@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../riverpod/auth_notifier/auth_notifier.dart';
-import '../../riverpod/auth_notifier/auth_states.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key key}) : super(key: key);
@@ -14,21 +13,16 @@ class LoginScreen extends StatelessWidget {
       ),
       body: Consumer(
         builder: (context, watch, child) {
-          final state = watch(authNotifierProvider.state);
-          if (state is AuthInitial) {
+          final state = watch(authNotifierProvider).getAuthState;
+          if (state == AuthStates.Empty) {
             return BuildInitial();
-          } else if (state is AuthError) {
-            return BuildInitial();
-            // return BuildError(state.message);
-          } else if (state is AuthLoaded) {
+          } else if (state == AuthStates.Loaded) {
+            // TODO check w/Gaston how to fix this issue(navigator inside a delay)
             Future.delayed(Duration.zero, () {
               Navigator.of(context).pushNamed('/channel-list');
             });
-
-            return BuildInitial();
-          } else {
-            return Center(child: CircularProgressIndicator());
           }
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );

@@ -1,18 +1,26 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/use_cases/login_use_case/login_use_case.dart';
 
-import 'auth_states.dart';
+final authNotifierProvider =
+ChangeNotifierProvider.autoDispose((ref) => AuthNotifier());
 
-final authNotifierProvider = StateNotifierProvider((ref) => AuthNotifier());
+enum AuthStates {
+  Empty,
+  Loading,
+  Loaded,
+  Error,
+}
 
-class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier() : super(AuthInitial());
-
+class AuthNotifier extends ChangeNotifier {
   LoginUseCase _loginUseCase = LoginUseCase();
 
+  // Properties
   var _userId = '';
   var _nickname = '';
+  AuthStates _authState = AuthStates.Empty;
 
+  // Setters
   set setUserId(String userid) {
     _userId = userid;
   }
@@ -21,15 +29,26 @@ class AuthNotifier extends StateNotifier<AuthState> {
     _nickname = nickname;
   }
 
-  // Future<void> connect(String userId, String nickname) async {
+  // Getters
+  AuthStates get getAuthState => _authState;
+
+  // Private Methods
+  void _setStatus(AuthStates state) {
+    _authState = state;
+    notifyListeners();
+  }
+
+  // Public Methods
   Future<void> connect() async {
-    state = AuthInitial();
     try {
-      state = AuthLoading();
+      _setStatus(AuthStates.Loading);
       var chatUser = await _loginUseCase.connect(_userId, _nickname);
-      state = AuthLoaded(chatUser);
+      if (chatUser != null) {
+        _setStatus(AuthStates.Loaded);
+      }
     } catch (e) {
-      state = AuthError(e.toString());
+      _setStatus(AuthStates.Error);
+      throw Exception(e);
     }
   }
 }

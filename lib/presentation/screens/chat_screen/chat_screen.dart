@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_channel.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_message.dart';
 import 'package:sendbirdtutorial/presentation/riverpod/chat_Notifier/chat.dart';
-import 'package:sendbirdtutorial/presentation/riverpod/chat_Notifier/chat_states.dart';
 
 import '../../../main.dart';
 
@@ -20,7 +19,7 @@ class ChatScreen extends StatelessWidget {
           children: [
             CircleAvatar(
               child: Text(
-                'TS',
+                'U',
                 style: TextStyle(fontSize: 12),
               ),
               backgroundColor: Colors.blue,
@@ -28,7 +27,7 @@ class ChatScreen extends StatelessWidget {
             ),
             SizedBox(height: 3),
             Text(
-              'Tony Stark',
+              'My User',
               style: TextStyle(color: Colors.black87, fontSize: 12),
             ),
           ],
@@ -90,22 +89,45 @@ class InputChat extends StatelessWidget {
                 decoration: InputDecoration.collapsed(hintText: 'Send message'),
               ),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 4),
-              child: IconButton(
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                icon: Icon(
-                  Icons.send,
-                  color: Colors.blue[400],
-                ),
-                onPressed: () {
-                  context.read(chatNotifier).sendMessage();
-                },
-              ),
+            Consumer(
+              builder: (context, watch, child) {
+                final state = watch(chatNotifier).getStatus;
+                if (state == ChatStatus.Empty) {
+                  return SendButton(true);
+                } else if (state == ChatStatus.Send) {
+                  return SendButton(true);
+                } else if (state == ChatStatus.Sending) {
+                  return SendButton(false);
+                }
+                return CircularProgressIndicator();
+              },
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SendButton extends StatelessWidget {
+  final bool available;
+
+  const SendButton(this.available);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4),
+      child: IconButton(
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        icon: Icon(
+          Icons.send,
+          color: available ? Colors.blue[400] : Colors.grey,
+        ),
+        onPressed: () {
+          context.read(chatNotifier).sendMessage();
+        },
       ),
     );
   }
