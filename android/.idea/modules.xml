@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android.iml" filepath="$PROJECT_DIR$/.idea/modules/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-806050820/android.connectivity.iml" filepath="$PROJECT_DIR$/.idea/modules/-806050820/android.connectivity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/379650949/android.device_info.iml" filepath="$PROJECT_DIR$/.idea/modules/379650949/android.device_info.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-827838378/android.shared_preferences.iml" filepath="$PROJECT_DIR$/.idea/modules/-827838378/android.shared_preferences.iml" />
+    </modules>
+  </component>
+</project>
