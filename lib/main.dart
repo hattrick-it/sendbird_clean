@@ -23,7 +23,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material App',
-      initialRoute: '/',
+      // initialRoute: '/',
+      initialRoute: '/user-type-selector',
       routes: MyRoutes().routes,
     );
   }
