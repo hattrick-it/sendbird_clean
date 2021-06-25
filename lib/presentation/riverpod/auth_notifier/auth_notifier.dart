@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
 import '../../../domain/use_cases/login_use_case/login_use_case.dart';
 
 final authNotifierProvider =

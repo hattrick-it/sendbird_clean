@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/Core/chat_colors.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_channel.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_message.dart';
-import 'package:sendbirdtutorial/presentation/riverpod/chat_Notifier/chat.dart';
+import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
+import 'package:sendbirdtutorial/presentation/riverpod/chat_Notifier/chat_notifier.dart';
 
 import '../../../main.dart';
 
@@ -14,7 +16,7 @@ class ChatScreen extends StatelessWidget {
     context.read(chatNotifier).setChannelUrl(chatChannel.url);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: ChatColors.whiteColor,
         title: Column(
           children: [
             CircleAvatar(
@@ -22,16 +24,17 @@ class ChatScreen extends StatelessWidget {
                 'U',
                 style: TextStyle(fontSize: 12),
               ),
-              backgroundColor: Colors.blue,
+              backgroundColor: ChatColors.primaryColor,
               maxRadius: 13,
             ),
             SizedBox(height: 3),
             Text(
               'My User',
-              style: TextStyle(color: Colors.black87, fontSize: 12),
+              style: TextStyle(color: ChatColors.blackColor, fontSize: 12),
             ),
           ],
         ),
+        iconTheme: IconThemeData(color: ChatColors.primaryColor),
         centerTitle: true,
         elevation: 1,
       ),
@@ -62,7 +65,7 @@ class ChatScreen extends StatelessWidget {
             ),
             Divider(height: 1),
             Container(
-              color: Colors.white,
+              color: ChatColors.whiteColor,
               height: 50,
               child: InputChat(),
             ),
@@ -84,19 +87,19 @@ class InputChat extends StatelessWidget {
             Expanded(
               child: TextField(
                 onChanged: (val) {
-                  context.read(chatNotifier).setMessage(val);
+                  context.read(chatNotifier).setUserMsg(val);
                 },
                 decoration: InputDecoration.collapsed(hintText: 'Send message'),
               ),
             ),
             Consumer(
               builder: (context, watch, child) {
-                final state = watch(chatNotifier).getStatus;
-                if (state == ChatStatus.Empty) {
+                final provider = watch(chatNotifier);
+                if (provider.chatState == ChatState.Empty) {
                   return SendButton(true);
-                } else if (state == ChatStatus.Send) {
+                } else if (provider.chatState == ChatState.Send) {
                   return SendButton(true);
-                } else if (state == ChatStatus.Sending) {
+                } else if (provider.chatState == ChatState.Sending) {
                   return SendButton(false);
                 }
                 return CircularProgressIndicator();
@@ -119,11 +122,11 @@ class SendButton extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 4),
       child: IconButton(
-        highlightColor: Colors.transparent,
-        splashColor: Colors.transparent,
+        highlightColor: ChatColors.transparentColor,
+        splashColor: ChatColors.transparentColor,
         icon: Icon(
           Icons.send,
-          color: available ? Colors.blue[400] : Colors.grey,
+          color: available ? ChatColors.enableSendButton : ChatColors.disbleSendButton,
         ),
         onPressed: () {
           context.read(chatNotifier).sendMessage();
@@ -140,9 +143,9 @@ class BuildChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ChatUser currentUser = context.read(chatNotifier).getCurrentUser();
     return Container(
-      // TODO buscar el id de mas abajo - no puede existir cosas de sendbird en esta capa
-      child: message.sender.userId == sendbird.currentUser.userId
+      child: message.sender.userId == currentUser.userId
           ? MyMessage(message.message)
           : NotMyMessage(message.message),
     );
@@ -162,7 +165,7 @@ class MyMessage extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 5),
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.blue,
+          color: ChatColors.myMsgColor,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(message),
@@ -184,7 +187,7 @@ class NotMyMessage extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 5),
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.grey,
+          color: ChatColors.notMyMsgColor,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(message),

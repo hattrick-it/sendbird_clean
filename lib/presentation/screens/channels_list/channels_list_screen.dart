@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/presentation/riverpod/channel_list_notifier/chat_channel_list.dart';
-import 'package:sendbirdtutorial/presentation/riverpod/channel_list_notifier/chat_channel_list_states.dart';
+import 'package:sendbirdtutorial/presentation/riverpod/channel_list_notifier/chat_channel_list_notifier.dart';
 
 class ChannelListScreen extends StatelessWidget {
   @override
@@ -12,11 +11,11 @@ class ChannelListScreen extends StatelessWidget {
       appBar: AppBar(),
       body: Consumer(
         builder: (context, watch, child) {
-          final state = watch(chatChannelNotifier.state);
-          if (state is ChatChannelsListLoading) {
-            return CircularProgressIndicator();
-          } else if (state is ChatChannelsListLoaded) {
-            var channelList = state.channels;
+          final provider = watch(chatChannelNotifier);
+          if (provider.chatChannelState ==  ChatChannelState.Loading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (provider.chatChannelState ==  ChatChannelState.Loaded) {
+            var channelList = provider.channelList;
             return ListView.builder(
               itemCount: channelList.length,
               itemBuilder: (context, index) {

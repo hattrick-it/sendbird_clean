@@ -10,5 +10,7 @@ abstract class ChatRepository {
 
   Future<List<ChatUser>> getUsers();
 
+  ChatUser getCurrentUser();
+
   Future<void> sendMessage(String message);
 }

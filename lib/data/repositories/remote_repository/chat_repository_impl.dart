@@ -43,4 +43,9 @@ class ChatRepositoryImpl implements ChatRepository {
   Future<void> sendMessage(String message) {
     return _sendbirdChannelsDataSource.sendMessage(message);
   }
+
+  @override
+  ChatUser getCurrentUser() {
+    return _sendbirdChannelsDataSource.getCurrentUser().toDomain();
+  }
 }

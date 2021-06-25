@@ -21,4 +21,8 @@ class ChatController {
   Future<Stream<List<ChatMessage>>> streamMessages() {
     return _chatRepository.getMessageStream();
   }
-}
+
+  ChatUser getCurrentUser(){
+    return _chatRepository.getCurrentUser();
+  }
+ }

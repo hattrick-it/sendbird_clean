@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:sendbird_sdk/sendbird_sdk.dart';
+import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
 import 'package:sendbirdtutorial/locator/locator.dart';
 
 import '../../../main.dart';
@@ -70,5 +71,13 @@ class SendbirdChatRemoteDataSource with ChannelEventHandler {
 
   Future<List<User>> getUsers() async {
     return await SendbirdChannelsDataSource().getUsers();
+  }
+
+  User getCurrentUser() {
+    try {
+      return sendbird.currentUser;
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }
