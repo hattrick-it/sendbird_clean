@@ -3,7 +3,7 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
 
-extension SendbirdUserExtension on User{
+extension UserExtension on User{
   ChatUser toDomain() =>
       ChatUser(
         userId: this.userId,
@@ -11,5 +11,6 @@ extension SendbirdUserExtension on User{
         profileUrl: this.profileUrl,
         isActive: this.isActive,
         lastSeenAt: this.lastSeenAt,
+        metadata: this.metaData,
       );
 }

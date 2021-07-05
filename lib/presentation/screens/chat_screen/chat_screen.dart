@@ -4,34 +4,38 @@ import 'package:sendbirdtutorial/Core/chat_colors.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_channel.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_message.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/presentation/riverpod/chat_Notifier/chat_notifier.dart';
-
-import '../../../main.dart';
+import 'package:sendbirdtutorial/presentation/viewmodel/chat_viewmodel/chat_viewmodel.dart';
 
 class ChatScreen extends StatelessWidget {
+  static const String routeName = '/chat-screen';
   @override
   Widget build(BuildContext context) {
     final chatChannel =
         ModalRoute.of(context).settings.arguments as ChatChannel;
-    context.read(chatNotifier).setChannelUrl(chatChannel.url);
+    context.read(chatNotifier).setChannelUrl(chatChannel.channelUrl);
+    var currentUser = context.read(chatNotifier).getCurrentUser();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ChatColors.whiteColor,
         title: Column(
           children: [
             CircleAvatar(
-              child: Text(
-                'U',
-                style: TextStyle(fontSize: 12),
-              ),
+              child: chatChannel.members[0].userId == currentUser.userId
+                  ? Text('${chatChannel.members[1].nickname[0]}',
+                      style: TextStyle(fontSize: 12))
+                  : Text('${chatChannel.members[0].nickname[0]}',
+                      style: TextStyle(fontSize: 12)),
               backgroundColor: ChatColors.primaryColor,
               maxRadius: 13,
             ),
             SizedBox(height: 3),
-            Text(
-              'My User',
-              style: TextStyle(color: ChatColors.blackColor, fontSize: 12),
-            ),
+            chatChannel.members[0].userId == currentUser.userId
+                ? Text(chatChannel.members[1].nickname,
+                    style:
+                        TextStyle(color: ChatColors.blackColor, fontSize: 12))
+                : Text(chatChannel.members[0].nickname,
+                    style:
+                        TextStyle(color: ChatColors.blackColor, fontSize: 12)),
           ],
         ),
         iconTheme: IconThemeData(color: ChatColors.primaryColor),
@@ -126,7 +130,9 @@ class SendButton extends StatelessWidget {
         splashColor: ChatColors.transparentColor,
         icon: Icon(
           Icons.send,
-          color: available ? ChatColors.enableSendButton : ChatColors.disbleSendButton,
+          color: available
+              ? ChatColors.enableSendButton
+              : ChatColors.disbleSendButton,
         ),
         onPressed: () {
           context.read(chatNotifier).sendMessage();

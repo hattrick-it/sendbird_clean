@@ -7,11 +7,16 @@ class ChatGroupChannel {
   int unreadMessageCount;
   List<ChatUser> members;
   int myLastRead;
+  String coverUrl;
+  ChatUser inviter;
+
 
   ChatGroupChannel({
     this.lastMessage,
     this.unreadMessageCount,
     this.members,
     this.myLastRead,
+    this.inviter,
+    this.coverUrl,
   });
 }

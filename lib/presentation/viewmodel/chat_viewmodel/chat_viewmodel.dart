@@ -1,11 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/domain/controllers/chat_controller/chat_controller.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_message.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/domain/use_cases/chat_use_case/chat_controller.dart';
 import 'package:sendbirdtutorial/locator/locator.dart';
 
-final chatNotifier = ChangeNotifierProvider((ref) => ChatNotifier());
+final chatNotifier =
+    ChangeNotifierProvider.autoDispose<ChatViewModel>((ref) => locator.get());
 
 enum ChatState {
   Empty,
@@ -14,8 +17,10 @@ enum ChatState {
   Error,
 }
 
-class ChatNotifier extends ChangeNotifier {
-  final ChatController _chatController = locator.get<ChatController>();
+class ChatViewModel extends ChangeNotifier {
+  final ChatController chatController;
+
+  ChatViewModel({this.chatController});
 
   // Properties
   String _userMsg = '';
@@ -23,9 +28,7 @@ class ChatNotifier extends ChangeNotifier {
   ChatState _chatState = ChatState.Empty;
 
   // Getters
-  Stream<List<ChatMessage>> get onNewMessage async* {
-    yield* await _chatController.streamMessages();
-  }
+  Stream<List<ChatMessage>> get onNewMessage => chatController.getMessages;
 
   ChatState get chatState => _chatState;
 
@@ -33,7 +36,7 @@ class ChatNotifier extends ChangeNotifier {
 
   // Setters
   void setChannelUrl(String channelUrl) {
-    _chatController.setChannelUrl(channelUrl);
+    chatController.setChannelUrl(channelUrl);
   }
 
   void setUserMsg(String msg) {
@@ -55,7 +58,7 @@ class ChatNotifier extends ChangeNotifier {
   // Public Methods
 
   ChatUser getCurrentUser() {
-    return _chatController.getCurrentUser();
+    return chatController.getCurrentUser();
   }
 
   void sendMessage() async {
@@ -63,7 +66,7 @@ class ChatNotifier extends ChangeNotifier {
       _setState(ChatState.Empty);
       if (_userMsg.isNotEmpty) {
         _setState(ChatState.Sending);
-        await _chatController.sendMessage(_userMsg);
+        await chatController.sendMessage(_userMsg);
         setUserMsg('');
       }
       _setState(ChatState.Send);

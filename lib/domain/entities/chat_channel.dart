@@ -1,14 +1,17 @@
+import 'package:sendbirdtutorial/domain/entities/chat_message.dart';
+
+import 'chat_user.dart';
+
 class ChatChannel {
   String coverUrl;
-  String name;
-  String url;
-  String data;
-  bool isOpenChannel;
+  String channelUrl;
+  List<ChatUser> members;
+  ChatMessage lastMessage;
+
   ChatChannel({
     this.coverUrl,
-    this.name,
-    this.url,
-    this.data,
-    this.isOpenChannel,
+    this.channelUrl,
+    this.members,
+    this.lastMessage,
   });
 }

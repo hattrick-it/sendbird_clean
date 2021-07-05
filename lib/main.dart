@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'Core/constants.dart';
 import 'Core/routes.dart';
 
 import 'locator/locator.dart';
+import 'presentation/viewmodel/auth_viewmodel/auth_viewmodel.dart';
 
-final sendbird = SendbirdSdk(appId: Constants.api_key);
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   setup();
   runApp(
     ProviderScope(
@@ -20,6 +18,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    adminConnect(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material App',
@@ -28,4 +27,8 @@ class MyApp extends StatelessWidget {
       routes: MyRoutes().routes,
     );
   }
+}
+
+void adminConnect(BuildContext context)async{
+  await context.read(authNotifierProvider).connect('admin','admin');
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/domain/controllers/channel_list_controller/channel_list_controller.dart';
+import 'package:sendbirdtutorial/domain/controllers/chat_controller/chat_controller.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/domain/use_cases/channel_list_use_case/channel_list_controller.dart';
-import 'package:sendbirdtutorial/domain/use_cases/chat_use_case/chat_controller.dart';
 import 'package:sendbirdtutorial/locator/locator.dart';
 
 final usersListNotifier =
-    ChangeNotifierProvider.autoDispose((ref) => UsersListNotifier());
+    ChangeNotifierProvider<UsersListViewModel>((ref) => locator.get());
 
 enum UserListStatus {
   Empty,
@@ -15,10 +15,11 @@ enum UserListStatus {
   Error,
 }
 
-class UsersListNotifier extends ChangeNotifier {
-  final ChatController _chatController = locator.get<ChatController>();
-  final ChannelListController _channelListController =
-      locator.get<ChannelListController>();
+class UsersListViewModel extends ChangeNotifier {
+  final ChatController chatController;
+  final ChannelListController channelListController;
+
+  UsersListViewModel({this.chatController, this.channelListController});
 
   // Properties
   List<ChatUser> _usersList = [];
@@ -27,7 +28,9 @@ class UsersListNotifier extends ChangeNotifier {
 
   // Getters
   List<ChatUser> get usersList => _usersList;
+
   String get errorMsg => _errorMsg;
+
   UserListStatus get userListStatus => _userListStatus;
 
   // Setters
@@ -41,7 +44,7 @@ class UsersListNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _setErrorMsg(String msg){
+  void _setErrorMsg(String msg) {
     _errorMsg = msg;
     notifyListeners();
   }
@@ -52,7 +55,7 @@ class UsersListNotifier extends ChangeNotifier {
   Future<void> getUsers() async {
     try {
       _setStatus(UserListStatus.Loading);
-      var users = await _chatController.getUsers();
+      var users = await chatController.getUsers();
       _setUsersList(users);
       _setStatus(UserListStatus.Loaded);
     } catch (e) {
@@ -62,6 +65,6 @@ class UsersListNotifier extends ChangeNotifier {
   }
 
   void createChannel(String userId) {
-    _channelListController.createChannel(userId);
+    channelListController.createChannel(userId);
   }
 }

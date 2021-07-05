@@ -2,28 +2,23 @@ import 'dart:async';
 
 import 'package:sendbird_sdk/sendbird_sdk.dart';
 
-import '../../../main.dart';
-
 class SendbirdChannelsDataSource extends ChannelEventHandler {
+  final SendbirdSdk sendbird;
+
   StreamController<BaseMessage> _messageStreamController;
   StreamController<BaseChannel> _channelsStreamController;
 
-  SendbirdChannelsDataSource() {
-    _messageStreamController = StreamController<BaseMessage>(
-        onListen: () =>
-            sendbird.addChannelEventHandler('channel_event_handler', this),
-        onCancel: () =>
-            sendbird.removeChannelEventHandler('channel_event_handler'));
+  SendbirdChannelsDataSource({this.sendbird}) {
+    _messageStreamController = StreamController<BaseMessage>();
 
-    _channelsStreamController = StreamController<BaseChannel>(
+    _channelsStreamController = StreamController<GroupChannel>(
         onListen: () => sendbird.addChannelEventHandler('base_channel', this),
         onCancel: () => sendbird.removeChannelEventHandler('base_channel'));
   }
 
+  Stream<BaseMessage> get onChannelNewMessage => _messageStreamController.stream;
 
-  Stream<BaseMessage> get onNewMsg => _messageStreamController.stream;
-
-  Stream<BaseChannel> get onChannelMsg => _channelsStreamController.stream;
+  Stream<GroupChannel> get onChannelNewChanged => _channelsStreamController.stream;
 
   void closeStream() {
     _messageStreamController.close();
@@ -33,14 +28,13 @@ class SendbirdChannelsDataSource extends ChannelEventHandler {
   // ChannelEventHandler methods
   @override
   void onMessageReceived(BaseChannel channel, BaseMessage message) {
-    print(message.message);
     _messageStreamController.sink.add(message);
   }
 
+  @override
   void onChannelChanged(BaseChannel channel) {
-    // todo add stream nuevo para channel changes
-    _channelsStreamController.sink.add(channel);
-    print(channel);
+    GroupChannel groupChannel = channel;
+    _channelsStreamController.sink.add(groupChannel);
   }
 
   // Methods
@@ -68,7 +62,8 @@ class SendbirdChannelsDataSource extends ChannelEventHandler {
         ..includeEmptyChannel = true
         ..order = GroupChannelListOrder.latestLastMessage
         ..limit = 15;
-      return await query.loadNext();
+      var ret = await query.loadNext();
+      return ret;
     } catch (e) {
       throw Exception(e);
     }
@@ -85,7 +80,7 @@ class SendbirdChannelsDataSource extends ChannelEventHandler {
     return groupChannel;
   }
 
-  Future<User> getCurrentUser() async {
+  User getCurrentUser()  {
     return sendbird.currentUser;
   }
 }

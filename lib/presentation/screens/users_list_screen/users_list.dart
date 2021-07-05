@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/presentation/riverpod/users_list_notifier/users_list_notifier.dart';
+import 'package:sendbirdtutorial/presentation/viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
 
 class UsersListScreen extends StatelessWidget {
+  static const String routeName = '/users-list-screen';
   const UsersListScreen();
 
   @override
   Widget build(BuildContext context) {
-    context.read(usersListNotifier).getUsers();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      context.read(usersListNotifier).getUsers();
+    });
+
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('Create new chat'),
+      ),
       body: BuildChannelListBody(),
     );
   }
@@ -56,9 +62,10 @@ class BuildUsersList extends StatelessWidget {
                 .createChannel(usersList[index].userId);
           },
           child: ListTile(
-            title: CircleAvatar(
-              child: Text(usersList[index].userId),
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(usersList[index].profileUrl),
             ),
+            title: Text(usersList[index].nickname),
           ),
         );
       },

@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/domain/controllers/login_controller/login_controller.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import '../../../domain/use_cases/login_use_case/login_use_case.dart';
+import 'package:sendbirdtutorial/locator/locator.dart';
 
 final authNotifierProvider =
-ChangeNotifierProvider.autoDispose((ref) => AuthNotifier());
+    ChangeNotifierProvider<AuthViewModel>((ref) => locator.get());
 
 enum AuthStates {
   Empty,
@@ -13,8 +14,10 @@ enum AuthStates {
   Error,
 }
 
-class AuthNotifier extends ChangeNotifier {
-  LoginUseCase _loginUseCase = LoginUseCase();
+class AuthViewModel extends ChangeNotifier {
+  final LoginController loginController;
+
+  AuthViewModel({this.loginController});
 
   // Properties
   var _userId = '';
@@ -40,15 +43,18 @@ class AuthNotifier extends ChangeNotifier {
   }
 
   // Public Methods
-  Future<void> connect() async {
+  Future<ChatUser> connect(String userId, String nickname) async {
     try {
-      _setStatus(AuthStates.Loading);
-      var chatUser = await _loginUseCase.connect(_userId, _nickname);
+      // _setStatus(AuthStates.Loading);
+      var chatUser = await loginController.connect(userId, nickname);
       if (chatUser != null) {
-        _setStatus(AuthStates.Loaded);
+        // _setStatus(AuthStates.Loaded);
+        return chatUser;
+      } else {
+        return null;
       }
     } catch (e) {
-      _setStatus(AuthStates.Error);
+      // _setStatus(AuthStates.Error);
       throw Exception(e);
     }
   }
