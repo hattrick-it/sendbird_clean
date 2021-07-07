@@ -13,7 +13,6 @@ class UsersListScreen extends StatelessWidget {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       context.read(usersListViewModel).getUsers();
     });
-
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).usersListPageAppBarTitle),

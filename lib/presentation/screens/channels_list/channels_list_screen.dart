@@ -15,7 +15,8 @@ class ChannelListScreen extends StatelessWidget {
     ChatUser chatUser = context.read(chatChannelViewModel).getCurrentUser();
     return Scaffold(
       appBar: AppBar(
-        title: Text(chatUser.nickname),
+        title: Text(chatUser.nickname,style: TextStyle(fontSize: 14),),
+        centerTitle: true,
       ),
       body: BuildChannelListBody(),
       floatingActionButton: FloatingActionButton(
@@ -39,7 +40,7 @@ class BuildChannelListBody extends StatelessWidget {
       stream: context.read(chatChannelViewModel).onNewChannelEvent,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          var channelList = snapshot.data as List<ChatChannel>;
+          List<ChatChannel> channelList = snapshot.data;
           return ListView.builder(
             itemCount: channelList.length,
             itemBuilder: (context, index) {
@@ -69,7 +70,7 @@ class BuildChannelListBody extends StatelessWidget {
             },
           );
         }
-        return CircularProgressIndicator();
+        return Center(child: CircularProgressIndicator());
       },
     );
   }

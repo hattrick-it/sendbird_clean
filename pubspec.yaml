@@ -35,6 +35,7 @@ dependencies:
   flutter_riverpod: ^0.12.4
   get_it: ^5.0.6
   shared_preferences: ^0.5.12+4
+  animate_do: ^1.7.5
 
 dev_dependencies:
   flutter_test:
