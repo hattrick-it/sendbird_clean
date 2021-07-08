@@ -1,11 +1,8 @@
-
-
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
+import '../../../../domain/entities/chat_user.dart';
 
-extension UserExtension on User{
-  ChatUser toDomain() =>
-      ChatUser(
+extension UserExtension on User {
+  ChatUser toDomain() => ChatUser(
         userId: this.userId,
         nickname: this.nickname,
         profileUrl: this.profileUrl,

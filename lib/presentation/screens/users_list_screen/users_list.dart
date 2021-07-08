@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/presentation/viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
+import '../../../domain/entities/chat_user.dart';
+import '../../viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UsersListScreen extends StatelessWidget {
   static const String routeName = '/users-list-screen';
@@ -15,7 +16,7 @@ class UsersListScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create new chat'),
+        title: Text(AppLocalizations.of(context).usersListPageAppBarTitle),
       ),
       body: BuildChannelListBody(),
     );

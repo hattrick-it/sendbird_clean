@@ -1,19 +1,20 @@
 import 'dart:async';
 
 import 'package:sendbird_sdk/sendbird_sdk.dart';
+import 'package:sendbirdtutorial/Core/string_constants.dart';
 
-class SendbirdChannelsDataSource extends ChannelEventHandler {
+class ChannelsDataSource extends ChannelEventHandler {
   final SendbirdSdk sendbird;
 
   StreamController<BaseMessage> _messageStreamController;
   StreamController<BaseChannel> _channelsStreamController;
 
-  SendbirdChannelsDataSource({this.sendbird}) {
+  ChannelsDataSource({this.sendbird}) {
     _messageStreamController = StreamController<BaseMessage>();
 
     _channelsStreamController = StreamController<GroupChannel>(
-        onListen: () => sendbird.addChannelEventHandler('base_channel', this),
-        onCancel: () => sendbird.removeChannelEventHandler('base_channel'));
+        onListen: () => sendbird.addChannelEventHandler(StringConstants.channelHandlerKey, this),
+        onCancel: () => sendbird.removeChannelEventHandler(StringConstants.channelHandlerKey));
   }
 
   Stream<BaseMessage> get onChannelNewMessage => _messageStreamController.stream;
@@ -38,15 +39,6 @@ class SendbirdChannelsDataSource extends ChannelEventHandler {
   }
 
   // Methods
-  Future<List<User>> getUsers() {
-    try {
-      final query = ApplicationUserListQuery();
-      return query.loadNext();
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
   Future<GroupChannel> createChannel(List<String> userIds) {
     try {
       final params = GroupChannelParams()..userIds = userIds;
@@ -62,8 +54,7 @@ class SendbirdChannelsDataSource extends ChannelEventHandler {
         ..includeEmptyChannel = true
         ..order = GroupChannelListOrder.latestLastMessage
         ..limit = 15;
-      var ret = await query.loadNext();
-      return ret;
+      return await query.loadNext();
     } catch (e) {
       throw Exception(e);
     }
@@ -71,13 +62,7 @@ class SendbirdChannelsDataSource extends ChannelEventHandler {
 
   Future<GroupChannel> getGroupChannel(String channelUrl) async {
     List<GroupChannel> channels = await getGroupChannels();
-    GroupChannel groupChannel;
-    for (var item in channels) {
-      if (item.channelUrl == channelUrl) {
-        groupChannel = item;
-      }
-    }
-    return groupChannel;
+    return channels.firstWhere((element) => element.channelUrl == channelUrl);
   }
 
   User getCurrentUser()  {

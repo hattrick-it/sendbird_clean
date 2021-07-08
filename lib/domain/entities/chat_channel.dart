@@ -1,4 +1,4 @@
-import 'package:sendbirdtutorial/domain/entities/chat_message.dart';
+import 'chat_message.dart';
 
 import 'chat_user.dart';
 

@@ -1,4 +1,4 @@
-import 'package:sendbirdtutorial/domain/repositories/user_repository.dart';
+import '../../repositories/auth_repository.dart';
 import '../../entities/chat_user.dart';
 
 class LoginController {

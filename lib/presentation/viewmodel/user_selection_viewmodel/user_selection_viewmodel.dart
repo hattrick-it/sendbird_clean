@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/domain/controllers/login_controller/login_controller.dart';
-import 'package:sendbirdtutorial/domain/controllers/user_selection_controller/user_selection_controller.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/locator/locator.dart';
+import 'package:sendbirdtutorial/Core/string_constants.dart';
+import '../../../domain/controllers/login_controller/login_controller.dart';
+import '../../../domain/controllers/user_selection_controller/user_selection_controller.dart';
+import '../../../domain/entities/chat_user.dart';
+import '../../../locator/locator.dart';
 
 final userSelectionNotifier =
     ChangeNotifierProvider<UserSelectionViewModel>((ref) => locator.get());
@@ -40,7 +41,8 @@ class UserSelectionViewModel extends ChangeNotifier {
   }
 
   Future<void> adminConnect() async {
-    await loginController.connect('admin', 'admin');
+    await loginController.connect(StringConstants.adminUserIdNickname,
+        StringConstants.adminUserIdNickname);
   }
 
   Future<List<ChatUser>> getUsersByType() async {

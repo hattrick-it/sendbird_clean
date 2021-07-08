@@ -1,0 +1,50 @@
+{
+  "userTypeDoctor": "Doctor",
+  "@userTypeDoctor": {
+    "description": "Doctor text"
+  },
+  "userTypePatient": "Patient",
+  "@userTypePatient": {
+    "description": "Patient text"
+  },
+  "doctorSpecialty": "Specialty",
+  "@doctorSpecialty": {
+    "description": "Patient text"
+  },
+  "adminUserIdNickname": "admin",
+  "@adminUserIdNickname": {
+    "description": "admin text for id and nickname"
+  },
+  "selectionPageTelemedicine": "Telemedicine",
+  "@selectionPageTelemedicine": {
+    "description": ""
+  },
+  "selectionPageDemostrator": "Demostrator",
+  "@selectionPageDemostrator": {
+    "description": ""
+  },
+  "selectionPagePatient": "Iam a Patient",
+  "@selectionPagePatient": {
+    "description": ""
+  },
+  "selectionPageDoctor": "Iam a Doctor",
+  "@selectionPageDoctor": {
+    "description": ""
+  },
+  "selectionPageLoadDummyData": "Load dummy data",
+  "@selectionPageLoadDummyData": {
+    "description": ""
+  },
+  "userSelectionPageAppBarTitle": "Select a ",
+  "@userSelectionPageAppBarTitle": {
+    "description": ""
+  },
+  "chatScreenSendButtonText": "Send message",
+  "@chatScreenSendButtonText": {
+    "description": ""
+  },
+  "usersListPageAppBarTitle": "Create new chat",
+  "@usersListPageAppBarTitle": {
+    "description": ""
+  }
+}

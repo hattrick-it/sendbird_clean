@@ -1,5 +1,5 @@
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
+import '../entities/chat_user.dart';
 
-abstract class UserSelectionRepository{
+abstract class UserSelectionRepository {
   Future<List<ChatUser>> getUsersByType(String userType);
 }

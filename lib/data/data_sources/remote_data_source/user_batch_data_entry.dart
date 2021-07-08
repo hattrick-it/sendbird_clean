@@ -1,9 +1,7 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_doctor.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/locator/locator.dart';
-
-import '../../../main.dart';
+import 'package:sendbirdtutorial/Core/constants.dart';
+import '../../../domain/entities/chat_doctor.dart';
+import '../../../domain/entities/chat_user.dart';
 
 var doctorUsers = [
   ChatDoctor(
@@ -52,7 +50,6 @@ var patientsUsers = [
         'https://res.cloudinary.com/hattrick-it/image/upload/v1624909075/users/black_widow.jpg',
   ),
 ];
-
 
 class SendbirdUserSelectionDataSource {
   final SendbirdSdk sendbird;

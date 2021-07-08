@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_channel.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/presentation/screens/chat_screen/chat_screen.dart';
-import 'package:sendbirdtutorial/presentation/screens/users_list_screen/users_list.dart';
-import 'package:sendbirdtutorial/presentation/viewmodel/channel_list_viewmodel/chat_channel_list_viewmodel.dart';
+import '../../../domain/entities/chat_channel.dart';
+import '../../../domain/entities/chat_user.dart';
+import '../chat_screen/chat_screen.dart';
+import '../users_list_screen/users_list.dart';
+import '../../viewmodel/channel_list_viewmodel/chat_channel_list_viewmodel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChannelListScreen extends StatelessWidget {
   static const String routeName = '/channel-list';
@@ -45,8 +46,8 @@ class BuildChannelListBody extends StatelessWidget {
               var chatUser = context.read(chatChannelNotifier).getCurrentUser();
               return GestureDetector(
                 onTap: () {
-                  Navigator.of(context)
-                      .pushNamed(ChatScreen.routeName, arguments: channelList[index]);
+                  Navigator.of(context).pushNamed(ChatScreen.routeName,
+                      arguments: channelList[index]);
                 },
                 child: ListTile(
                   leading: Container(

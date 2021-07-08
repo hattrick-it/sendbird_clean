@@ -1,34 +1,37 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'package:sendbirdtutorial/data/data_sources/local_data_source/local_user_type_data_source.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_message.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import '../../data_sources/remote_data_source/sendbird_chat_remote_data_source.dart';
+import 'package:sendbirdtutorial/Core/string_constants.dart';
+import 'package:sendbirdtutorial/data/data_sources/remote_data_source/users_data_source.dart';
+import '../../data_sources/local_data_source/user_type_data_source.dart';
+import '../../../domain/entities/chat_message.dart';
+import '../../../domain/entities/chat_user.dart';
+import '../../data_sources/remote_data_source/chat_data_source.dart';
 import '../../../domain/repositories/chat_repository.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/sendbird_base_message.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/sendbird_user.dart';
+import '../../data_sources/remote_data_source/models/baseMessage.dart';
+import '../../data_sources/remote_data_source/models/user.dart';
 
 class ChatRepositoryImpl implements ChatRepository {
-  final SendbirdChatRemoteDataSource sendbirdChannelsDataSource;
+  final ChatRemoteDataSource sendbirdChannelsDataSource;
   final LocalUserTypeDataSource localUserTypeDataSource;
+  final UsersDataSource usersDataSource;
 
-  ChatRepositoryImpl({this.sendbirdChannelsDataSource, this.localUserTypeDataSource});
+  ChatRepositoryImpl(
+      {this.sendbirdChannelsDataSource, this.localUserTypeDataSource, this.usersDataSource});
 
   @override
-  Stream<List<ChatMessage>> getMessageStream() {
-    return sendbirdChannelsDataSource
-        .getMessagesStream.map((baseMessages) =>
-        baseMessages.map((baseMessage) => baseMessage.toDomain()).toList());
+  Stream<ChatMessage> getMessageStream() {
+    return sendbirdChannelsDataSource.getMessageStream
+        .map((baseMessages) => baseMessages.toDomain());
   }
 
   @override
   Future<List<ChatUser>> getUsers() async {
     var currentUserType = await localUserTypeDataSource.getCurrentUserType();
     try {
-      List<User> users = await sendbirdChannelsDataSource.getUsers();
+      List<User> users = await usersDataSource.getUsers();
       var chatUserList = users.map((e) => e.toDomain()).toList();
       List<ChatUser> chatUsers = [];
       for (var item in chatUserList) {
-        if (item.metadata['userType'] != currentUserType &&
+        if (item.metadata[StringConstants.userTypeKey] != currentUserType &&
             item.metadata.length > 0) {
           chatUsers.add(item);
         }
@@ -44,13 +47,15 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<void> sendMessage(String message) {
-    return sendbirdChannelsDataSource.sendMessage(message);
+  Future<ChatMessage> sendMessage(String message) {
+    return sendbirdChannelsDataSource
+        .sendMessage(message)
+        .then((message) => message.toDomain());
   }
 
   @override
   ChatUser getCurrentUser() {
-    return sendbirdChannelsDataSource.getCurrentUser().toDomain();
+    return usersDataSource.getCurrentUser().toDomain();
   }
 
   @override

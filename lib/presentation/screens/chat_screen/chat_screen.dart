@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/Core/chat_colors.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_channel.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_message.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/presentation/viewmodel/chat_viewmodel/chat_viewmodel.dart';
+import '../../../Core/chat_colors.dart';
+import '../../../domain/entities/chat_channel.dart';
+import '../../../domain/entities/chat_message.dart';
+import '../../../domain/entities/chat_user.dart';
+import '../../viewmodel/chat_viewmodel/chat_viewmodel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatScreen extends StatelessWidget {
   static const String routeName = '/chat-screen';
@@ -93,7 +94,7 @@ class InputChat extends StatelessWidget {
                 onChanged: (val) {
                   context.read(chatNotifier).setUserMsg(val);
                 },
-                decoration: InputDecoration.collapsed(hintText: 'Send message'),
+                decoration: InputDecoration.collapsed(hintText: AppLocalizations.of(context).chatScreenSendButtonText),
               ),
             ),
             Consumer(

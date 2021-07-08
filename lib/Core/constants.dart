@@ -1,3 +1,3 @@
 class Constants {
-  static const api_key = 'F7401EF2-1436-46F7-92BB-905949B212E4';
+  static const api_key = '552EE1DD-12E1-4AE4-AEDD-D13DD4969248';
 }

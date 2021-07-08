@@ -1,19 +1,18 @@
 import 'dart:async';
 
-import 'package:sendbirdtutorial/domain/entities/chat_message.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/domain/repositories/channel_repository.dart';
+import '../../entities/chat_message.dart';
+import '../../entities/chat_user.dart';
+import '../../repositories/channel_repository.dart';
 
 import '../../entities/chat_channel.dart';
 
 class ChannelListController {
-
   final ChannelRepository channelRepository;
   ChannelListController({this.channelRepository}) {
-    _onInitl();
+    _onInit();
   }
 
-  void _onInitl() {
+  void _onInit() {
     _messageStreamController = StreamController<ChatMessage>(onListen: () {
       _getMessageStream();
     });
@@ -24,7 +23,6 @@ class ChannelListController {
       _getChannelsStream();
     });
   }
-
 
   StreamController<ChatMessage> _messageStreamController;
 
@@ -41,7 +39,11 @@ class ChannelListController {
   }
 
   void createChannel(String userId) {
-    channelRepository.createChannel(userId);
+    List<String> userIds = [];
+    ChatUser currentUser = channelRepository.getCurrentUser();
+    userIds.add(currentUser.userId);
+    userIds.add(userId);
+    channelRepository.createChannel(userIds);
   }
 
   void _getChannelsStream() {

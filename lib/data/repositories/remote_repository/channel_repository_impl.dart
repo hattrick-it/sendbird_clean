@@ -1,29 +1,20 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/sendbird_channels_remote_data_source.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_channel.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_message.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/domain/repositories/channel_repository.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/sendbird_group_channel.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/sendbird_user.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/sendbird_base_message.dart';
+import '../../data_sources/remote_data_source/channels_data_source.dart';
+import '../../../domain/entities/chat_channel.dart';
+import '../../../domain/entities/chat_message.dart';
+import '../../../domain/entities/chat_user.dart';
+import '../../../domain/repositories/channel_repository.dart';
+import '../../data_sources/remote_data_source/models/groupChannel.dart';
+import '../../data_sources/remote_data_source/models/user.dart';
+import '../../data_sources/remote_data_source/models/baseMessage.dart';
 
 class ChannelRepositoryImpl implements ChannelRepository {
-  final SendbirdChannelsDataSource sendbirdChannelsDataSource;
+  final ChannelsDataSource sendbirdChannelsDataSource;
   ChannelRepositoryImpl({this.sendbirdChannelsDataSource});
 
   @override
-  void createChannel(String userId) {
-    List<String> userIds = [];
-    User current = sendbirdChannelsDataSource.getCurrentUser();
-    userIds.add(current.userId);
-    userIds.add(userId);
+  void createChannel(List<String> userIds) {
     sendbirdChannelsDataSource.createChannel(userIds);
-  }
-
-  void getChatChannel() {
-    // TODO: implement getChatChannel
-    throw UnimplementedError();
   }
 
   @override
@@ -46,7 +37,7 @@ class ChannelRepositoryImpl implements ChannelRepository {
   }
 
   @override
-  ChatUser getCurrentUser()  {
+  ChatUser getCurrentUser() {
     return sendbirdChannelsDataSource.getCurrentUser().toDomain();
   }
 }

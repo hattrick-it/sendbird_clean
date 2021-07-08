@@ -1,11 +1,11 @@
-import 'package:sendbirdtutorial/domain/entities/chat_channel.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_message.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
+import '../entities/chat_channel.dart';
+import '../entities/chat_message.dart';
+import '../entities/chat_user.dart';
 
 abstract class ChannelRepository {
   Future<List<ChatChannel>> getChannels();
 
-  void createChannel(String userId);
+  void createChannel(List<String> userIds);
 
   Stream<ChatChannel> getChannelsStream();
 

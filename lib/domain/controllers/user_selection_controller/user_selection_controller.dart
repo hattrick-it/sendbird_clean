@@ -1,6 +1,6 @@
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/domain/repositories/local_user_type_repository.dart';
-import 'package:sendbirdtutorial/domain/repositories/user_selection_repository.dart';
+import '../../entities/chat_user.dart';
+import '../../repositories/local_user_type_repository.dart';
+import '../../repositories/user_selection_repository.dart';
 
 class UserSelectionController {
   final UserSelectionRepository userSelectorRepository;

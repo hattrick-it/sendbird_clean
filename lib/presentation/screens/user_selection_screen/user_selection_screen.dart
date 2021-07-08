@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/presentation/screens/channels_list/channels_list_screen.dart';
-import 'package:sendbirdtutorial/presentation/viewmodel/auth_viewmodel/auth_viewmodel.dart';
-import 'package:sendbirdtutorial/presentation/viewmodel/user_selection_viewmodel/user_selection_viewmodel.dart';
+import '../../../domain/entities/chat_user.dart';
+import '../channels_list/channels_list_screen.dart';
+import '../../viewmodel/auth_viewmodel/auth_viewmodel.dart';
+import '../../viewmodel/user_selection_viewmodel/user_selection_viewmodel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserSelectionScreen extends StatelessWidget {
   static const String routeName = '/user-selection-screen';
@@ -15,7 +16,7 @@ class UserSelectionScreen extends StatelessWidget {
     context.read(userSelectionNotifier).saveUserType(userType);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select a $userType'),
+        title: Text('${AppLocalizations.of(context).userSelectionPageAppBarTitle} $userType'),
       ),
       body: BuildUserSelectionBody(userType: userType),
     );
@@ -74,8 +75,8 @@ class BuildUserCard extends StatelessWidget {
         title: chatUser.nickname != null || chatUser.nickname.isNotEmpty
             ? Text(chatUser.nickname)
             : Text(chatUser.userId),
-        subtitle: chatUser.metadata['Specialty'] != null
-            ? Text(chatUser.metadata['Specialty'])
+        subtitle: chatUser.metadata[AppLocalizations.of(context).doctorSpecialty] != null
+            ? Text(chatUser.metadata[AppLocalizations.of(context).doctorSpecialty])
             : Text(''),
       ),
     );

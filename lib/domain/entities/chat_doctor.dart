@@ -1,4 +1,4 @@
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
+import 'chat_user.dart';
 
 class ChatDoctor extends ChatUser {
   @override

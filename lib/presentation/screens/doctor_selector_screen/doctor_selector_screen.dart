@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sendbirdtutorial/Core/chat_colors.dart';
-import 'package:sendbirdtutorial/Core/chat_resources.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_doctor.dart';
+import '../../../Core/chat_colors.dart';
+import '../../../Core/chat_resources.dart';
+import '../../../domain/entities/chat_doctor.dart';
 
 var docList = [
   ChatDoctor(
@@ -31,6 +31,7 @@ var docList = [
 ];
 
 class DoctorSelectorScreen extends StatelessWidget {
+  static const String routeName = '/doctor-selector-screen';
   @override
   Widget build(BuildContext context) {
     return Scaffold(

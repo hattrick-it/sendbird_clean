@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/domain/controllers/channel_list_controller/channel_list_controller.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_channel.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_message.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/locator/locator.dart';
+import '../../../domain/controllers/channel_list_controller/channel_list_controller.dart';
+import '../../../domain/entities/chat_channel.dart';
+import '../../../domain/entities/chat_message.dart';
+import '../../../domain/entities/chat_user.dart';
+import '../../../locator/locator.dart';
 
 final chatChannelNotifier =
     ChangeNotifierProvider<ChatChannelViewModel>((ref) => locator.get());
@@ -32,8 +32,7 @@ class ChatChannelViewModel extends ChangeNotifier {
   Stream<List<ChatChannel>> get onNewChannelEvent =>
       channelListController.getChannels;
 
-  Stream<ChatMessage> get onNewMessageEvent =>
-      channelListController.getMessage;
+  Stream<ChatMessage> get onNewMessageEvent => channelListController.getMessage;
 
   ChatChannelState get chatChannelState => _chatChannelState;
 

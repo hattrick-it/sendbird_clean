@@ -1,8 +1,8 @@
 import 'package:sendbird_sdk/core/channel/base/base_channel.dart';
 import 'package:sendbird_sdk/core/channel/group/group_channel.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_channel.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/sendbird_chat_member.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/sendbird_base_message.dart';
+import '../../../../domain/entities/chat_channel.dart';
+import 'member.dart';
+import 'baseMessage.dart';
 
 extension GroupChannelExtension on GroupChannel {
   ChatChannel toDomain() => ChatChannel(
