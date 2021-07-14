@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/chat_channel.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../chat_screen/chat_screen.dart';
-import '../users_list_screen/users_list_screen.dart';
+
+// import '../users_list_screen/users_list.dart';
 import '../../viewmodel/channel_list_viewmodel/chat_channel_list_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -25,7 +26,7 @@ class ChannelListScreen extends StatelessWidget {
       body: BuildChannelListBody(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed(UsersListScreen.routeName);
+          // Navigator.of(context).pushNamed(UsersListScreen.routeName);
         },
         child: Text('Add'),
       ),

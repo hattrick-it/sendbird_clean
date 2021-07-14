@@ -1,5 +1,4 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'package:sendbirdtutorial/Core/constants.dart';
 import '../../../domain/entities/chat_doctor.dart';
 import '../../../domain/entities/chat_user.dart';
 
@@ -55,6 +54,8 @@ class UserBatchDataEntry {
   final SendbirdSdk sendbird;
   UserBatchDataEntry({this.sendbird});
 
+  final send = SendbirdSdk(appId: '81E3CC1F-64AF-4F04-BDE8-A7B632250808');
+
   Future<List<User>> getUsers() {
     try {
       final query = ApplicationUserListQuery();
@@ -66,13 +67,13 @@ class UserBatchDataEntry {
 
   Future<void> createDoctors() async {
     for (var item in doctorUsers) {
-      await sendbird.connect(item.userId);
-      await sendbird.updateCurrentUserInfo(
+      await send.connect(item.userId);
+      await send.updateCurrentUserInfo(
           nickname: item.nickname,
           fileInfo: FileInfo.fromUrl(
             url: item.profileUrl,
           ));
-      final user = sendbird.currentUser;
+      final user = send.currentUser;
       final data = item.metadata;
       await user.createMetaData(data);
     }
@@ -80,13 +81,13 @@ class UserBatchDataEntry {
 
   Future<void> createPatients() async {
     for (var item in patientsUsers) {
-      await sendbird.connect(item.userId);
-      await sendbird.updateCurrentUserInfo(
+      await send.connect(item.userId);
+      await send.updateCurrentUserInfo(
           nickname: item.nickname,
           fileInfo: FileInfo.fromUrl(
             url: item.profileUrl,
           ));
-      final user = sendbird.currentUser;
+      final user = send.currentUser;
       final data = item.metadata;
       await user.createMetaData(data);
     }

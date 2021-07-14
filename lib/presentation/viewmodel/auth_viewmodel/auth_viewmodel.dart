@@ -4,14 +4,14 @@ import '../../../domain/controllers/login_controller/login_controller.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
 
-enum AuthState {
-  Error,
+enum LoginState {
+  Empty,
   Loading,
   Loaded,
-  Empty,
+  Error,
 }
 
-final authViewModel =
+final authNotifierProvider =
     ChangeNotifierProvider<AuthViewModel>((ref) => locator.get());
 
 class AuthViewModel extends ChangeNotifier {
@@ -22,7 +22,10 @@ class AuthViewModel extends ChangeNotifier {
   // Properties
   var _userId = '';
   var _nickname = '';
-  AuthState _authState = AuthState.Empty;
+  LoginState _loginState = LoginState.Empty;
+
+  // Getters
+  LoginState get getState => _loginState;
 
   // Setters
   set setUserId(String userid) {
@@ -33,34 +36,30 @@ class AuthViewModel extends ChangeNotifier {
     _nickname = nickname;
   }
 
-  void _setState(AuthState state) {
-    _authState = state;
+  void _setLoginState(LoginState state) {
+    _loginState = state;
     notifyListeners();
   }
-
-  // Getters
-  AuthState get getAuthState => _authState;
 
   // Private Methods
 
   // Public Methods
-  Future<void> connect(String userId, String nickname) async {
+
+  Future<ChatUser> connect(
+      String userId, String nickname, String userType) async {
     try {
-      _setState(AuthState.Loading);
-      var chatUser = await loginController.connect(userId, nickname);
-      if (chatUser != null) {
-        _setState(AuthState.Loaded);
-        return chatUser;
-      } else {
-        return null;
-      }
+      _setLoginState(LoginState.Loading);
+      loginController.saveUserType(userType);
+      await loginController.connect(userId, nickname);
+      _setLoginState(LoginState.Loaded);
     } catch (e) {
-      _setState(AuthState.Error);
+      _setLoginState(LoginState.Error);
       throw Exception(e);
     }
   }
 
   Future<void> adminConnect(String userId, String nickname) async {
-    var chatUser = await loginController.connect(userId, nickname);
+    print('ADMIN CONNECT EN VIEWMODEL');
+    await loginController.connect(userId, nickname);
   }
 }

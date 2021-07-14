@@ -1,16 +1,18 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/Core/chat_colors.dart';
+import 'package:sendbirdtutorial/presentation/screens/common_widgets/common_appbar.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../channels_list/channels_list_screen.dart';
 import '../../viewmodel/auth_viewmodel/auth_viewmodel.dart';
 import '../../viewmodel/user_selection_viewmodel/user_selection_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class UserSelectionScreen extends StatelessWidget {
-  static const String routeName = '/user-selection-screen';
+class PatientsListScreen extends StatelessWidget {
+  static const String routeName = '/patients-list-screen';
 
-  const UserSelectionScreen();
+  const PatientsListScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +25,14 @@ class UserSelectionScreen extends StatelessWidget {
       ),
       body: Consumer(
         builder: (context, watch, child) {
-          final providerState = watch(authViewModel).getAuthState;
-          if (providerState == AuthState.Empty) {
+          final providerState = watch(authNotifierProvider).getState;
+          if (providerState == LoginState.Empty) {
             return BuildUserSelectionBody(userType: userType);
-          } else if (providerState == AuthState.Loaded) {
+          } else if (providerState == LoginState.Loaded) {
             WidgetsBinding.instance?.addPostFrameCallback((_) {
-              Navigator.of(context).popAndPushNamed(ChannelListScreen.routeName);
+              Navigator.of(context)
+                  .popAndPushNamed(ChannelListScreen.routeName);
             });
-
           }
           return Center(child: CircularProgressIndicator());
         },
@@ -77,9 +79,11 @@ class BuildUserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        var tempUser = await context
-            .read(authViewModel)
-            .connect(chatUser.userId, chatUser.nickname);
+        var tempUser = await context.read(authNotifierProvider).connect(
+            chatUser.userId, chatUser.nickname, chatUser.metadata['userType']);
+        if (tempUser != null) {
+          Navigator.of(context).popAndPushNamed(ChannelListScreen.routeName);
+        }
       },
       child: ListTile(
         leading: CircleAvatar(

@@ -9,6 +9,13 @@ import '../../../locator/locator.dart';
 final userSelectionViewModel =
     ChangeNotifierProvider<UserSelectionViewModel>((ref) => locator.get());
 
+enum UserSelectionStatus {
+  Empty,
+  Loading,
+  Loaded,
+  Error,
+}
+
 class UserSelectionViewModel extends ChangeNotifier {
   // Locator DI
   final LoginController loginController;
@@ -18,15 +25,30 @@ class UserSelectionViewModel extends ChangeNotifier {
     this.loginController,
     this.userSelectionController,
   }) {
-    adminConnect();
+    // adminConnect();
   }
 
   // Properties
   String _userType;
+  List<ChatUser> _userList = [];
+  UserSelectionStatus _userSelectionStatus = UserSelectionStatus.Empty;
 
   // Getters
+  List<ChatUser> get getUserList => _userList;
+
+  UserSelectionStatus get getUserSelectionSatus => _userSelectionStatus;
 
   // Setters
+  void _setUserList(List<ChatUser> list) {
+    _userList = [];
+    _userList = list;
+    notifyListeners();
+  }
+
+  void _setStatus(UserSelectionStatus status) {
+    _userSelectionStatus = status;
+    notifyListeners();
+  }
 
   // Private methods
 
@@ -40,12 +62,47 @@ class UserSelectionViewModel extends ChangeNotifier {
     return userSelectionController.getCurrentUserType();
   }
 
-  Future<void> adminConnect() async {
-    await loginController.connect(StringConstants.adminUserIdNickname,
-        StringConstants.adminUserIdNickname);
+  // Future<void> adminConnect() async {
+  //   await loginController.connect(StringConstants.adminUserIdNickname,
+  //       StringConstants.adminUserIdNickname);
+  // }
+
+  // TODO !!!!!
+
+  Future<void> getUsersByType() async {
+    try {
+      _setStatus(UserSelectionStatus.Loading);
+      List<ChatUser> chatUsers = await userSelectionController.getUsersByType();
+      _setUserList(chatUsers);
+      _setStatus(UserSelectionStatus.Loaded);
+    } catch (e) {
+      _setStatus(UserSelectionStatus.Error);
+      throw Exception(e);
+    }
   }
 
-  Future<List<ChatUser>> getUsersByType() async {
-    return userSelectionController.getUsersByType(_userType);
+  Future<void> getUserByName(String name) async {
+    try {
+      _setStatus(UserSelectionStatus.Loading);
+      var chatUsers = await userSelectionController.getUserByName(name);
+      _setUserList(chatUsers);
+      _setStatus(UserSelectionStatus.Loaded);
+    } catch (e) {
+      _setStatus(UserSelectionStatus.Error);
+      throw Exception(e);
+    }
+  }
+
+  Future<void> getDoctorBySpecialty(String specialty) async {
+    try {
+      _setStatus(UserSelectionStatus.Loading);
+      var chatUsers =
+          await userSelectionController.getDoctorBySpecialty(specialty);
+      _setUserList(chatUsers);
+      _setStatus(UserSelectionStatus.Loaded);
+    } catch (e) {
+      _setStatus(UserSelectionStatus.Error);
+      throw Exception(e);
+    }
   }
 }

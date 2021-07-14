@@ -36,6 +36,7 @@ dependencies:
   get_it: ^5.0.6
   shared_preferences: ^0.5.12+4
   animate_do: ^1.7.5
+  flutter_advanced_avatar: ^0.0.2+1
 
 dev_dependencies:
   flutter_test:

@@ -1,15 +1,16 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-
+import 'package:sendbirdtutorial/Core/constants.dart';
+import 'package:sendbirdtutorial/data/data_sources/local_data_source/user_type_data_source.dart';
 
 class AuthRemoteDataSource {
   final SendbirdSdk sendbird;
-AuthRemoteDataSource({this.sendbird});
+  final UserTypeDataSource userTypeDataSource;
+
+  AuthRemoteDataSource({this.sendbird, this.userTypeDataSource});
 
   Future<User> connect(String userId, String nickname) async {
     try {
-      var user = await sendbird.connect(userId);
-      await sendbird.updateCurrentUserInfo(nickname: nickname);
-      return user;
+      await sendbird.connect(userId, nickname: nickname);
     } catch (e) {
       throw Exception(e);
     }
@@ -17,5 +18,9 @@ AuthRemoteDataSource({this.sendbird});
 
   void disconnect() {
     sendbird.disconnect();
+  }
+
+  void saveUserType(String userType) async {
+    await userTypeDataSource.saveUserType(userType);
   }
 }

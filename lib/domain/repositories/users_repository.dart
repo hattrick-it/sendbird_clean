@@ -4,4 +4,5 @@ abstract class UsersRepository {
   Future<List<ChatUser>> getUsers();
 
   ChatUser getCurrentUser();
+
 }

@@ -15,10 +15,9 @@ enum DoctorStates {
 
 class DoctorSelectionViewModel extends ChangeNotifier {
   // Properties
-  List<ChatDoctor> _doctorsList = [];
+
 
   // Getters
-  List<ChatDoctor> get doctorsList => _doctorsList;
 
   // Setters
 

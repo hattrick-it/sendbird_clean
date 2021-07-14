@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sendbird_sdk/sendbird_sdk.dart';
 import 'package:sendbirdtutorial/Core/string_constants.dart';
 import 'package:sendbirdtutorial/data/data_sources/remote_data_source/users_data_source.dart';
@@ -14,10 +16,12 @@ class ChatRepositoryImpl implements ChatRepository {
   final UserTypeDataSource localUserTypeDataSource;
   final UsersDataSource usersDataSource;
 
-  ChatRepositoryImpl(
-      {this.sendbirdChannelsDataSource,
-      this.localUserTypeDataSource,
-      this.usersDataSource});
+
+  ChatRepositoryImpl({
+    this.sendbirdChannelsDataSource,
+    this.localUserTypeDataSource,
+    this.usersDataSource,
+  });
 
   @override
   Stream<ChatMessage> getMessageStream() {
@@ -50,7 +54,6 @@ class ChatRepositoryImpl implements ChatRepository {
         .then((message) => message.toDomain());
   }
 
-  @override
   ChatUser getCurrentUser() {
     return usersDataSource.getCurrentUser().toDomain();
   }

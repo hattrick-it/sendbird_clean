@@ -2,15 +2,20 @@ import '../../repositories/auth_repository.dart';
 import '../../entities/chat_user.dart';
 
 class LoginController {
-  final AuthRepository userRespository;
+  final AuthRepository authRepository;
 
-  LoginController({this.userRespository});
+  LoginController({this.authRepository});
 
-  Future<ChatUser> connect([String userId, String nickname]) async {
+  Future<void> connect(String userId, String nickname) async {
+    print('ADMIN CONNECT EN Controller');
     try {
-      return await userRespository.connect(userId, nickname);
+      await authRepository.connect(userId, nickname);
     } catch (e) {
       throw Exception(e);
     }
+  }
+
+  void saveUserType(String userType) {
+    authRepository.saveUserType(userType);
   }
 }

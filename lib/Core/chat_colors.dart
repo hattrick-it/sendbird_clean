@@ -16,5 +16,9 @@ class ChatColors {
   static Color doctorsubtitleText = Color.fromRGBO(123, 120, 120, 1.0);
   static Color doctorSubTitleBackground = Color.fromRGBO(213, 211, 211, 1.0);
   static Color doctorAvailable = Color.fromRGBO(66, 149, 66, 1.0);
-  static Color doctorNotAvailable = Color.fromRGBO(182, 47, 76, 1.0);
+  static Color doctorNotAvailable = Color.fromRGBO(226, 68, 102, 1.0);
+  static Color welcomeScreenPurpleButton = Color.fromRGBO(76, 27, 104, 1.0);
+  static Color welcomeScreenWhiteButton = Color.fromRGBO(252, 252, 252, 1.0);
+  static Color greyAppbarBackgroundColor = Color.fromRGBO(203, 201, 201, 1.0);
+  static Color whiteAppbarBackgroundColor = Color.fromRGBO(255, 255, 255, 1.0);
 }

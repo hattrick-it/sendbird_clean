@@ -64,6 +64,7 @@ class UsersListViewModel extends ChangeNotifier {
     }
   }
 
+
   void createChannel(String userId) {
     channelListController.createChannel(userId);
   }

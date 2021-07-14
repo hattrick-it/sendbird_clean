@@ -50,5 +50,25 @@
   "channelScreenNoMessagesYet": "No messages yet",
   "@channelScreenNoMessagesYet": {
     "description": ""
+  },
+  "welcomeScreenTitle": "Hello, Welcome!",
+  "@welcomeScreenTitle": {
+    "description": ""
+  },
+  "doctorListScreenAppbarTitle": "Doctors",
+  "@doctorListScreenAppbarTitle": {
+    "description": ""
+  },
+  "patientListScreenAppbarTitle": "Patients",
+  "@patientListScreenAppbarTitle": {
+    "description": ""
+  },
+  "patientsListScreenHinttext": "Patients list",
+  "@patientsListScreenHinttext": {
+    "description": ""
+  },
+  "doctorListScreenHinttext": "Search doctor by name",
+  "@doctorListScreenHinttext": {
+    "description": ""
   }
 }
