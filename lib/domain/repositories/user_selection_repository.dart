@@ -6,4 +6,8 @@ abstract class UserSelectionRepository {
   Future<List<ChatUser>> getUsersByType();
 
   Future<List<ChatUser>> getDoctorBySpecialty(String specialty);
+
+  Future<List<String>> getSpecialtyList();
+
+  Future<Map<String, bool>> getSpecialtyMap();
 }

@@ -21,4 +21,6 @@ class ChatColors {
   static Color welcomeScreenWhiteButton = Color.fromRGBO(252, 252, 252, 1.0);
   static Color greyAppbarBackgroundColor = Color.fromRGBO(203, 201, 201, 1.0);
   static Color whiteAppbarBackgroundColor = Color.fromRGBO(255, 255, 255, 1.0);
+  static Color specialtyUnSelected = Color.fromRGBO(255, 255, 255, 1.0);
+  static Color specialtySelected = Color.fromRGBO(130, 62, 198, 1.0);
 }

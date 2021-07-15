@@ -16,6 +16,13 @@ enum UserSelectionStatus {
   Error,
 }
 
+enum SpecialtyListStatus {
+  Empty,
+  Loading,
+  Loaded,
+  Error,
+}
+
 class UserSelectionViewModel extends ChangeNotifier {
   // Locator DI
   final LoginController loginController;
@@ -30,13 +37,25 @@ class UserSelectionViewModel extends ChangeNotifier {
 
   // Properties
   String _userType;
-  List<ChatUser> _userList = [];
+  List<ChatUser> _userList = List<ChatUser>();
+  List<String> _specialtyList = List<String>();
+  Map<String, bool> _specialtiesMap = {};
   UserSelectionStatus _userSelectionStatus = UserSelectionStatus.Empty;
+  SpecialtyListStatus _specialtyListStatus = SpecialtyListStatus.Empty;
+  int _selectedIndex = 0;
 
   // Getters
   List<ChatUser> get getUserList => _userList;
 
+  List<String> get getSpecialties => _specialtyList;
+
+  int get getSelectedIndex => _selectedIndex;
+
+  Map<String, bool> get getSpecialtiesMap => _specialtiesMap;
+
   UserSelectionStatus get getUserSelectionSatus => _userSelectionStatus;
+
+  SpecialtyListStatus get getSpecialtyListStatus => _specialtyListStatus;
 
   // Setters
   void _setUserList(List<ChatUser> list) {
@@ -45,8 +64,25 @@ class UserSelectionViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void _setSpecialtyList(List<String> list) {
+    _specialtyList = [];
+    _specialtyList = list;
+    notifyListeners();
+  }
+
+  void _setSpecialtiesMap(Map<String, bool> myMap) {
+    _specialtiesMap = {};
+    _specialtiesMap = myMap;
+    notifyListeners();
+  }
+
   void _setStatus(UserSelectionStatus status) {
     _userSelectionStatus = status;
+    notifyListeners();
+  }
+
+  void _setSpecialtyListStatus(SpecialtyListStatus status) {
+    _specialtyListStatus = status;
     notifyListeners();
   }
 
@@ -62,12 +98,29 @@ class UserSelectionViewModel extends ChangeNotifier {
     return userSelectionController.getCurrentUserType();
   }
 
-  // Future<void> adminConnect() async {
-  //   await loginController.connect(StringConstants.adminUserIdNickname,
-  //       StringConstants.adminUserIdNickname);
-  // }
+  Future<List<String>> getSpecialtyList() async {
+    try {
+      _setSpecialtyListStatus(SpecialtyListStatus.Loading);
+      var specialties = await userSelectionController.getSpecialtyList();
+      _setSpecialtyList(specialties);
+      _setSpecialtyListStatus(SpecialtyListStatus.Loaded);
+    } catch (e) {
+      _setSpecialtyListStatus(SpecialtyListStatus.Error);
+      throw Exception(e);
+    }
+  }
 
-  // TODO !!!!!
+  Future<void> getSpecialtyMap() async {
+    try {
+      _setSpecialtyListStatus(SpecialtyListStatus.Loading);
+      var specialties = await userSelectionController.getSpecialtiesMap();
+      _setSpecialtiesMap(specialties);
+      _setSpecialtyListStatus(SpecialtyListStatus.Loaded);
+    } catch (e) {
+      _setSpecialtyListStatus(SpecialtyListStatus.Error);
+      throw Exception(e);
+    }
+  }
 
   Future<void> getUsersByType() async {
     try {
@@ -93,16 +146,25 @@ class UserSelectionViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> getDoctorBySpecialty(String specialty) async {
+  Future<void> getDoctorBySpecialty(int index) async {
+    var speciality = _specialtiesMap.keys.elementAt(index);
+    setSelectedIndex(index);
     try {
       _setStatus(UserSelectionStatus.Loading);
       var chatUsers =
-          await userSelectionController.getDoctorBySpecialty(specialty);
+      await userSelectionController.getDoctorBySpecialty(speciality);
       _setUserList(chatUsers);
       _setStatus(UserSelectionStatus.Loaded);
     } catch (e) {
       _setStatus(UserSelectionStatus.Error);
       throw Exception(e);
     }
+  }
+
+  void setSelectedIndex(int selected) {
+    _specialtiesMap[_specialtiesMap.keys.elementAt(_selectedIndex)] = false;
+    _specialtiesMap[_specialtiesMap.keys.elementAt(selected)] = true;
+    _selectedIndex = selected;
+    notifyListeners();
   }
 }

@@ -24,6 +24,7 @@ class UsersDataSource {
     }
   }
 
+  // TODO: remove this method and sendbird DI
   User getCurrentUser() {
     try {
       return sendbird.currentUser;
@@ -39,14 +40,11 @@ class UsersDataSource {
 // getUserByName(String name)
   Future<List<ChatUser>> getUserByName(String name) async {
     try {
-      String currentType = await getCurrentType();
-      final userList = await ApplicationUserListQuery().loadNext();
-      return userList.map((e) {
-        if (e.nickname.contains(name) &&
-            e.metaData['userType'] != currentType) {
-          return e.toDomain();
-        }
-      }).toList();
+      var list = await getUsersByType();
+      return list
+          .where((element) =>
+              element.nickname.toLowerCase().contains(name.toLowerCase()))
+          .toList();
     } catch (e) {
       Exception(e);
     }
@@ -54,18 +52,13 @@ class UsersDataSource {
 
   // getUsersByType()
   Future<List<ChatUser>> getUsersByType() async {
-    var currentType = await getCurrentType();
-    print(currentType);
+    final currentType = await getCurrentType();
     final listQuery = ApplicationUserListQuery();
     try {
       var userList = await listQuery.loadNext();
-      print('');
-      var mapList = userList.map((e) {
-        if (e.metaData['userType'] != currentType) {
-          return e.toDomain();
-        }
-      }).toList();
-      return mapList;
+      var returnList = userList
+          .where((element) => element.metaData['userType'] != currentType);
+      return returnList.map((e) => e.toDomain()).toList();
     } catch (e) {
       Exception(e);
     }
@@ -74,13 +67,42 @@ class UsersDataSource {
   Future<List<ChatUser>> getDoctorBySpecialty(String specialty) async {
     try {
       final userList = await ApplicationUserListQuery().loadNext();
-      return userList.map((e) {
-        if (e.metaData['Specialty'] == specialty) {
-          return e.toDomain();
-        }
-      }).toList();
+      if(specialty == 'All'){
+        return getUsersByType();
+      }
+      List<ChatUser> returnList = [];
+       for(var item in userList){
+         if(item.metaData['Specialty'] == specialty){
+           returnList.add(item.toDomain());
+         }
+       }
+      return returnList.toList();
     } catch (e) {
       Exception(e);
+    }
+  }
+
+  //TODO DELETE THIS METHOD FROM HERE ALL THE WAY TO THE TOP
+  Future<List<String>> getSpecialtyList() async {
+    final userList = List<String>();
+    return userList;
+  }
+
+  Future<Map<String, bool>> getSpecialtyMap() async {
+    Map<String, bool> returnMap = {'All': true};
+    try {
+      final userList = await ApplicationUserListQuery().loadNext();
+      userList
+          .where((element) => element.metaData.containsKey('Specialty'))
+          .map((e) => e.metaData['Specialty'])
+          .toSet()
+          .toList()
+          .forEach((element) {
+        returnMap[element] = false;
+      });
+      return returnMap;
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

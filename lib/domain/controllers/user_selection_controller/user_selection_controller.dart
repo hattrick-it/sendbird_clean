@@ -31,12 +31,19 @@ class UserSelectionController {
   }
 
   Future<List<ChatUser>> getUsersByType()async{
-    var lista = await userSelectorRepository.getUsersByType();
-    return lista;
+    return await userSelectorRepository.getUsersByType();
   }
 
   Future<List<ChatUser>> getDoctorBySpecialty(String specialty){
     return userSelectorRepository.getDoctorBySpecialty(specialty);
+  }
+
+  Future<List<String>> getSpecialtyList() async {
+    return await userSelectorRepository.getSpecialtyList();
+  }
+
+  Future<Map<String,bool>> getSpecialtiesMap() async{
+    return await userSelectorRepository.getSpecialtyMap();
   }
 }
 

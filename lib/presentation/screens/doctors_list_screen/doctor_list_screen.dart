@@ -95,13 +95,22 @@ class BuildDoctorListBody extends StatelessWidget {
     return Column(
       children: [
         SearchComponent(),
+        Container(
+          height: 60,
+          padding: EdgeInsets.symmetric(vertical: 10),
+          color: ChatColors.greyAppbarBackgroundColor,
+          child: SpecialtyButtonsComponent(),
+        ),
         Consumer(
           builder: (context, watch, child) {
             var provider = watch(userSelectionViewModel);
-            if (provider.getUserSelectionSatus == UserSelectionStatus.Loaded) {
+            if (provider.getUserList == null) {
+              return Center(child: CircularProgressIndicator());
+            } else if (provider.getUserSelectionSatus ==
+                UserSelectionStatus.Loaded) {
               return DoctorsList(userList: provider.getUserList);
             }
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           },
         ),
       ],
@@ -151,6 +160,9 @@ class BuildSearchBar extends StatelessWidget {
                 style:
                     TextStyle(color: ChatColors.disbleSendButton, fontSize: 12),
                 cursorColor: ChatColors.disbleSendButton,
+                onChanged: (val) {
+                  context.read(userSelectionViewModel).getUserByName(val);
+                },
                 onTap: () {},
                 decoration: InputDecoration(
                   hintText:
@@ -165,6 +177,63 @@ class BuildSearchBar extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SpecialtyButtonsComponent extends StatelessWidget {
+  const SpecialtyButtonsComponent();
+
+  @override
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read(userSelectionViewModel).getSpecialtyList();
+      context.read(userSelectionViewModel).getSpecialtyMap();
+    });
+
+    return Container(
+      height: 40,
+      margin: EdgeInsets.only(left: 15),
+      child: Consumer(
+        builder: (context, watch, child) {
+          final status = watch(userSelectionViewModel).getSpecialtyListStatus;
+          if (status == SpecialtyListStatus.Loaded) {
+            final specialties = watch(userSelectionViewModel).getSpecialties;
+            final specialtiesMap =
+                watch(userSelectionViewModel).getSpecialtiesMap;
+            return ListView.separated(
+              separatorBuilder: (context, index) {
+                return Divider(
+                  thickness: 2,
+                  endIndent: 5,
+                );
+              },
+              scrollDirection: Axis.horizontal,
+              itemCount: specialtiesMap.length,
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Container(
+                  color: specialtiesMap.values.elementAt(index)
+                      ? ChatColors.specialtySelected
+                      : ChatColors.specialtyUnSelected,
+                  child: FlatButton(
+                    onPressed: () {
+                      context.read(userSelectionViewModel).getDoctorBySpecialty(index);
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(specialtiesMap.keys.elementAt(index)),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+          return LinearProgressIndicator();
+        },
       ),
     );
   }
