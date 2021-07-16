@@ -18,13 +18,12 @@ class UsersDataSource {
     try {
       final query = ApplicationUserListQuery();
       final list = await query.loadNext();
-      print('asdas');
+      return list;
     } catch (e) {
       throw Exception(e);
     }
   }
 
-  // TODO: remove this method and sendbird DI
   User getCurrentUser() {
     try {
       return sendbird.currentUser;
@@ -52,9 +51,9 @@ class UsersDataSource {
 
   // getUsersByType()
   Future<List<ChatUser>> getUsersByType() async {
-    final currentType = await getCurrentType();
-    final listQuery = ApplicationUserListQuery();
     try {
+      final currentType = await getCurrentType();
+      final listQuery = ApplicationUserListQuery();
       var userList = await listQuery.loadNext();
       var returnList = userList
           .where((element) => element.metaData['userType'] != currentType);
@@ -67,25 +66,16 @@ class UsersDataSource {
   Future<List<ChatUser>> getDoctorBySpecialty(String specialty) async {
     try {
       final userList = await ApplicationUserListQuery().loadNext();
-      if(specialty == 'All'){
+      if (specialty == 'All') {
         return getUsersByType();
       }
-      List<ChatUser> returnList = [];
-       for(var item in userList){
-         if(item.metaData['Specialty'] == specialty){
-           returnList.add(item.toDomain());
-         }
-       }
-      return returnList.toList();
+      return userList
+          .where((element) => element.metaData['Specialty'] == specialty)
+          .map((e) => e.toDomain())
+          .toList();
     } catch (e) {
       Exception(e);
     }
-  }
-
-  //TODO DELETE THIS METHOD FROM HERE ALL THE WAY TO THE TOP
-  Future<List<String>> getSpecialtyList() async {
-    final userList = List<String>();
-    return userList;
   }
 
   Future<Map<String, bool>> getSpecialtyMap() async {

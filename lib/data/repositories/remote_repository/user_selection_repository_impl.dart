@@ -29,11 +29,6 @@ class UserSelectionRepositoryImpl implements UserSelectionRepository {
     return usersDataSource.getDoctorBySpecialty(specialty);
   }
 
-  @override
-  Future<List<String>> getSpecialtyList()async{
-    return usersDataSource.getSpecialtyList();
-  }
-
   Future<Map<String,bool>> getSpecialtyMap()async{
     return usersDataSource.getSpecialtyMap();
   }

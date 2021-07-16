@@ -5,7 +5,6 @@ import 'package:sendbirdtutorial/domain/repositories/chat_repository.dart';
 import '../../entities/chat_user.dart';
 import '../../repositories/local_user_type_repository.dart';
 import '../../repositories/user_selection_repository.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/user.dart';
 
 class UserSelectionController {
   final UserSelectionRepository userSelectorRepository;
@@ -36,10 +35,6 @@ class UserSelectionController {
 
   Future<List<ChatUser>> getDoctorBySpecialty(String specialty){
     return userSelectorRepository.getDoctorBySpecialty(specialty);
-  }
-
-  Future<List<String>> getSpecialtyList() async {
-    return await userSelectorRepository.getSpecialtyList();
   }
 
   Future<Map<String,bool>> getSpecialtiesMap() async{

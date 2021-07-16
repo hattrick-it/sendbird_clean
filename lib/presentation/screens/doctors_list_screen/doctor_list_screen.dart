@@ -5,67 +5,7 @@ import 'package:sendbirdtutorial/Core/chat_colors.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
 import 'package:sendbirdtutorial/presentation/screens/common_widgets/common_appbar.dart';
 import 'package:sendbirdtutorial/presentation/viewmodel/user_selection_viewmodel/user_selection_viewmodel.dart';
-import '../../../domain/entities/chat_doctor.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-var docList = [
-  ChatDoctor(
-      userId: 'doctor1',
-      nickname: 'Dr.Edwin Ching',
-      isOnline: true,
-      profileUrl:
-          'https://res.cloudinary.com/hattrick-it/image/upload/v1624907937/users/doctor_1.jpg',
-      specialty: 'General Practice'),
-  ChatDoctor(
-      userId: 'doctor2',
-      nickname: 'Dr.Kevin Zeng',
-      isOnline: true,
-      profileUrl:
-          'https://res.cloudinary.com/hattrick-it/image/upload/v1624907946/users/doctor_2.jpg',
-      specialty: 'Hospitalist'),
-  ChatDoctor(
-      userId: 'doctor3',
-      nickname: 'Dr.John Shi Chang Su',
-      isOnline: false,
-      profileUrl:
-          'https://res.cloudinary.com/hattrick-it/image/upload/v1624907952/users/doctor_3.jpg',
-      specialty: 'Family Medicine'),
-  ChatDoctor(
-      userId: 'doctor4',
-      nickname: 'Dr.Jun Qi Wu.',
-      isOnline: true,
-      profileUrl:
-          'https://res.cloudinary.com/hattrick-it/image/upload/v1624907937/users/doctor_1.jpg',
-      specialty: 'Family Medicine'),
-  ChatDoctor(
-      userId: 'doctor1',
-      nickname: 'Dr.Edwin Ching',
-      isOnline: true,
-      profileUrl:
-          'https://res.cloudinary.com/hattrick-it/image/upload/v1624907937/users/doctor_1.jpg',
-      specialty: 'General Practice'),
-  ChatDoctor(
-      userId: 'doctor2',
-      nickname: 'Dr.Kevin Zeng',
-      isOnline: true,
-      profileUrl:
-          'https://res.cloudinary.com/hattrick-it/image/upload/v1624907946/users/doctor_2.jpg',
-      specialty: 'Hospitalist'),
-  ChatDoctor(
-      userId: 'doctor3',
-      nickname: 'Dr.John Shi Chang Su',
-      isOnline: false,
-      profileUrl:
-          'https://res.cloudinary.com/hattrick-it/image/upload/v1624907952/users/doctor_3.jpg',
-      specialty: 'Family Medicine'),
-  ChatDoctor(
-      userId: 'doctor4',
-      nickname: 'Dr.Jun Qi Wu.',
-      isOnline: true,
-      profileUrl:
-          'https://res.cloudinary.com/hattrick-it/image/upload/v1624907937/users/doctor_1.jpg',
-      specialty: 'Family Medicine'),
-];
 
 class DoctorListScreen extends StatelessWidget {
   static const String routeName = '/doctor-list-screen';
@@ -163,7 +103,6 @@ class BuildSearchBar extends StatelessWidget {
                 onChanged: (val) {
                   context.read(userSelectionViewModel).getUserByName(val);
                 },
-                onTap: () {},
                 decoration: InputDecoration(
                   hintText:
                       AppLocalizations.of(context).doctorListScreenHinttext,
@@ -188,7 +127,6 @@ class SpecialtyButtonsComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read(userSelectionViewModel).getSpecialtyList();
       context.read(userSelectionViewModel).getSpecialtyMap();
     });
 
@@ -199,7 +137,6 @@ class SpecialtyButtonsComponent extends StatelessWidget {
         builder: (context, watch, child) {
           final status = watch(userSelectionViewModel).getSpecialtyListStatus;
           if (status == SpecialtyListStatus.Loaded) {
-            final specialties = watch(userSelectionViewModel).getSpecialties;
             final specialtiesMap =
                 watch(userSelectionViewModel).getSpecialtiesMap;
             return ListView.separated(
@@ -218,13 +155,22 @@ class SpecialtyButtonsComponent extends StatelessWidget {
                       ? ChatColors.specialtySelected
                       : ChatColors.specialtyUnSelected,
                   child: FlatButton(
-                    onPressed: () {
-                      context.read(userSelectionViewModel).getDoctorBySpecialty(index);
+                    onPressed: () { 
+                      context
+                          .read(userSelectionViewModel)
+                          .getDoctorBySpecialty(index);
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text(specialtiesMap.keys.elementAt(index)),
+                        Text(
+                          specialtiesMap.keys.elementAt(index),
+                          style: TextStyle(
+                            color: specialtiesMap.values.elementAt(index)
+                                ? ChatColors.whiteColor
+                                : ChatColors.doctorsubtitleText,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -257,48 +203,53 @@ class DoctorsList extends StatelessWidget {
           );
         },
         itemBuilder: (context, index) {
-          return Container(
-            width: double.infinity,
-            height: 90,
-            child: Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 20, top: 5),
-                  child: AdvancedAvatar(
-                    image: NetworkImage(userList[index].profileUrl),
-                    foregroundDecoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: ChatColors.greyAppbarBackgroundColor,
-                        width: 1.0,
+          return GestureDetector(
+            onTap: () {
+              print(userList[index].userId);
+            },
+            child: Container(
+              width: double.infinity,
+              height: 90,
+              child: Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 20, top: 5),
+                    child: AdvancedAvatar(
+                      image: NetworkImage(userList[index].profileUrl),
+                      foregroundDecoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: ChatColors.greyAppbarBackgroundColor,
+                          width: 1.0,
+                        ),
+                      ),
+                      size: 60,
+                      statusSize: 16,
+                      statusColor: userList[index].isOnline
+                          ? ChatColors.doctorAvailable
+                          : ChatColors.doctorNotAvailable,
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            userList[index].metadata['Specialty'],
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            userList[index].nickname,
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ],
                       ),
                     ),
-                    size: 60,
-                    statusSize: 16,
-                    statusColor: userList[index].isOnline
-                        ? ChatColors.doctorAvailable
-                        : ChatColors.doctorNotAvailable,
                   ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Text(
-                        //   userList[index].specialty,
-                        //   style: TextStyle(fontWeight: FontWeight.bold),
-                        // ),
-                        Text(
-                          userList[index].nickname,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(width: 30),
-              ],
+                  SizedBox(width: 30),
+                ],
+              ),
             ),
           );
         },

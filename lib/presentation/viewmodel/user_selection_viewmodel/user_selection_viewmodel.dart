@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/Core/string_constants.dart';
 import '../../../domain/controllers/login_controller/login_controller.dart';
 import '../../../domain/controllers/user_selection_controller/user_selection_controller.dart';
 import '../../../domain/entities/chat_user.dart';
@@ -96,18 +95,6 @@ class UserSelectionViewModel extends ChangeNotifier {
 
   Future<String> getCurrentUserType() {
     return userSelectionController.getCurrentUserType();
-  }
-
-  Future<List<String>> getSpecialtyList() async {
-    try {
-      _setSpecialtyListStatus(SpecialtyListStatus.Loading);
-      var specialties = await userSelectionController.getSpecialtyList();
-      _setSpecialtyList(specialties);
-      _setSpecialtyListStatus(SpecialtyListStatus.Loaded);
-    } catch (e) {
-      _setSpecialtyListStatus(SpecialtyListStatus.Error);
-      throw Exception(e);
-    }
   }
 
   Future<void> getSpecialtyMap() async {
