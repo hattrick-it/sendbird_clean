@@ -6,7 +6,7 @@ import '../../../domain/controllers/user_selection_controller/user_selection_con
 import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
 
-final userSelectionNotifier =
+final userSelectionViewModel =
     ChangeNotifierProvider<UserSelectionViewModel>((ref) => locator.get());
 
 class UserSelectionViewModel extends ChangeNotifier {

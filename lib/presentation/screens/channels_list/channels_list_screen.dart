@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/chat_channel.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../chat_screen/chat_screen.dart';
-import '../users_list_screen/users_list.dart';
+import '../users_list_screen/users_list_screen.dart';
 import '../../viewmodel/channel_list_viewmodel/chat_channel_list_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -12,7 +12,7 @@ class ChannelListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance?.addPostFrameCallback((_) {});
-    ChatUser chatUser = context.read(chatChannelNotifier).getCurrentUser();
+    ChatUser chatUser = context.read(chatChannelViewModel).getCurrentUser();
     return Scaffold(
       appBar: AppBar(
         title: Text(chatUser.nickname),
@@ -36,14 +36,14 @@ class BuildChannelListBody extends StatelessWidget {
     WidgetsBinding.instance?.addPostFrameCallback((_) {});
 
     return StreamBuilder(
-      stream: context.read(chatChannelNotifier).onNewChannelEvent,
+      stream: context.read(chatChannelViewModel).onNewChannelEvent,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var channelList = snapshot.data as List<ChatChannel>;
           return ListView.builder(
             itemCount: channelList.length,
             itemBuilder: (context, index) {
-              var chatUser = context.read(chatChannelNotifier).getCurrentUser();
+              var chatUser = context.read(chatChannelViewModel).getCurrentUser();
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushNamed(ChatScreen.routeName,

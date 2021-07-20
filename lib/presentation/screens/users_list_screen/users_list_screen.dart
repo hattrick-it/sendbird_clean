@@ -11,7 +11,7 @@ class UsersListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      context.read(usersListNotifier).getUsers();
+      context.read(usersListViewModel).getUsers();
     });
 
     return Scaffold(
@@ -31,7 +31,7 @@ class BuildChannelListBody extends StatelessWidget {
     return Center(
       child: Consumer(
         builder: (context, watch, child) {
-          final provider = watch(usersListNotifier);
+          final provider = watch(usersListViewModel);
           if (provider.userListStatus == UserListStatus.Loaded) {
             return BuildUsersList(provider.usersList);
           } else if (provider.userListStatus == UserListStatus.Loading) {
@@ -59,7 +59,7 @@ class BuildUsersList extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             context
-                .read(usersListNotifier)
+                .read(usersListViewModel)
                 .createChannel(usersList[index].userId);
           },
           child: ListTile(

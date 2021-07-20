@@ -10,12 +10,14 @@ import '../../data_sources/remote_data_source/models/baseMessage.dart';
 import '../../data_sources/remote_data_source/models/user.dart';
 
 class ChatRepositoryImpl implements ChatRepository {
-  final ChatRemoteDataSource sendbirdChannelsDataSource;
-  final LocalUserTypeDataSource localUserTypeDataSource;
+  final ChatDataSource sendbirdChannelsDataSource;
+  final UserTypeDataSource localUserTypeDataSource;
   final UsersDataSource usersDataSource;
 
   ChatRepositoryImpl(
-      {this.sendbirdChannelsDataSource, this.localUserTypeDataSource, this.usersDataSource});
+      {this.sendbirdChannelsDataSource,
+      this.localUserTypeDataSource,
+      this.usersDataSource});
 
   @override
   Stream<ChatMessage> getMessageStream() {
@@ -28,15 +30,10 @@ class ChatRepositoryImpl implements ChatRepository {
     var currentUserType = await localUserTypeDataSource.getCurrentUserType();
     try {
       List<User> users = await usersDataSource.getUsers();
-      var chatUserList = users.map((e) => e.toDomain()).toList();
-      List<ChatUser> chatUsers = [];
-      for (var item in chatUserList) {
-        if (item.metadata[StringConstants.userTypeKey] != currentUserType &&
-            item.metadata.length > 0) {
-          chatUsers.add(item);
-        }
-      }
-      return chatUsers;
+      var chatUsers = users.map((e) => e.toDomain()).toList();
+      return chatUsers.where((element) =>
+          element.metadata[StringConstants.userTypeKey] != currentUserType &&
+          element.metadata.length > 0);
     } catch (e) {
       throw Exception(e);
     }

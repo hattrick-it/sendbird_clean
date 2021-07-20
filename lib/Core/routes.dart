@@ -5,7 +5,7 @@ import '../presentation/screens/doctor_selector_screen/doctor_selector_screen.da
 import '../presentation/screens/patient_selector_screen/patient_selector_screen.dart';
 import '../presentation/screens/user_selection_screen/user_selection_screen.dart';
 import '../presentation/screens/user_type_selector_screen/user_type_selector_screen.dart';
-import '../presentation/screens/users_list_screen/users_list.dart';
+import '../presentation/screens/users_list_screen/users_list_screen.dart';
 
 class MyRoutes {
   var routes = <String, WidgetBuilder>{

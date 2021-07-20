@@ -6,7 +6,7 @@ import '../../../domain/repositories/user_selection_repository.dart';
 import '../../data_sources/remote_data_source/models/user.dart';
 
 class UserSelectionRepositoryImpl implements UserSelectionRepository {
-  SendbirdUserSelectionDataSource sendbirdUserSelectionDataSource;
+  UserBatchDataEntry sendbirdUserSelectionDataSource;
   UserSelectionRepositoryImpl({this.sendbirdUserSelectionDataSource});
 
   @override

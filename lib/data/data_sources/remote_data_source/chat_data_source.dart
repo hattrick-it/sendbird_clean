@@ -4,12 +4,12 @@ import 'package:sendbird_sdk/sendbird_sdk.dart';
 import 'package:sendbirdtutorial/Core/string_constants.dart';
 import 'channels_data_source.dart';
 
-class ChatRemoteDataSource with ChannelEventHandler {
+class ChatDataSource with ChannelEventHandler {
   StreamController<BaseMessage> _chatStreamController;
-  final ChannelsDataSource sendbirdChannelsDataSource;
+  final ChannelsDataSource channelsDataSource;
   final SendbirdSdk sendbird;
 
-  ChatRemoteDataSource({this.sendbird, this.sendbirdChannelsDataSource}) {
+  ChatDataSource({this.sendbird, this.channelsDataSource}) {
     _chatStreamController = StreamController<BaseMessage>(
         onListen: () async {
           sendbird.addChannelEventHandler(StringConstants.chatHandlerKey, this);
@@ -36,11 +36,11 @@ class ChatRemoteDataSource with ChannelEventHandler {
   }
 
   Future<GroupChannel> getGroupChannel(String channelUrl) async {
-    return sendbirdChannelsDataSource.getGroupChannel(channelUrl);
+    return channelsDataSource.getGroupChannel(channelUrl);
   }
 
   Future<List<GroupChannel>> getGroupChannels(String channelUrl) async {
-    return sendbirdChannelsDataSource.getGroupChannels();
+    return channelsDataSource.getGroupChannels();
   }
 
   Future<List<BaseMessage>> getMessages() async {

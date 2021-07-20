@@ -4,7 +4,7 @@ import '../../../domain/controllers/login_controller/login_controller.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
 
-final authNotifierProvider =
+final authViewModel =
     ChangeNotifierProvider<AuthViewModel>((ref) => locator.get());
 
 class AuthViewModel extends ChangeNotifier {

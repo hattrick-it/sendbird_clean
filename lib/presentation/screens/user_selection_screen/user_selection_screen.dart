@@ -13,7 +13,7 @@ class UserSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userType = ModalRoute.of(context).settings.arguments as String;
-    context.read(userSelectionNotifier).saveUserType(userType);
+    context.read(userSelectionViewModel).saveUserType(userType);
     return Scaffold(
       appBar: AppBar(
         title: Text('${AppLocalizations.of(context).userSelectionPageAppBarTitle} $userType'),
@@ -31,7 +31,7 @@ class BuildUserSelectionBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: context.read(userSelectionNotifier).getUsersByType(),
+      future: context.read(userSelectionViewModel).getUsersByType(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<ChatUser> list = snapshot.data;
@@ -58,7 +58,7 @@ class BuildUserCard extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         var tempUser = await context
-            .read(authNotifierProvider)
+            .read(authViewModel)
             .connect(chatUser.userId, chatUser.nickname);
         if (tempUser != null) {
           Navigator.of(context).popAndPushNamed(ChannelListScreen.routeName);

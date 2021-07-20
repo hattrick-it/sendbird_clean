@@ -10,7 +10,7 @@ SendbirdSdk sendbird = locator.get();
 
 extension BaseMessageExtension on BaseMessage {
   ChatMessage toDomain() => ChatMessage(
-        createdAt: this.createdAt,
+        createdAt: this.createdAt != null ? this.createdAt : 0,
         data: this.data,
         messageId: this.messageId,
         message: this.message,

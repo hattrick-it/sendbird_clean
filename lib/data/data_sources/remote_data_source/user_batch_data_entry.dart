@@ -51,9 +51,9 @@ var patientsUsers = [
   ),
 ];
 
-class SendbirdUserSelectionDataSource {
+class UserBatchDataEntry {
   final SendbirdSdk sendbird;
-  SendbirdUserSelectionDataSource({this.sendbird});
+  UserBatchDataEntry({this.sendbird});
 
   Future<List<User>> getUsers() {
     try {

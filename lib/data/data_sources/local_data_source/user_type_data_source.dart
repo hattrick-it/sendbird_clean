@@ -1,7 +1,7 @@
 import 'package:sendbirdtutorial/Core/string_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LocalUserTypeDataSource {
+class UserTypeDataSource {
   Future<void> saveUserType(String userType) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();

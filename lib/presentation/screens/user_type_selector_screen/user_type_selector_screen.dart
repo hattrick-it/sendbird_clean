@@ -26,7 +26,6 @@ class UserSelectorBody extends StatelessWidget {
         BuildTitle(),
         SizedBox(height: 100),
         BuildSelectorButtons(),
-        // SizedBox(height: 100),
         // BuildLoadDummyDataButton(),
       ],
     );
@@ -130,7 +129,7 @@ class BuildLoadDummyDataButton extends StatelessWidget {
           ),
         ),
         onPressed: (){
-          var batchClass = SendbirdUserSelectionDataSource();
+          var batchClass = UserBatchDataEntry();
           batchClass.createPatients();
           batchClass.createDoctors();
         },

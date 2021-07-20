@@ -45,8 +45,8 @@ void setup() {
   locator.registerFactory<UserSelectionRepository>(() =>
       UserSelectionRepositoryImpl(
           sendbirdUserSelectionDataSource: locator.get()));
-  locator.registerFactory<LocalUserTypeRepository>(() =>
-      LocalUserTypeRepositoryImpl(localUserTypeDataSource: locator.get()));
+  locator.registerFactory<UserTypeRepository>(
+      () => UserTypeRepositoryImpl(localUserTypeDataSource: locator.get()));
 
   locator.registerFactory<ChannelRepository>(
       () => ChannelRepositoryImpl(sendbirdChannelsDataSource: locator.get()));
@@ -54,19 +54,17 @@ void setup() {
       () => UsersRepositoryImpl(usersDataSource: locator.get()));
 
   // Data Sources
-  locator.registerFactory<ChatRemoteDataSource>(
-      () => ChatRemoteDataSource(
-            sendbird: locator.get(),
-            sendbirdChannelsDataSource: locator.get(),
-          ));
+  locator.registerFactory<ChatDataSource>(() => ChatDataSource(
+        sendbird: locator.get(),
+        channelsDataSource: locator.get(),
+      ));
   locator.registerFactory<ChannelsDataSource>(
       () => ChannelsDataSource(sendbird: locator.get()));
   locator.registerFactory<AuthRemoteDataSource>(
       () => AuthRemoteDataSource(sendbird: locator.get()));
-  locator.registerFactory<SendbirdUserSelectionDataSource>(
-      () => SendbirdUserSelectionDataSource(sendbird: locator.get()));
-  locator.registerFactory<LocalUserTypeDataSource>(
-      () => LocalUserTypeDataSource());
+  locator.registerFactory<UserBatchDataEntry>(
+      () => UserBatchDataEntry(sendbird: locator.get()));
+  locator.registerFactory<UserTypeDataSource>(() => UserTypeDataSource());
   locator.registerFactory<UsersDataSource>(
       () => UsersDataSource(sendbird: locator.get()));
 

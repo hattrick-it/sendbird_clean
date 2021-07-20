@@ -7,7 +7,7 @@ import '../../../domain/entities/chat_message.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
 
-final chatNotifier =
+final chatViewModel =
     ChangeNotifierProvider.autoDispose<ChatViewModel>((ref) => locator.get());
 
 enum ChatState {

@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
 }
 
 void adminConnect(BuildContext context) async {
-  await context.read(authNotifierProvider).connect(
+  await context.read(authViewModel).connect(
         'admin',
         'admin',
       );

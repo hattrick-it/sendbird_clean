@@ -13,8 +13,8 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final chatChannel =
         ModalRoute.of(context).settings.arguments as ChatChannel;
-    context.read(chatNotifier).setChannelUrl(chatChannel.channelUrl);
-    var currentUser = context.read(chatNotifier).getCurrentUser();
+    context.read(chatViewModel).setChannelUrl(chatChannel.channelUrl);
+    var currentUser = context.read(chatViewModel).getCurrentUser();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ChatColors.whiteColor,
@@ -51,7 +51,7 @@ class ChatScreen extends StatelessWidget {
                 builder: (context, watch, child) {
                   return StreamBuilder(
                     initialData: [],
-                    stream: watch(chatNotifier).onNewMessage,
+                    stream: watch(chatViewModel).onNewMessage,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.active) {
                         List<ChatMessage> list = snapshot.data;
@@ -92,14 +92,14 @@ class InputChat extends StatelessWidget {
             Expanded(
               child: TextField(
                 onChanged: (val) {
-                  context.read(chatNotifier).setUserMsg(val);
+                  context.read(chatViewModel).setUserMsg(val);
                 },
                 decoration: InputDecoration.collapsed(hintText: AppLocalizations.of(context).chatScreenSendButtonText),
               ),
             ),
             Consumer(
               builder: (context, watch, child) {
-                final provider = watch(chatNotifier);
+                final provider = watch(chatViewModel);
                 if (provider.chatState == ChatState.Empty) {
                   return SendButton(true);
                 } else if (provider.chatState == ChatState.Send) {
@@ -136,7 +136,7 @@ class SendButton extends StatelessWidget {
               : ChatColors.disbleSendButton,
         ),
         onPressed: () {
-          context.read(chatNotifier).sendMessage();
+          context.read(chatViewModel).sendMessage();
         },
       ),
     );
@@ -150,7 +150,7 @@ class BuildChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ChatUser currentUser = context.read(chatNotifier).getCurrentUser();
+    final ChatUser currentUser = context.read(chatViewModel).getCurrentUser();
     return Container(
       child: message.sender.userId == currentUser.userId
           ? MyMessage(message.message)

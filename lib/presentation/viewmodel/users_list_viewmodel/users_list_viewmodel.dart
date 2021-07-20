@@ -5,7 +5,7 @@ import '../../../domain/controllers/chat_controller/chat_controller.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
 
-final usersListNotifier =
+final usersListViewModel =
     ChangeNotifierProvider<UsersListViewModel>((ref) => locator.get());
 
 enum UserListStatus {

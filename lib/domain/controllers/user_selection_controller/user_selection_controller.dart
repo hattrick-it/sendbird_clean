@@ -4,7 +4,7 @@ import '../../repositories/user_selection_repository.dart';
 
 class UserSelectionController {
   final UserSelectionRepository userSelectorRepository;
-  final LocalUserTypeRepository localUserTypeRepository;
+  final UserTypeRepository localUserTypeRepository;
 
   UserSelectionController(
       {this.userSelectorRepository, this.localUserTypeRepository});

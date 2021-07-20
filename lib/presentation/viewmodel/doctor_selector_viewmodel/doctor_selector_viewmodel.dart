@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/chat_doctor.dart';
 import '../../../locator/locator.dart';
 
-final doctorNotifier =
+final doctorSelectionViewModel =
     ChangeNotifierProvider<DoctorSelectionViewModel>((ref) => locator.get());
 
 enum DoctorStates {
