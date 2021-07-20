@@ -5,7 +5,6 @@ import '../../../domain/entities/chat_channel.dart';
 import '../../../domain/entities/chat_message.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../viewmodel/chat_viewmodel/chat_viewmodel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatScreen extends StatelessWidget {
   static const String routeName = '/chat-screen';
