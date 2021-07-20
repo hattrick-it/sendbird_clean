@@ -23,7 +23,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // adminConnect(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: WelcomeScreen.routeName,
@@ -37,8 +36,4 @@ class MyApp extends StatelessWidget {
       ],
     );
   }
-}
-
-void adminConnect(BuildContext context)async{
-  await context.read(authNotifierProvider).adminConnect('admin','admin');
 }

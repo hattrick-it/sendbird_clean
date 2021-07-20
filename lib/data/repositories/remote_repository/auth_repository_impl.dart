@@ -7,10 +7,8 @@ class AuthRespositoryImpl implements AuthRepository {
 
   @override
   Future<void> connect(String userId, String nickname) async {
-    print('ADMIN CONNECT EN RepoImpl');
     try {
       await authRemoteDataSource.connect(userId, nickname);
-      print('ADMIN CONNECT EN RepoImpl');
     } catch (e) {
       throw Exception(e);
     }

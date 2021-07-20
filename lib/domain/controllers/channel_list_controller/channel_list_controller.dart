@@ -38,12 +38,8 @@ class ChannelListController {
     return channelRepository.getChannels();
   }
 
-  void createChannel(String userId) {
-    List<String> userIds = [];
-    ChatUser currentUser = channelRepository.getCurrentUser();
-    userIds.add(currentUser.userId);
-    userIds.add(userId);
-    channelRepository.createChannel(userIds);
+  Future<ChatChannel> createChannel(String userId)  {
+    return  channelRepository.createChannel(userId);
   }
 
   void _getChannelsStream() {
@@ -74,4 +70,15 @@ class ChannelListController {
   ChatUser getCurrentUser() {
     return channelRepository.getCurrentUser();
   }
+
+  Future<ChatChannel> getChannelByIds(String userId) async {
+    var chatChannel = await channelRepository.getChannelByIds(userId);
+    if(chatChannel == null){
+      var newChatChannel = await channelRepository.createChannel(userId);
+      return newChatChannel;
+    }else{
+      return chatChannel;
+    }
+  }
+
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/domain/entities/chat_channel.dart';
 import '../../../domain/controllers/channel_list_controller/channel_list_controller.dart';
 import '../../../domain/controllers/chat_controller/chat_controller.dart';
 import '../../../domain/entities/chat_user.dart';
@@ -64,8 +65,11 @@ class UsersListViewModel extends ChangeNotifier {
     }
   }
 
+  Future<ChatChannel> createChannel(String userId) {
+    return channelListController.createChannel(userId);
+  }
 
-  void createChannel(String userId) {
-    channelListController.createChannel(userId);
+  Future<ChatChannel> getChannelByIds(String userId) async {
+    return await channelListController.getChannelByIds(userId);
   }
 }

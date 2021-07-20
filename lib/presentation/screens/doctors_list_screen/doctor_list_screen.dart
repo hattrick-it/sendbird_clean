@@ -3,9 +3,11 @@ import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:sendbirdtutorial/Core/chat_colors.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
+import 'package:sendbirdtutorial/presentation/screens/chat_screen/chat_screen.dart';
 import 'package:sendbirdtutorial/presentation/screens/common_widgets/common_appbar.dart';
 import 'package:sendbirdtutorial/presentation/viewmodel/user_selection_viewmodel/user_selection_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sendbirdtutorial/presentation/viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
 
 class DoctorListScreen extends StatelessWidget {
   static const String routeName = '/doctor-list-screen';
@@ -50,7 +52,13 @@ class BuildDoctorListBody extends StatelessWidget {
                 UserSelectionStatus.Loaded) {
               return DoctorsList(userList: provider.getUserList);
             }
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: Container(
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
+              ),
+            );
           },
         ),
       ],
@@ -178,7 +186,15 @@ class SpecialtyButtonsComponent extends StatelessWidget {
               },
             );
           }
-          return LinearProgressIndicator();
+          return Center(
+            child: Container(
+              height: 10,
+              width: 10,
+              child: CircularProgressIndicator(
+                strokeWidth: 1,
+              ),
+            ),
+          );
         },
       ),
     );
@@ -204,8 +220,14 @@ class DoctorsList extends StatelessWidget {
         },
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {
-              print(userList[index].userId);
+            onTap: () async {
+              var gropuChannel = await context
+                  .read(usersListViewModel)
+                  .getChannelByIds(userList[index].userId);
+              if (gropuChannel != null) {
+                Navigator.of(context)
+                    .pushNamed(ChatScreen.routeName, arguments: gropuChannel);
+              }
             },
             child: Container(
               width: double.infinity,
@@ -235,10 +257,12 @@ class DoctorsList extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            userList[index].metadata['Specialty'],
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          userList[index].metadata['Specialty'] != null
+                              ? Text(
+                                  userList[index].metadata['Specialty'],
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              : Container(),
                           Text(
                             userList[index].nickname,
                             style: TextStyle(fontSize: 18),

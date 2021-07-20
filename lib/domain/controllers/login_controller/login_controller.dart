@@ -7,7 +7,6 @@ class LoginController {
   LoginController({this.authRepository});
 
   Future<void> connect(String userId, String nickname) async {
-    print('ADMIN CONNECT EN Controller');
     try {
       await authRepository.connect(userId, nickname);
     } catch (e) {

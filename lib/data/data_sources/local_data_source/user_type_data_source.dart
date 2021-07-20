@@ -17,7 +17,6 @@ class UserTypeDataSource {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var userType =  prefs.getString(StringConstants.userTypeKey);
-      print(userType);
       return userType;
     } catch (e) {
       throw Exception(e);

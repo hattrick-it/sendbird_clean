@@ -57,9 +57,4 @@ class AuthViewModel extends ChangeNotifier {
       throw Exception(e);
     }
   }
-
-  Future<void> adminConnect(String userId, String nickname) async {
-    print('ADMIN CONNECT EN VIEWMODEL');
-    await loginController.connect(userId, nickname);
-  }
 }

@@ -52,14 +52,23 @@ class UsersDataSource {
   // getUsersByType()
   Future<List<ChatUser>> getUsersByType() async {
     try {
-      final currentType = await getCurrentType();
+      final usertype = await getTypeByUserLogged();
       final listQuery = ApplicationUserListQuery();
       var userList = await listQuery.loadNext();
-      var returnList = userList
-          .where((element) => element.metaData['userType'] != currentType);
+      var returnList = userList.where((element) =>
+          element.metaData['userType'] == usertype);
       return returnList.map((e) => e.toDomain()).toList();
     } catch (e) {
       Exception(e);
+    }
+  }
+
+  Future<String> getTypeByUserLogged()async{
+    final currentType = await getCurrentType();
+    if(currentType == 'Patient'){
+      return 'Doctor';
+    }else{
+      return 'Patient';
     }
   }
 

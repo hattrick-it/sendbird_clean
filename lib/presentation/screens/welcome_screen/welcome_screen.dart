@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendbirdtutorial/Core/chat_assets.dart';
 import 'package:sendbirdtutorial/data/data_sources/remote_data_source/user_batch_data_entry.dart';
 import 'package:sendbirdtutorial/presentation/screens/doctors_list_screen/doctor_list_screen.dart';
+import 'package:sendbirdtutorial/presentation/screens/patients_list_screen/patients_list_screen.dart';
 import 'package:sendbirdtutorial/presentation/viewmodel/auth_viewmodel/auth_viewmodel.dart';
 import '../../../Core/chat_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,6 +31,22 @@ class WelcomeScreen extends StatelessWidget {
             left: 30,
             right: 30,
             child: BuildSelectorButtons(),
+          ),
+          Consumer(
+            builder: (context, watch, child) {
+              var state = watch(authNotifierProvider).getState;
+              if (state == LoginState.Loading) {
+                return Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  color: Colors.black38.withAlpha(200),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+              return Container();
+            },
           ),
         ],
       ),
@@ -87,7 +104,6 @@ class BuildSelectorButtons extends ConsumerWidget {
             await context
                 .read(authNotifierProvider)
                 .connect('Patient_3', 'Black Widow', 'Patient');
-
             Navigator.of(context).pushNamed(DoctorListScreen.routeName,
                 arguments: AppLocalizations.of(context).userTypePatient);
           },
@@ -97,7 +113,14 @@ class BuildSelectorButtons extends ConsumerWidget {
         SizedBox(height: 20),
         BuildSelectorButton(
           title: AppLocalizations.of(context).selectionPageDoctor,
-          onPressed: () {},
+          onPressed: () async {
+            await context
+                .read(authNotifierProvider)
+                .connect('Doctor_1', 'Dr.Edwin Ching MBBS,MIRCP', 'Doctor');
+
+            Navigator.of(context).pushNamed(PatientsListScreen.routeName,
+                arguments: AppLocalizations.of(context).userTypeDoctor);
+          },
           buttonColor: ChatColors.welcomeScreenWhiteButton,
           textColor: ChatColors.blackColor,
         ),

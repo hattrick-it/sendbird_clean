@@ -70,5 +70,9 @@
   "doctorListScreenHinttext": "Search doctor by name",
   "@doctorListScreenHinttext": {
     "description": ""
+  },
+  "patientListScreenHinttext": "Search patient by name",
+  "@patientListScreenHinttext": {
+    "description": ""
   }
 }

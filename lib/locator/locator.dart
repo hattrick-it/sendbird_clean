@@ -52,7 +52,7 @@ void setup() {
           usersDataSource: locator.get()));
 
   locator.registerFactory<ChannelRepository>(
-      () => ChannelRepositoryImpl(sendbirdChannelsDataSource: locator.get()));
+      () => ChannelRepositoryImpl(channelsDataSource: locator.get()));
   locator.registerFactory<UsersRepository>(
       () => UsersRepositoryImpl(usersDataSource: locator.get()));
 
