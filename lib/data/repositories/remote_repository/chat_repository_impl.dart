@@ -32,8 +32,8 @@ class ChatRepositoryImpl implements ChatRepository {
       List<User> users = await usersDataSource.getUsers();
       var chatUsers = users.map((e) => e.toDomain()).toList();
       return chatUsers.where((element) =>
-          element.metadata[StringConstants.userTypeKey] != currentUserType &&
-          element.metadata.length > 0);
+          element.metadata.containsKey(StringConstants.userTypeKey) &&
+          element.metadata[StringConstants.userTypeKey] != currentUserType);
     } catch (e) {
       throw Exception(e);
     }
