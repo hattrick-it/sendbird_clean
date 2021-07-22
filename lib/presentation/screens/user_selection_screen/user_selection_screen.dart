@@ -18,7 +18,8 @@ class UserSelectionScreen extends StatelessWidget {
     context.read(userSelectionViewModel).saveUserType(userType);
     return Scaffold(
       appBar: AppBar(
-        title: Text('${AppLocalizations.of(context).userSelectionPageAppBarTitle} $userType'),
+        title: Text(
+            '${AppLocalizations.of(context).userSelectionPageAppBarTitle} $userType'),
       ),
       body: Consumer(
         builder: (context, watch, child) {
@@ -26,10 +27,10 @@ class UserSelectionScreen extends StatelessWidget {
           if (providerState == AuthState.Empty) {
             return BuildUserSelectionBody(userType: userType);
           } else if (providerState == AuthState.Loaded) {
-            Future.delayed(Duration.zero, () {
-              Navigator.of(context)
-                  .popAndPushNamed(ChannelListScreen.routeName);
+            WidgetsBinding.instance?.addPostFrameCallback((_) {
+              Navigator.of(context).popAndPushNamed(ChannelListScreen.routeName);
             });
+
           }
           return Center(child: CircularProgressIndicator());
         },
@@ -91,8 +92,11 @@ class BuildUserCard extends StatelessWidget {
         title: chatUser.nickname != null || chatUser.nickname.isNotEmpty
             ? Text(chatUser.nickname)
             : Text(chatUser.userId),
-        subtitle: chatUser.metadata[AppLocalizations.of(context).doctorSpecialty] != null
-            ? Text(chatUser.metadata[AppLocalizations.of(context).doctorSpecialty])
+        subtitle: chatUser
+                    .metadata[AppLocalizations.of(context).doctorSpecialty] !=
+                null
+            ? Text(
+                chatUser.metadata[AppLocalizations.of(context).doctorSpecialty])
             : Text(''),
       ),
     );
