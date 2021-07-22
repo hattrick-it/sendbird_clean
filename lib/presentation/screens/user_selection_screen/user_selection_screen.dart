@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/chat_user.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserSelectionScreen extends StatelessWidget {
   static const String routeName = '/user-selection-screen';
+
   const UserSelectionScreen();
 
   @override
@@ -16,20 +18,34 @@ class UserSelectionScreen extends StatelessWidget {
     context.read(userSelectionViewModel).saveUserType(userType);
     return Scaffold(
       appBar: AppBar(
-        title: Text('${AppLocalizations.of(context).userSelectionPageAppBarTitle} $userType'),
+        title: Text(
+            '${AppLocalizations.of(context).userSelectionPageAppBarTitle} $userType'),
       ),
-      body: BuildUserSelectionBody(userType: userType),
+      body: Consumer(
+        builder: (context, watch, child) {
+          final providerState = watch(authViewModel).getAuthState;
+          if (providerState == AuthState.Empty) {
+            return BuildUserSelectionBody(userType: userType);
+          } else if (providerState == AuthState.Loaded) {
+            WidgetsBinding.instance?.addPostFrameCallback((_) {
+              Navigator.of(context).popAndPushNamed(ChannelListScreen.routeName);
+            });
+
+          }
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 }
 
-class BuildUserSelectionBody extends StatelessWidget {
+class BuildUserSelectionBody extends ConsumerWidget {
   final String userType;
 
   const BuildUserSelectionBody({this.userType});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, watch) {
     return FutureBuilder(
       future: context.read(userSelectionViewModel).getUsersByType(),
       builder: (context, snapshot) {
@@ -38,11 +54,15 @@ class BuildUserSelectionBody extends StatelessWidget {
           return ListView.builder(
             itemCount: list.length,
             itemBuilder: (context, index) {
-              return BuildUserCard(chatUser: list[index]);
+              return SlideInRight(
+                delay: Duration(milliseconds: index * 150),
+                from: 350,
+                child: BuildUserCard(chatUser: list[index]),
+              );
             },
           );
         }
-        return Center(child: CircularProgressIndicator());
+        return Center(child: Center(child: CircularProgressIndicator()));
       },
     );
   }
@@ -60,9 +80,6 @@ class BuildUserCard extends StatelessWidget {
         var tempUser = await context
             .read(authViewModel)
             .connect(chatUser.userId, chatUser.nickname);
-        if (tempUser != null) {
-          Navigator.of(context).popAndPushNamed(ChannelListScreen.routeName);
-        }
       },
       child: ListTile(
         leading: CircleAvatar(
@@ -75,8 +92,11 @@ class BuildUserCard extends StatelessWidget {
         title: chatUser.nickname != null || chatUser.nickname.isNotEmpty
             ? Text(chatUser.nickname)
             : Text(chatUser.userId),
-        subtitle: chatUser.metadata[AppLocalizations.of(context).doctorSpecialty] != null
-            ? Text(chatUser.metadata[AppLocalizations.of(context).doctorSpecialty])
+        subtitle: chatUser
+                    .metadata[AppLocalizations.of(context).doctorSpecialty] !=
+                null
+            ? Text(
+                chatUser.metadata[AppLocalizations.of(context).doctorSpecialty])
             : Text(''),
       ),
     );

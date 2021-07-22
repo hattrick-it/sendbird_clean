@@ -9,13 +9,18 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChannelListScreen extends StatelessWidget {
   static const String routeName = '/channel-list';
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance?.addPostFrameCallback((_) {});
     ChatUser chatUser = context.read(chatChannelViewModel).getCurrentUser();
     return Scaffold(
       appBar: AppBar(
-        title: Text(chatUser.nickname),
+        title: Text(
+          chatUser.nickname,
+          style: TextStyle(fontSize: 14),
+        ),
+        centerTitle: true,
       ),
       body: BuildChannelListBody(),
       floatingActionButton: FloatingActionButton(
@@ -39,11 +44,12 @@ class BuildChannelListBody extends StatelessWidget {
       stream: context.read(chatChannelViewModel).onNewChannelEvent,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          var channelList = snapshot.data as List<ChatChannel>;
+          List<ChatChannel> channelList = snapshot.data;
           return ListView.builder(
             itemCount: channelList.length,
             itemBuilder: (context, index) {
-              var chatUser = context.read(chatChannelViewModel).getCurrentUser();
+              var chatUser =
+                  context.read(chatChannelViewModel).getCurrentUser();
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushNamed(ChatScreen.routeName,
@@ -63,13 +69,15 @@ class BuildChannelListBody extends StatelessWidget {
                   title: channelList[index].members[0].userId == chatUser.userId
                       ? Text(channelList[index].members[1].nickname)
                       : Text(channelList[index].members[0].nickname),
-                  trailing: Text(channelList[index].lastMessage.message),
+                  trailing: channelList[index].lastMessage != null
+                      ? Text(channelList[index].lastMessage.message)
+                      : Text(AppLocalizations.of(context).channelScreenNoMessagesYet),
                 ),
               );
             },
           );
         }
-        return CircularProgressIndicator();
+        return Center(child: CircularProgressIndicator());
       },
     );
   }

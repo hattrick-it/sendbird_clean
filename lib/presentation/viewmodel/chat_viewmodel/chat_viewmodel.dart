@@ -34,9 +34,16 @@ class ChatViewModel extends ChangeNotifier {
 
   String get errorMsg => _errorMsg;
 
+  String get getMsg => _userMsg;
+
   // Setters
   void setChannelUrl(String channelUrl) {
     chatController.setChannelUrl(channelUrl);
+  }
+
+  void clearMsg(){
+    _userMsg = '';
+    notifyListeners();
   }
 
   void setUserMsg(String msg) {
@@ -68,6 +75,7 @@ class ChatViewModel extends ChangeNotifier {
         _setState(ChatState.Sending);
         await chatController.sendMessage(_userMsg);
         setUserMsg('');
+        clearMsg();
       }
       _setState(ChatState.Send);
     } catch (e) {

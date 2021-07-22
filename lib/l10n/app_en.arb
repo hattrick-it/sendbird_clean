@@ -39,12 +39,16 @@
   "@userSelectionPageAppBarTitle": {
     "description": ""
   },
-  "chatScreenSendButtonText": "Send message",
+  "chatScreenSendButtonText": "Send Message",
   "@chatScreenSendButtonText": {
     "description": ""
   },
   "usersListPageAppBarTitle": "Create new chat",
   "@usersListPageAppBarTitle": {
+    "description": ""
+  },
+  "channelScreenNoMessagesYet": "No messages yet",
+  "@channelScreenNoMessagesYet": {
     "description": ""
   }
 }

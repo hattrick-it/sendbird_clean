@@ -38,9 +38,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void adminConnect(BuildContext context) async {
-  await context.read(authViewModel).connect(
-        'admin',
-        'admin',
-      );
+void adminConnect(BuildContext context)async{
+  await context.read(authViewModel).adminConnect('admin','admin');
 }

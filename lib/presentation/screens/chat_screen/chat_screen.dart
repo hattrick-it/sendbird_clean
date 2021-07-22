@@ -9,6 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatScreen extends StatelessWidget {
   static const String routeName = '/chat-screen';
+
   @override
   Widget build(BuildContext context) {
     final chatChannel =
@@ -55,14 +56,17 @@ class ChatScreen extends StatelessWidget {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.active) {
                         List<ChatMessage> list = snapshot.data;
+                        var reversed = list.reversed.toList();
                         return ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          reverse: true,
                           itemCount: list.length,
                           itemBuilder: (context, index) {
-                            return BuildChatMessage(list[index]);
+                            return BuildChatMessage(reversed[index]);
                           },
                         );
                       }
-                      return CircularProgressIndicator();
+                      return Center(child: CircularProgressIndicator());
                     },
                   );
                 },
@@ -82,21 +86,31 @@ class ChatScreen extends StatelessWidget {
 }
 
 class InputChat extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
+    TextEditingController ctrl = TextEditingController();
     return SafeArea(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           children: [
-            Expanded(
-              child: TextField(
-                onChanged: (val) {
-                  context.read(chatViewModel).setUserMsg(val);
-                },
-                decoration: InputDecoration.collapsed(hintText: AppLocalizations.of(context).chatScreenSendButtonText),
-              ),
+            Consumer(
+              builder: (context, watch, child) {
+                final provider = watch(chatViewModel);
+                ctrl.text = provider.getMsg;
+                return Expanded(
+                  child: TextField(
+                    controller: ctrl,
+                    onChanged: (val) {
+                      context.read(chatViewModel).setUserMsg(val);
+                    },
+                    decoration: InputDecoration.collapsed(hintText: AppLocalizations.of(context).chatScreenSendButtonText),
+                  ),
+                );
+              },
             ),
+
             Consumer(
               builder: (context, watch, child) {
                 final provider = watch(chatViewModel);
@@ -119,9 +133,7 @@ class InputChat extends StatelessWidget {
 
 class SendButton extends StatelessWidget {
   final bool available;
-
   const SendButton(this.available);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -137,6 +149,7 @@ class SendButton extends StatelessWidget {
         ),
         onPressed: () {
           context.read(chatViewModel).sendMessage();
+          context.read(chatViewModel).clearMsg();
         },
       ),
     );
@@ -161,15 +174,13 @@ class BuildChatMessage extends StatelessWidget {
 
 class MyMessage extends StatelessWidget {
   final String message;
-
   const MyMessage(this.message);
-
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5),
+        margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: ChatColors.myMsgColor,
@@ -183,15 +194,13 @@ class MyMessage extends StatelessWidget {
 
 class NotMyMessage extends StatelessWidget {
   final String message;
-
   const NotMyMessage(this.message);
-
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomRight,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5),
+        margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: ChatColors.notMyMsgColor,
