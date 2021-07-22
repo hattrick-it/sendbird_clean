@@ -1,5 +1,7 @@
 import 'chat_user.dart';
 
+enum MsgSendingStatus { none, pending, failed, succeeded, canceled }
+
 class ChatMessage {
   int createdAt;
   String data;
@@ -9,6 +11,7 @@ class ChatMessage {
   String channelUrl;
   String message;
   ChatUser sender;
+  MsgSendingStatus sendingStatus;
 
   ChatMessage({
     this.createdAt,
@@ -19,5 +22,6 @@ class ChatMessage {
     this.channelUrl,
     this.message,
     this.sender,
+    this.sendingStatus,
   });
 }

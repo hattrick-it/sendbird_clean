@@ -9,8 +9,8 @@ class ChatColors {
   static Color transparentColor = Colors.transparent;
   static Color enableSendButton = Color.fromRGBO(26, 108, 240, 1.0);
   static Color disbleSendButton = Color.fromRGBO(86, 91, 102, 1.0);
-  static Color notMyMsgColor = Color.fromRGBO(171, 172, 175, 1.0);
-  static Color myMsgColor = Color.fromRGBO(119, 155, 232, 1.0);
+  static Color notMyMsgColor = Color.fromRGBO(102, 18, 184, 1.0);
+  static Color myMsgColor = Color.fromRGBO(227, 227, 229, 1.0);
   static Color doctorAppbarBackground = Color.fromRGBO(86, 182, 161, 1.0);
   static Color doctorSearchBar = Color.fromRGBO(163, 161, 161, 1.0);
   static Color doctorsubtitleText = Color.fromRGBO(123, 120, 120, 1.0);

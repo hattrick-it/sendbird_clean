@@ -15,6 +15,9 @@ extension BaseMessageExtension on BaseMessage {
         messageId: this.messageId != null ? this.messageId : null,
         message: this.message != null ? this.message : null,
         channelUrl: this.channelUrl,
+        sendingStatus: this.sendingStatus == MessageSendingStatus.pending
+            ? MsgSendingStatus.pending
+            : MsgSendingStatus.succeeded,
         sender: this.sender != null
             ? this.sender.toDomain()
             : ChatUser(userId: StringConstants.baseMessageAdminKey),

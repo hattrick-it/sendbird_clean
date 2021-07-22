@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../../../Core/chat_colors.dart';
 import '../../../domain/entities/chat_channel.dart';
 import '../../../domain/entities/chat_message.dart';
@@ -86,7 +87,6 @@ class ChatScreen extends StatelessWidget {
 }
 
 class InputChat extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     TextEditingController ctrl = TextEditingController();
@@ -105,12 +105,13 @@ class InputChat extends StatelessWidget {
                     onChanged: (val) {
                       context.read(chatViewModel).setUserMsg(val);
                     },
-                    decoration: InputDecoration.collapsed(hintText: AppLocalizations.of(context).chatScreenSendButtonText),
+                    decoration: InputDecoration.collapsed(
+                        hintText: AppLocalizations.of(context)
+                            .chatScreenSendButtonText),
                   ),
                 );
               },
             ),
-
             Consumer(
               builder: (context, watch, child) {
                 final provider = watch(chatViewModel);
@@ -118,7 +119,8 @@ class InputChat extends StatelessWidget {
                   return SendButton(true);
                 } else if (provider.chatState == ChatState.Send) {
                   return SendButton(true);
-                } else if (provider.chatState == ChatState.Sending) {
+                } else if (provider.chatState == ChatState.Sending ||
+                    provider.getMsg.isEmpty) {
                   return SendButton(false);
                 }
                 return CircularProgressIndicator();
@@ -133,7 +135,9 @@ class InputChat extends StatelessWidget {
 
 class SendButton extends StatelessWidget {
   final bool available;
+
   const SendButton(this.available);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -166,47 +170,98 @@ class BuildChatMessage extends StatelessWidget {
     final ChatUser currentUser = context.read(chatViewModel).getCurrentUser();
     return Container(
       child: message.sender.userId == currentUser.userId
-          ? MyMessage(message.message)
-          : NotMyMessage(message.message),
+          ? MyMessage(message)
+          : NotMyMessage(message),
     );
   }
 }
 
 class MyMessage extends StatelessWidget {
-  final String message;
-  const MyMessage(this.message);
+  final ChatMessage chatMessage;
+
+  const MyMessage(this.chatMessage);
+
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomLeft,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: ChatColors.myMsgColor,
-          borderRadius: BorderRadius.circular(10),
+    var date =
+        DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt * 1000);
+    var formattedDate = DateFormat('h:mm a').format(date);
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: Row(
+          children: [
+            SizedBox(
+              width: 10,
+            ),
+            CircleAvatar(
+              maxRadius: 21,
+              backgroundColor: ChatColors.greyAppbarBackgroundColor,
+              child: CircleAvatar(
+                maxRadius: 20,
+                backgroundImage: NetworkImage(chatMessage.sender.profileUrl),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  chatMessage.sender.nickname,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: ChatColors.disbleSendButton,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: ChatColors.myMsgColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(chatMessage.message),
+                    ),
+                    Text(
+                      formattedDate,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: ChatColors.disbleSendButton,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
-        child: Text(message),
       ),
     );
   }
 }
 
 class NotMyMessage extends StatelessWidget {
-  final String message;
-  const NotMyMessage(this.message);
+  final ChatMessage chatMessage;
+
+  const NotMyMessage(this.chatMessage);
+
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomRight,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: ChatColors.notMyMsgColor,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Text(message),
+        child: Text(
+          chatMessage.message,
+          style: TextStyle(color: ChatColors.whiteColor),
+        ),
       ),
     );
   }
