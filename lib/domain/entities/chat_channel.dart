@@ -7,11 +7,13 @@ class ChatChannel {
   String channelUrl;
   List<ChatUser> members;
   ChatMessage lastMessage;
+  int createdAt;
 
   ChatChannel({
     this.coverUrl,
     this.channelUrl,
     this.members,
     this.lastMessage,
+    this.createdAt,
   });
 }

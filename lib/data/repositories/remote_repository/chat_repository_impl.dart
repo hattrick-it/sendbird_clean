@@ -58,6 +58,10 @@ class ChatRepositoryImpl implements ChatRepository {
   @override
   Future<List<ChatMessage>> getMessagesList() async {
     var baseMessages = await sendbirdChannelsDataSource.getMessages();
-    return baseMessages.map((e) => e.toDomain()).toList();
+    if (baseMessages != null) {
+      return baseMessages.map((e) => e.toDomain()).toList();
+    } else {
+      return null;
+    }
   }
 }

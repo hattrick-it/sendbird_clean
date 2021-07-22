@@ -12,8 +12,8 @@ extension BaseMessageExtension on BaseMessage {
   ChatMessage toDomain() => ChatMessage(
         createdAt: this.createdAt != null ? this.createdAt : 0,
         data: this.data,
-        messageId: this.messageId,
-        message: this.message,
+        messageId: this.messageId != null ? this.messageId : null,
+        message: this.message != null ? this.message : null,
         channelUrl: this.channelUrl,
         sender: this.sender != null
             ? this.sender.toDomain()

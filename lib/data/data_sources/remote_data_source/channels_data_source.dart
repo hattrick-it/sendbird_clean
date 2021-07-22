@@ -29,7 +29,7 @@ class ChannelsDataSource extends ChannelEventHandler {
   // ChannelEventHandler methods
   @override
   void onMessageReceived(BaseChannel channel, BaseMessage message) {
-    _messageStreamController.sink.add(message);
+    // _messageStreamController.sink.add(message);
   }
 
   @override

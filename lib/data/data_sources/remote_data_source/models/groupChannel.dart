@@ -6,15 +6,18 @@ import 'baseMessage.dart';
 
 extension GroupChannelExtension on GroupChannel {
   ChatChannel toDomain() => ChatChannel(
+        createdAt: this.createdAt != null ? this.createdAt : null,
         channelUrl: this.channelUrl,
         coverUrl: this.coverUrl,
         members: this.members.map((e) => e.toDomain()).toList(),
-        lastMessage: this.lastMessage.toDomain(),
+        lastMessage:
+            this.lastMessage != null ? this.lastMessage.toDomain() : null,
       );
 }
 
 extension BaseChannelExtension on BaseChannel {
   ChatChannel toDomain() => ChatChannel(
+        createdAt: this.createdAt != null ? this.createdAt : null,
         channelUrl: this.channelUrl,
         coverUrl: this.coverUrl,
       );
