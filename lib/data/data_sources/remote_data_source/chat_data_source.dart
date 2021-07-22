@@ -30,11 +30,6 @@ class ChatDataSource with ChannelEventHandler {
     _chatStreamController.sink.add(message);
   }
 
-  void onChannelChanged(BaseChannel channel) async {
-    GroupChannel groupChannel = await getGroupChannel(channel.channelUrl);
-    // _chatStreamController.sink.add(groupChannel.lastMessage);
-  }
-
   Future<GroupChannel> getGroupChannel(String channelUrl) async {
     return channelsDataSource.getGroupChannel(channelUrl);
   }

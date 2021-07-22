@@ -26,12 +26,6 @@ class ChannelsDataSource extends ChannelEventHandler {
     _channelsStreamController.close();
   }
 
-  // ChannelEventHandler methods
-  @override
-  void onMessageReceived(BaseChannel channel, BaseMessage message) {
-    // _messageStreamController.sink.add(message);
-  }
-
   @override
   void onChannelChanged(BaseChannel channel) {
     GroupChannel groupChannel = channel;

@@ -71,7 +71,7 @@ class BuildChannelListBody extends StatelessWidget {
                       : Text(channelList[index].members[0].nickname),
                   trailing: channelList[index].lastMessage != null
                       ? Text(channelList[index].lastMessage.message)
-                      : Text('No messages yet'),
+                      : Text(AppLocalizations.of(context).channelScreenNoMessagesYet),
                 ),
               );
             },
