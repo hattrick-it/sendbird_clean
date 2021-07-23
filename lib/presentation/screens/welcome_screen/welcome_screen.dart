@@ -116,7 +116,7 @@ class BuildSelectorButtons extends ConsumerWidget {
           onPressed: () async {
             await context
                 .read(authNotifierProvider)
-                .connect('Doctor_1', 'Dr.Edwin Ching MBBS,MIRCP', 'Doctor');
+                .connect('Doctor_2', 'Dr.Kevin Zeng M.D.', 'Doctor');
 
             Navigator.of(context).pushNamed(PatientsListScreen.routeName,
                 arguments: AppLocalizations.of(context).userTypeDoctor);
@@ -124,8 +124,6 @@ class BuildSelectorButtons extends ConsumerWidget {
           buttonColor: ChatColors.welcomeScreenWhiteButton,
           textColor: ChatColors.blackColor,
         ),
-        // SizedBox(height: 50),
-        // BuildLoadDummyDataButton(),
       ],
     );
   }

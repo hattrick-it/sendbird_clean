@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:sendbirdtutorial/Core/chat_assets.dart';
 import '../../../Core/chat_colors.dart';
 import '../../../domain/entities/chat_channel.dart';
 import '../../../domain/entities/chat_message.dart';
-import '../../../domain/entities/chat_user.dart';
 import '../../viewmodel/chat_viewmodel/chat_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -16,14 +17,15 @@ class ChatScreen extends StatelessWidget {
     final chatChannel =
         ModalRoute.of(context).settings.arguments as ChatChannel;
     context.read(chatViewModel).setChannelUrl(chatChannel.channelUrl);
-    var currentUser = context.read(chatViewModel).getCurrentUser();
+    context.read(chatViewModel).setCurrentUser();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ChatColors.whiteColor,
         title: Column(
           children: [
             CircleAvatar(
-              child: chatChannel.members[0].userId == currentUser.userId
+              child: chatChannel.members[0].userId ==
+                      context.read(chatViewModel).getCurrentUser.userId
                   ? Text('${chatChannel.members[1].nickname[0]}',
                       style: TextStyle(fontSize: 12))
                   : Text('${chatChannel.members[0].nickname[0]}',
@@ -32,7 +34,8 @@ class ChatScreen extends StatelessWidget {
               maxRadius: 13,
             ),
             SizedBox(height: 3),
-            chatChannel.members[0].userId == currentUser.userId
+            chatChannel.members[0].userId ==
+                    context.read(chatViewModel).getCurrentUser.userId
                 ? Text(chatChannel.members[1].nickname,
                     style:
                         TextStyle(color: ChatColors.blackColor, fontSize: 12))
@@ -167,11 +170,97 @@ class BuildChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ChatUser currentUser = context.read(chatViewModel).getCurrentUser();
     return Container(
-      child: message.sender.userId == currentUser.userId
+      child: message.sender.userId ==
+              context.read(chatViewModel).getCurrentUser.userId
           ? MyMessage(message)
           : NotMyMessage(message),
+    );
+  }
+}
+
+class NotMyMessage extends StatelessWidget {
+  final ChatMessage chatMessage;
+
+  const NotMyMessage(this.chatMessage);
+
+  @override
+  Widget build(BuildContext context) {
+    var date =
+        DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt * 1000);
+    var formattedDate = DateFormat('hh:mm a').format(date);
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: Row(
+          children: [
+            CircleAvatar(
+              maxRadius: 21,
+              backgroundColor: ChatColors.greyAppbarBackgroundColor,
+              child: CircleAvatar(
+                maxRadius: 20,
+                backgroundImage: chatMessage.sender.userId != 'WebAdmin'
+                    ? NetworkImage(chatMessage.sender.profileUrl)
+                    : AssetImage(ChatAssets.profileUrlPlaceholder),
+              ),
+            ),
+            Column(
+              children: [
+                chatMessage.sender.userId != 'WebAdmin'
+                    ? Text(
+                        chatMessage.sender.nickname,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: ChatColors.disbleSendButton,
+                        ),
+                      )
+                    : Text(
+                        AppLocalizations.of(context).chatScreenWebAdmin,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: ChatColors.doctorSearchBar,
+                        ),
+                      ),
+                Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: ChatColors.myMsgColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Container(
+                        width: 150,
+                        child: Text(
+                          chatMessage.message,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          formattedDate,
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: ChatColors.doctorSearchBar,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -185,83 +274,50 @@ class MyMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     var date =
         DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt * 1000);
-    var formattedDate = DateFormat('h:mm a').format(date);
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10),
-      child: Align(
-        alignment: Alignment.bottomLeft,
-        child: Row(
-          children: [
-            SizedBox(
-              width: 10,
-            ),
-            CircleAvatar(
-              maxRadius: 21,
-              backgroundColor: ChatColors.greyAppbarBackgroundColor,
-              child: CircleAvatar(
-                maxRadius: 20,
-                backgroundImage: NetworkImage(chatMessage.sender.profileUrl),
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  chatMessage.sender.nickname,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: ChatColors.disbleSendButton,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: ChatColors.myMsgColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(chatMessage.message),
-                    ),
-                    Text(
-                      formattedDate,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: ChatColors.disbleSendButton,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class NotMyMessage extends StatelessWidget {
-  final ChatMessage chatMessage;
-
-  const NotMyMessage(this.chatMessage);
-
-  @override
-  Widget build(BuildContext context) {
+    var formattedDate = DateFormat('hh:mm a').format(date);
     return Align(
       alignment: Alignment.bottomRight,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: ChatColors.notMyMsgColor,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          chatMessage.message,
-          style: TextStyle(color: ChatColors.whiteColor),
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              chatMessage.sendingStatus == MsgSendingStatus.pending
+                  ? FaIcon(
+                      FontAwesomeIcons.check,
+                      size: 12,
+                      color: ChatColors.checkColor,
+                    )
+                  : FaIcon(
+                      FontAwesomeIcons.checkDouble,
+                      size: 12,
+                      color: ChatColors.checkColor,
+                    ),
+              Text(
+                formattedDate,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: ChatColors.doctorSearchBar,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: ChatColors.notMyMsgColor,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              chatMessage.message,
+              style: TextStyle(color: ChatColors.whiteColor),
+            ),
+          ),
+        ],
       ),
     );
   }

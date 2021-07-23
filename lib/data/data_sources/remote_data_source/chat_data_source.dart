@@ -4,12 +4,15 @@ import 'package:sendbird_sdk/sendbird_sdk.dart';
 import 'package:sendbirdtutorial/Core/string_constants.dart';
 import 'channels_data_source.dart';
 
-class ChatDataSource with ChannelEventHandler {
+class ChatRemoteDataSource with ChannelEventHandler {
   StreamController<BaseMessage> _chatStreamController;
+
+  StreamController<BaseMessage> _chatStreamControllerSendMessage;
   final ChannelsDataSource channelsDataSource;
   final SendbirdSdk sendbird;
 
-  ChatDataSource({this.sendbird, this.channelsDataSource}) {
+  ChatRemoteDataSource({this.sendbird, this.channelsDataSource}) {
+    _chatStreamControllerSendMessage = StreamController<BaseMessage>();
     _chatStreamController = StreamController<BaseMessage>(
         onListen: () async {
           sendbird.addChannelEventHandler(StringConstants.chatHandlerKey, this);
@@ -19,6 +22,7 @@ class ChatDataSource with ChannelEventHandler {
   }
 
   Stream<BaseMessage> get getMessageStream => _chatStreamController.stream;
+  Stream<BaseMessage> get getSendMessageStream => _chatStreamControllerSendMessage.stream;
 
   String _channelUrl;
 
@@ -49,17 +53,17 @@ class ChatDataSource with ChannelEventHandler {
   }
 
   Future<BaseMessage> sendMessage(String message) async {
+    BaseMessage userMessage;
     try {
-      final Completer<BaseMessage> completer = Completer();
       GroupChannel channel = await getGroupChannel(_channelUrl);
-      channel.sendUserMessageWithText(message, onCompleted: (baseMessage, err) {
+       userMessage = channel.sendUserMessageWithText(message, onCompleted: (baseMessage, err) {
         if (err != null) {
-          completer.complete(null);
+          _chatStreamControllerSendMessage.sink.add(baseMessage);
         } else {
-          completer.complete(baseMessage);
+          _chatStreamControllerSendMessage.sink.add(baseMessage);
         }
       });
-      return completer.future;
+      _chatStreamControllerSendMessage.sink.add(userMessage);
     } catch (e) {
       throw Exception(e);
     }

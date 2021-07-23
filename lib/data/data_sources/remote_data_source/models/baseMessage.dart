@@ -15,9 +15,7 @@ extension BaseMessageExtension on BaseMessage {
         messageId: this.messageId != null ? this.messageId : null,
         message: this.message != null ? this.message : null,
         channelUrl: this.channelUrl,
-        sendingStatus: this.sendingStatus == MessageSendingStatus.pending
-            ? MsgSendingStatus.pending
-            : MsgSendingStatus.succeeded,
+        sendingStatus: this.sendingStatus.getStatus,
         sender: this.sender != null
             ? this.sender.toDomain()
             : ChatUser(userId: StringConstants.baseMessageAdminKey),
@@ -31,6 +29,23 @@ extension SenderExtension on Sender {
         profileUrl: this.profileUrl,
         metadata: this.metaData,
       );
+}
+
+extension MessageSendingStatusExtension on MessageSendingStatus {
+  MsgSendingStatus get getStatus {
+    switch (this) {
+      case MessageSendingStatus.pending:
+        return MsgSendingStatus.pending;
+      case MessageSendingStatus.canceled:
+        return MsgSendingStatus.canceled;
+      case MessageSendingStatus.failed:
+        return MsgSendingStatus.failed;
+      case MessageSendingStatus.succeeded:
+        return MsgSendingStatus.succeeded;
+      default:
+        return MsgSendingStatus.none;
+    }
+  }
 }
 
 extension ChatMessageExtension on ChatMessage {

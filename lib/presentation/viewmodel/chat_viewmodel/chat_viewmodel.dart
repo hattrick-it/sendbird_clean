@@ -104,6 +104,7 @@ class ChatViewModel extends ChangeNotifier {
   String _userMsg = '';
   String _errorMsg = '';
   ChatState _chatState = ChatState.Empty;
+  ChatUser _currentUser = null;
 
   // Getters
   Stream<List<ChatMessage>> get onNewMessage => chatController.getMessages;
@@ -113,6 +114,8 @@ class ChatViewModel extends ChangeNotifier {
   String get errorMsg => _errorMsg;
 
   String get getMsg => _userMsg;
+
+  ChatUser get getCurrentUser => _currentUser;
 
   // Setters
   void setChannelUrl(String channelUrl) {
@@ -142,8 +145,12 @@ class ChatViewModel extends ChangeNotifier {
 
   // Public Methods
 
-  ChatUser getCurrentUser() {
-    return chatController.getCurrentUser();
+  // ChatUser getCurrentUser() {
+  //   return chatController.getCurrentUser();
+  // }
+
+  void setCurrentUser(){
+    _currentUser = chatController.getCurrentUser();
   }
 
   void sendMessage() async {
@@ -157,7 +164,6 @@ class ChatViewModel extends ChangeNotifier {
       }
       _setState(ChatState.Send);
     } catch (e) {
-      _setErrorMsg(e);
       _setState(ChatState.Error);
     }
   }

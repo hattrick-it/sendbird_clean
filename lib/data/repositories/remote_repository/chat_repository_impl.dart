@@ -12,26 +12,33 @@ import '../../data_sources/remote_data_source/models/baseMessage.dart';
 import '../../data_sources/remote_data_source/models/user.dart';
 
 class ChatRepositoryImpl implements ChatRepository {
-  final ChatDataSource sendbirdChannelsDataSource;
-  final UserTypeDataSource localUserTypeDataSource;
+  final ChatRemoteDataSource chatRemoteDataSource;
+  final UserTypeDataSource userTypeDataSource;
   final UsersDataSource usersDataSource;
 
 
   ChatRepositoryImpl({
-    this.sendbirdChannelsDataSource,
-    this.localUserTypeDataSource,
+    this.chatRemoteDataSource,
+    this.userTypeDataSource,
     this.usersDataSource,
   });
 
+  Stream<ChatMessage> getSendMessageStream() {
+    return chatRemoteDataSource.getSendMessageStream
+        .map((event) {
+          return event.toDomain();
+    });
+  }
+
   @override
   Stream<ChatMessage> getMessageStream() {
-    return sendbirdChannelsDataSource.getMessageStream
-        .map((baseMessages) => baseMessages.toDomain());
+    return chatRemoteDataSource.getMessageStream
+        .map((baseMessage) => baseMessage.toDomain());
   }
 
   @override
   Future<List<ChatUser>> getUsers() async {
-    var currentUserType = await localUserTypeDataSource.getCurrentUserType();
+    var currentUserType = await userTypeDataSource.getCurrentUserType();
     try {
       List<User> users = await usersDataSource.getUsers();
       var chatUsers = users.map((e) => e.toDomain()).toList();
@@ -44,12 +51,12 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   void setChannelUrl(String channelUrl) {
-    sendbirdChannelsDataSource.setChannelUrl(channelUrl);
+    chatRemoteDataSource.setChannelUrl(channelUrl);
   }
 
   @override
   Future<ChatMessage> sendMessage(String message) {
-    return sendbirdChannelsDataSource
+    return chatRemoteDataSource
         .sendMessage(message)
         .then((message) => message.toDomain());
   }
@@ -60,7 +67,7 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   Future<List<ChatMessage>> getMessagesList() async {
-    var baseMessages = await sendbirdChannelsDataSource.getMessages();
+    var baseMessages = await chatRemoteDataSource.getMessages();
     if (baseMessages != null) {
       return baseMessages.map((e) => e.toDomain()).toList();
     } else {

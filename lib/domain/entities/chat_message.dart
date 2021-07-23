@@ -4,6 +4,7 @@ enum MsgSendingStatus { none, pending, failed, succeeded, canceled }
 
 class ChatMessage {
   int createdAt;
+  String requestId;
   String data;
   int messageId;
   String type;
@@ -15,6 +16,7 @@ class ChatMessage {
 
   ChatMessage({
     this.createdAt,
+    this.requestId,
     this.data,
     this.messageId,
     this.type,

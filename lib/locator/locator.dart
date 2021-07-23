@@ -43,7 +43,7 @@ void setup() {
       () => AuthRespositoryImpl(authRemoteDataSource: locator.get()));
 
   locator.registerFactory<ChatRepository>(() => ChatRepositoryImpl(
-        sendbirdChannelsDataSource: locator.get(),
+        chatRemoteDataSource: locator.get(),
         localUserTypeDataSource: locator.get(),
       ));
 

@@ -74,5 +74,9 @@
   "patientListScreenHinttext": "Search patient by name",
   "@patientListScreenHinttext": {
     "description": ""
+  },
+  "chatScreenWebAdmin": "Web Admin",
+  "@chatScreenWebAdmin": {
+    "description": ""
   }
 }
