@@ -1,8 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/Core/chat_colors.dart';
-import 'package:sendbirdtutorial/presentation/screens/common_widgets/common_appbar.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../channels_list/channels_list_screen.dart';
 import '../../viewmodel/auth_viewmodel/auth_viewmodel.dart';
@@ -25,7 +23,7 @@ class PatientsListScreen extends StatelessWidget {
       ),
       body: Consumer(
         builder: (context, watch, child) {
-          final providerState = watch(authNotifierProvider).getState;
+          final providerState = watch(authViewModel).getState;
           if (providerState == LoginState.Empty) {
             return BuildUserSelectionBody(userType: userType);
           } else if (providerState == LoginState.Loaded) {
@@ -79,11 +77,6 @@ class BuildUserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        var tempUser = await context.read(authNotifierProvider).connect(
-            chatUser.userId, chatUser.nickname, chatUser.metadata['userType']);
-        if (tempUser != null) {
-          Navigator.of(context).popAndPushNamed(ChannelListScreen.routeName);
-        }
       },
       child: ListTile(
         leading: CircleAvatar(

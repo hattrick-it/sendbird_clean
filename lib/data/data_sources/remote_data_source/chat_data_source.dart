@@ -7,12 +7,10 @@ import 'channels_data_source.dart';
 class ChatRemoteDataSource with ChannelEventHandler {
   StreamController<BaseMessage> _chatStreamController;
 
-  StreamController<BaseMessage> _chatStreamControllerSendMessage;
   final ChannelsDataSource channelsDataSource;
   final SendbirdSdk sendbird;
 
   ChatRemoteDataSource({this.sendbird, this.channelsDataSource}) {
-    _chatStreamControllerSendMessage = StreamController<BaseMessage>();
     _chatStreamController = StreamController<BaseMessage>(
         onListen: () async {
           sendbird.addChannelEventHandler(StringConstants.chatHandlerKey, this);
@@ -22,7 +20,7 @@ class ChatRemoteDataSource with ChannelEventHandler {
   }
 
   Stream<BaseMessage> get getMessageStream => _chatStreamController.stream;
-  Stream<BaseMessage> get getSendMessageStream => _chatStreamControllerSendMessage.stream;
+
 
   String _channelUrl;
 
@@ -56,14 +54,15 @@ class ChatRemoteDataSource with ChannelEventHandler {
     BaseMessage userMessage;
     try {
       GroupChannel channel = await getGroupChannel(_channelUrl);
-       userMessage = channel.sendUserMessageWithText(message, onCompleted: (baseMessage, err) {
+      userMessage = channel.sendUserMessageWithText(message,
+          onCompleted: (baseMessage, err) {
         if (err != null) {
-          _chatStreamControllerSendMessage.sink.add(baseMessage);
+          _chatStreamController.sink.add(baseMessage);
         } else {
-          _chatStreamControllerSendMessage.sink.add(baseMessage);
+          _chatStreamController.sink.add(baseMessage);
         }
       });
-      _chatStreamControllerSendMessage.sink.add(userMessage);
+      _chatStreamController.sink.add(userMessage);
     } catch (e) {
       throw Exception(e);
     }

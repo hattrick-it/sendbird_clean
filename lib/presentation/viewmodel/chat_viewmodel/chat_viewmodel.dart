@@ -136,18 +136,9 @@ class ChatViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _setErrorMsg(String msg) {
-    _errorMsg = msg;
-    notifyListeners();
-  }
-
   // Private Methods
 
   // Public Methods
-
-  // ChatUser getCurrentUser() {
-  //   return chatController.getCurrentUser();
-  // }
 
   void setCurrentUser(){
     _currentUser = chatController.getCurrentUser();
@@ -155,12 +146,12 @@ class ChatViewModel extends ChangeNotifier {
 
   void sendMessage() async {
     try {
-      _setState(ChatState.Empty);
       if (_userMsg.isNotEmpty) {
         _setState(ChatState.Sending);
         await chatController.sendMessage(_userMsg);
         setUserMsg('');
         clearMsg();
+        _setState(ChatState.Empty);
       }
       _setState(ChatState.Send);
     } catch (e) {

@@ -8,8 +8,6 @@ abstract class ChatRepository {
 
   Stream<ChatMessage> getMessageStream();
 
-  Stream<ChatMessage> getSendMessageStream();
-
   Future<ChatMessage> sendMessage(String message);
 
   Future<List<ChatMessage>> getMessagesList();

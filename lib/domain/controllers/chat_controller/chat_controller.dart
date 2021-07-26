@@ -15,8 +15,7 @@ class ChatController {
         StreamController<List<ChatMessage>>(onListen: () async {
       _chatMessagesList = await getMessagesList();
       _chatStreamController.sink.add(_chatMessagesList);
-      // _getMessageStream();
-      _getSendMessageStream();
+      _getMessageStream();
     });
   }
 
@@ -35,12 +34,7 @@ class ChatController {
   }
 
   Future<void> sendMessage(String message) async {
-    var messageSent = await chatRepository.sendMessage(message);
-    // if (messageSent != null) {
-    //   // TODO si el mensaje existe, actualizarlo y pasar la lista de nuevo (basemessage messageId)
-    //   _chatMessagesList.add(messageSent);
-    //   _chatStreamController.sink.add(_chatMessagesList);
-    // }
+    await chatRepository.sendMessage(message);
   }
 
   void setChannelUrl(String channelUrl) {
@@ -53,13 +47,6 @@ class ChatController {
 
   void _getMessageStream() {
     chatRepository.getMessageStream().listen((event) {
-      _chatMessagesList.add(event);
-      _chatStreamController.sink.add(_chatMessagesList);
-    });
-  }
-
-  void _getSendMessageStream() {
-    chatRepository.getSendMessageStream().listen((event) {
       final message = _chatMessagesList.firstWhere(
           (element) => element.requestId == event.requestId,
           orElse: () => null);

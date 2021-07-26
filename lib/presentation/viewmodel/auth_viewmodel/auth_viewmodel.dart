@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/Core/constants.dart';
 import '../../../domain/controllers/login_controller/login_controller.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
@@ -9,9 +10,11 @@ enum LoginState {
   Loading,
   Loaded,
   Error,
+  PatientLoaded,
+  DoctorLoaded,
 }
 
-final authNotifierProvider =
+final authViewModel =
     ChangeNotifierProvider<AuthViewModel>((ref) => locator.get());
 
 class AuthViewModel extends ChangeNotifier {
@@ -44,8 +47,7 @@ class AuthViewModel extends ChangeNotifier {
   // Private Methods
 
   // Public Methods
-
-  Future<ChatUser> connect(
+  Future<void> connect(
       String userId, String nickname, String userType) async {
     try {
       _setLoginState(LoginState.Loading);
@@ -57,4 +59,6 @@ class AuthViewModel extends ChangeNotifier {
       throw Exception(e);
     }
   }
+
+
 }

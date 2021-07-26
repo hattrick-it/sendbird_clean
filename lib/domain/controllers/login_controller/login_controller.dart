@@ -14,7 +14,7 @@ class LoginController {
     }
   }
 
-  void saveUserType(String userType) {
-    authRepository.saveUserType(userType);
+  Future<void> saveUserType(String userType) async {
+    await authRepository.saveUserType(userType);
   }
 }

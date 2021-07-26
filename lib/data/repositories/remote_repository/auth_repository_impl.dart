@@ -3,6 +3,7 @@ import '../../../domain/repositories/auth_repository.dart';
 
 class AuthRespositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
+
   AuthRespositoryImpl({this.authRemoteDataSource});
 
   @override
@@ -14,8 +15,8 @@ class AuthRespositoryImpl implements AuthRepository {
     }
   }
 
-  void saveUserType(String userType){
-    authRemoteDataSource.saveUserType(userType);
+  Future<void> saveUserType(String userType) async {
+    await authRemoteDataSource.saveUserType(userType);
   }
 
   void disconnect() {

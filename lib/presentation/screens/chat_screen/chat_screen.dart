@@ -115,20 +115,7 @@ class InputChat extends StatelessWidget {
                 );
               },
             ),
-            Consumer(
-              builder: (context, watch, child) {
-                final provider = watch(chatViewModel);
-                if (provider.chatState == ChatState.Empty) {
-                  return SendButton(true);
-                } else if (provider.chatState == ChatState.Send) {
-                  return SendButton(true);
-                } else if (provider.chatState == ChatState.Sending ||
-                    provider.getMsg.isEmpty) {
-                  return SendButton(false);
-                }
-                return CircularProgressIndicator();
-              },
-            ),
+            SendButton(),
           ],
         ),
       ),
@@ -137,9 +124,8 @@ class InputChat extends StatelessWidget {
 }
 
 class SendButton extends StatelessWidget {
-  final bool available;
 
-  const SendButton(this.available);
+  const SendButton();
 
   @override
   Widget build(BuildContext context) {
@@ -150,9 +136,7 @@ class SendButton extends StatelessWidget {
         splashColor: ChatColors.transparentColor,
         icon: Icon(
           Icons.send,
-          color: available
-              ? ChatColors.enableSendButton
-              : ChatColors.disbleSendButton,
+          color: ChatColors.enableSendButton,
         ),
         onPressed: () {
           context.read(chatViewModel).sendMessage();
@@ -187,7 +171,7 @@ class NotMyMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var date =
-        DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt * 1000);
+        DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt);
     var formattedDate = DateFormat('hh:mm a').format(date);
     return Padding(
       padding: EdgeInsets.all(10),
@@ -232,11 +216,8 @@ class NotMyMessage extends StatelessWidget {
                         color: ChatColors.myMsgColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Container(
-                        width: 150,
-                        child: Text(
-                          chatMessage.message,
-                        ),
+                      child: Text(
+                        chatMessage.message,
                       ),
                     ),
                     Column(
@@ -273,7 +254,7 @@ class MyMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var date =
-        DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt * 1000);
+        DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt);
     var formattedDate = DateFormat('hh:mm a').format(date);
     return Align(
       alignment: Alignment.bottomRight,

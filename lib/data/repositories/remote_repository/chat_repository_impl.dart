@@ -23,13 +23,6 @@ class ChatRepositoryImpl implements ChatRepository {
     this.usersDataSource,
   });
 
-  Stream<ChatMessage> getSendMessageStream() {
-    return chatRemoteDataSource.getSendMessageStream
-        .map((event) {
-          return event.toDomain();
-    });
-  }
-
   @override
   Stream<ChatMessage> getMessageStream() {
     return chatRemoteDataSource.getMessageStream

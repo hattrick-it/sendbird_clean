@@ -5,5 +5,5 @@ abstract class AuthRepository {
 
   void disconnect();
 
-  void saveUserType(String userType);
+  Future<void> saveUserType(String userType);
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,7 +36,7 @@ class WelcomeScreen extends StatelessWidget {
           ),
           Consumer(
             builder: (context, watch, child) {
-              var state = watch(authNotifierProvider).getState;
+              var state = watch(authViewModel).getState;
               if (state == LoginState.Loading) {
                 return Container(
                   height: double.infinity,
@@ -44,6 +46,7 @@ class WelcomeScreen extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   ),
                 );
+
               }
               return Container();
             },
@@ -102,7 +105,7 @@ class BuildSelectorButtons extends ConsumerWidget {
           title: AppLocalizations.of(context).selectionPagePatient,
           onPressed: () async {
             await context
-                .read(authNotifierProvider)
+                .read(authViewModel)
                 .connect('Patient_3', 'Black Widow', 'Patient');
             Navigator.of(context).pushNamed(DoctorListScreen.routeName,
                 arguments: AppLocalizations.of(context).userTypePatient);
@@ -115,9 +118,8 @@ class BuildSelectorButtons extends ConsumerWidget {
           title: AppLocalizations.of(context).selectionPageDoctor,
           onPressed: () async {
             await context
-                .read(authNotifierProvider)
+                .read(authViewModel)
                 .connect('Doctor_2', 'Dr.Kevin Zeng M.D.', 'Doctor');
-
             Navigator.of(context).pushNamed(PatientsListScreen.routeName,
                 arguments: AppLocalizations.of(context).userTypeDoctor);
           },

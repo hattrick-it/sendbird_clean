@@ -43,13 +43,12 @@ void setup() {
       () => AuthRespositoryImpl(authRemoteDataSource: locator.get()));
 
   locator.registerFactory<ChatRepository>(() => ChatRepositoryImpl(
-        chatRemoteDataSource: locator.get(),
-        localUserTypeDataSource: locator.get(),
-      ));
+      chatRemoteDataSource: locator.get(),
+      userTypeDataSource: locator.get(),
+      usersDataSource: locator.get()));
 
-  locator.registerFactory<UserSelectionRepository>(() =>
-      UserSelectionRepositoryImpl(
-          usersDataSource: locator.get()));
+  locator.registerFactory<UserSelectionRepository>(
+      () => UserSelectionRepositoryImpl(usersDataSource: locator.get()));
 
   locator.registerFactory<ChannelRepository>(
       () => ChannelRepositoryImpl(channelsDataSource: locator.get()));
@@ -58,10 +57,11 @@ void setup() {
 
   // Data Sources
 
-  locator.registerFactory<ChatDataSource>(() => ChatDataSource(
+  locator.registerFactory<ChatRemoteDataSource>(() => ChatRemoteDataSource(
         sendbird: locator.get(),
         channelsDataSource: locator.get(),
       ));
+
   locator.registerFactory<ChannelsDataSource>(
       () => ChannelsDataSource(sendbird: locator.get()));
   locator.registerFactory<AuthRemoteDataSource>(() => AuthRemoteDataSource(
