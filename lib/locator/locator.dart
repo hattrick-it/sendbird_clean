@@ -33,8 +33,6 @@ final locator = GetIt.instance;
 
 void setup() {
   // SendbirdSdk
-  // locator.registerSingleton<SendbirdSdk>(SendbirdSdk(appId: Constants.api_key));
-
   locator.registerFactory<SendbirdSdk>(
       () => SendbirdSdk(appId: Constants.api_key));
 
@@ -54,6 +52,10 @@ void setup() {
       () => ChannelRepositoryImpl(channelsDataSource: locator.get()));
   locator.registerFactory<UsersRepository>(
       () => UsersRepositoryImpl(usersDataSource: locator.get()));
+
+  locator.registerFactory<UserTypeRepository>(() => UserTypeRepositoryImpl(
+        localUserTypeDataSource: locator.get(),
+      ));
 
   // Data Sources
 
