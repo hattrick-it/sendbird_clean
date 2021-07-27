@@ -35,6 +35,7 @@ class ChannelsDataSource extends ChannelEventHandler {
   void onMessageReceived(BaseChannel channel, BaseMessage message) {
     _messageStreamController.sink.add(message);
   }
+
   @override
   void onChannelChanged(BaseChannel channel) {
     GroupChannel groupChannel = channel;
@@ -44,7 +45,9 @@ class ChannelsDataSource extends ChannelEventHandler {
   // Methods
   Future<GroupChannel> createChannel(List<String> userIds) async {
     try {
-      final params = GroupChannelParams()..userIds = userIds;
+      final params = GroupChannelParams()
+        ..userIds = userIds
+        ..isDistinct = true;
       var groupChannel = await GroupChannel.createChannel(params);
       return groupChannel;
     } catch (e) {
@@ -79,12 +82,12 @@ class ChannelsDataSource extends ChannelEventHandler {
       query.setUserIdsIncludeFilter(
           [usersIds[0], usersIds[1]], GroupChannelListQueryType.and);
       final result = await query.loadNext();
-     if(result != null) {
-       return result.first;
-     }else{
-       var emptyChannel =  GroupChannel();
-       return emptyChannel;
-     }
+      if (result != null && result.length > 0) {
+        return result.first;
+      } else {
+        var newChannel = await createChannel(usersIds);
+        return newChannel;
+      }
     } catch (e) {
       throw Exception(e);
     }
