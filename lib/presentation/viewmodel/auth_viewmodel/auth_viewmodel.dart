@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/Core/constants.dart';
 import '../../../domain/controllers/login_controller/login_controller.dart';
-import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
 
 enum LoginState {

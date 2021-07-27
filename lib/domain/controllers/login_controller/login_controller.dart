@@ -1,5 +1,4 @@
 import '../../repositories/auth_repository.dart';
-import '../../entities/chat_user.dart';
 
 class LoginController {
   final AuthRepository authRepository;

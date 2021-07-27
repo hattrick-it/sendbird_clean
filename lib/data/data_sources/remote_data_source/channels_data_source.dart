@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:sendbird_sdk/sendbird_sdk.dart';
 import 'package:sendbirdtutorial/Core/string_constants.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/groupChannel.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_channel.dart';
 
 class ChannelsDataSource extends ChannelEventHandler {
   final SendbirdSdk sendbird;
