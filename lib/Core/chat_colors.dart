@@ -6,6 +6,7 @@ class ChatColors {
   static Color primaryColor = Color.fromRGBO(26, 108, 240, 1.0);
   static Color whiteColor = Color.fromRGBO(253, 253, 253, 1.0);
   static Color blackColor = Color.fromRGBO(0, 0, 0, 1.0);
+  static Color darckGrey = Color.fromRGBO(42, 42, 42, 1.0);
   static Color transparentColor = Colors.transparent;
   static Color enableSendButton = Color.fromRGBO(26, 108, 240, 1.0);
   static Color disbleSendButton = Color.fromRGBO(86, 91, 102, 1.0);

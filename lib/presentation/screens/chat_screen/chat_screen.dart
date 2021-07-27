@@ -20,7 +20,22 @@ class ChatScreen extends StatelessWidget {
     context.read(chatViewModel).setCurrentUser();
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            color: ChatColors.darckGrey,
+            size: 30,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         backgroundColor: ChatColors.whiteColor,
+        actions: [
+          Icon(
+            Icons.info_outline,
+            color: ChatColors.notMyMsgColor,
+          ),
+          SizedBox(width: 10),
+        ],
         title: Column(
           children: [
             CircleAvatar(
@@ -30,8 +45,8 @@ class ChatScreen extends StatelessWidget {
                       style: TextStyle(fontSize: 12))
                   : Text('${chatChannel.members[0].nickname[0]}',
                       style: TextStyle(fontSize: 12)),
-              backgroundColor: ChatColors.primaryColor,
-              maxRadius: 13,
+              backgroundColor: ChatColors.notMyMsgColor,
+              maxRadius: 10,
             ),
             SizedBox(height: 3),
             chatChannel.members[0].userId ==
@@ -124,7 +139,6 @@ class InputChat extends StatelessWidget {
 }
 
 class SendButton extends StatelessWidget {
-
   const SendButton();
 
   @override
@@ -170,8 +184,7 @@ class NotMyMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var date =
-        DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt);
+    var date = DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt);
     var formattedDate = DateFormat('hh:mm a').format(date);
     return Padding(
       padding: EdgeInsets.all(10),
@@ -180,33 +193,42 @@ class NotMyMessage extends StatelessWidget {
         child: Row(
           children: [
             CircleAvatar(
-              maxRadius: 21,
+              maxRadius: 16,
               backgroundColor: ChatColors.greyAppbarBackgroundColor,
               child: CircleAvatar(
-                maxRadius: 20,
+                maxRadius: 15,
                 backgroundImage: chatMessage.sender.userId != 'WebAdmin'
                     ? NetworkImage(chatMessage.sender.profileUrl)
                     : AssetImage(ChatAssets.profileUrlPlaceholder),
               ),
             ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                chatMessage.sender.userId != 'WebAdmin'
-                    ? Text(
-                        chatMessage.sender.nickname,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: ChatColors.disbleSendButton,
-                        ),
-                      )
-                    : Text(
-                        AppLocalizations.of(context).chatScreenWebAdmin,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: ChatColors.doctorSearchBar,
-                        ),
-                      ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 12,
+                    ),
+                    chatMessage.sender.userId != 'WebAdmin'
+                        ? Text(
+                            chatMessage.sender.nickname,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: ChatColors.doctorSearchBar,
+                            ),
+                          )
+                        : Text(
+                            AppLocalizations.of(context).chatScreenWebAdmin,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: ChatColors.doctorSearchBar,
+                            ),
+                          ),
+                  ],
+                ),
                 Row(
                   children: [
                     Container(
@@ -253,8 +275,7 @@ class MyMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var date =
-        DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt);
+    var date = DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt);
     var formattedDate = DateFormat('hh:mm a').format(date);
     return Align(
       alignment: Alignment.bottomRight,
