@@ -85,7 +85,11 @@ class ChatScreen extends StatelessWidget {
                           },
                         );
                       }
-                      return Center(child: CircularProgressIndicator());
+                      return Center(
+                          child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            ChatColors.purpleAppbarBackgroundColor),
+                      ));
                     },
                   );
                 },
@@ -150,7 +154,7 @@ class SendButton extends StatelessWidget {
         splashColor: ChatColors.transparentColor,
         icon: Icon(
           Icons.send,
-          color: ChatColors.enableSendButton,
+          color: ChatColors.purpleAppbarBackgroundColor,
         ),
         onPressed: () {
           context.read(chatViewModel).sendMessage();
@@ -192,23 +196,23 @@ class NotMyMessage extends StatelessWidget {
         alignment: Alignment.bottomLeft,
         child: Row(
           children: [
-            CircleAvatar(
-              maxRadius: 16,
-              backgroundColor: ChatColors.greyAppbarBackgroundColor,
-              child: CircleAvatar(
-                maxRadius: 15,
-                backgroundImage: chatMessage.sender.userId != 'WebAdmin'
-                    ? NetworkImage(chatMessage.sender.profileUrl)
-                    : AssetImage(ChatAssets.profileUrlPlaceholder),
-              ),
-            ),
+            // CircleAvatar(
+            //   maxRadius: 16,
+            //   backgroundColor: ChatColors.greyAppbarBackgroundColor,
+            //   child: CircleAvatar(
+            //     maxRadius: 15,
+            //     backgroundImage: chatMessage.sender.userId != 'WebAdmin'
+            //         ? NetworkImage(chatMessage.sender.profileUrl)
+            //         : AssetImage(ChatAssets.profileUrlPlaceholder),
+            //   ),
+            // ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     SizedBox(
-                      width: 12,
+                      width: 45,
                     ),
                     chatMessage.sender.userId != 'WebAdmin'
                         ? Text(
@@ -231,12 +235,29 @@ class NotMyMessage extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          maxRadius: 14,
+                          backgroundColor: ChatColors.greyAppbarBackgroundColor,
+                          child: CircleAvatar(
+                            maxRadius: 13,
+                            backgroundImage: chatMessage.sender.userId !=
+                                    'WebAdmin'
+                                ? NetworkImage(chatMessage.sender.profileUrl)
+                                : AssetImage(ChatAssets.profileUrlPlaceholder),
+                          ),
+                        ),
+                      ],
+                    ),
                     Container(
+                      constraints: BoxConstraints(minWidth: 100, maxWidth: 200),
                       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: ChatColors.myMsgColor,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(14),
                       ),
                       child: Text(
                         chatMessage.message,
@@ -283,6 +304,7 @@ class MyMessage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               SizedBox(
                 height: 20,
@@ -312,7 +334,7 @@ class MyMessage extends StatelessWidget {
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: ChatColors.notMyMsgColor,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(14),
             ),
             child: Text(
               chatMessage.message,

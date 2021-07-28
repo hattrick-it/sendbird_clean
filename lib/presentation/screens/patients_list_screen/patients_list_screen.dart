@@ -41,7 +41,10 @@ class BuildPatientsListBody extends StatelessWidget {
           builder: (context, watch, child) {
             var provider = watch(userSelectionViewModel);
             if (provider.getUserList == null) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    ChatColors.purpleAppbarBackgroundColor),
+              ));
             } else if (provider.getUserSelectionSatus ==
                 UserSelectionStatus.Loaded) {
               return PatientsList(userList: provider.getUserList);
@@ -50,6 +53,8 @@ class BuildPatientsListBody extends StatelessWidget {
               child: Container(
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      ChatColors.purpleAppbarBackgroundColor),
                 ),
               ),
             );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/Core/chat_colors.dart';
 import '../../../domain/entities/chat_channel.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../chat_screen/chat_screen.dart';
@@ -72,13 +73,19 @@ class BuildChannelListBody extends StatelessWidget {
                       : Text(channelList[index].members[0].nickname),
                   trailing: channelList[index].lastMessage != null
                       ? Text(channelList[index].lastMessage.message)
-                      : Text(AppLocalizations.of(context).channelScreenNoMessagesYet),
+                      : Text(AppLocalizations.of(context)
+                          .channelScreenNoMessagesYet),
                 ),
               );
             },
           );
         }
-        return Center(child: CircularProgressIndicator());
+        return Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(
+                ChatColors.purpleAppbarBackgroundColor),
+          ),
+        );
       },
     );
   }

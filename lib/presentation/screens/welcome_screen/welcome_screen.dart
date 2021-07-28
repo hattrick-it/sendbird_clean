@@ -43,10 +43,12 @@ class WelcomeScreen extends StatelessWidget {
                   width: double.infinity,
                   color: Colors.black38.withAlpha(200),
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          ChatColors.purpleAppbarBackgroundColor),
+                    ),
                   ),
                 );
-
               }
               return Container();
             },
@@ -110,7 +112,7 @@ class BuildSelectorButtons extends ConsumerWidget {
             Navigator.of(context).pushNamed(DoctorListScreen.routeName,
                 arguments: AppLocalizations.of(context).userTypePatient);
           },
-          buttonColor: ChatColors.welcomeScreenPurpleButton,
+          buttonColor: ChatColors.notMyMsgColor,
           textColor: ChatColors.whiteColor,
         ),
         SizedBox(height: 20),

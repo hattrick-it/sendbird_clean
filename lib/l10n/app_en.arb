@@ -23,11 +23,11 @@
   "@selectionPageDemostrator": {
     "description": ""
   },
-  "selectionPagePatient": "Iam a Patient",
+  "selectionPagePatient": "I am a Patient",
   "@selectionPagePatient": {
     "description": ""
   },
-  "selectionPageDoctor": "Iam a Doctor",
+  "selectionPageDoctor": "I am a Doctor",
   "@selectionPageDoctor": {
     "description": ""
   },

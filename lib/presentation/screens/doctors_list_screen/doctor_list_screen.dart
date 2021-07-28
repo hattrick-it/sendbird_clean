@@ -38,16 +38,22 @@ class BuildDoctorListBody extends StatelessWidget {
       children: [
         SearchComponent(),
         Container(
-          height: 60,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          color: ChatColors.greyAppbarBackgroundColor,
-          child: SpecialtyButtonsComponent(),
+          height: 70,
+          child: Container(
+            height: 60,
+            padding: EdgeInsets.only(bottom: 22,top: 10),
+            color: ChatColors.greyAppbarBackgroundColor,
+            child: SpecialtyButtonsComponent(),
+          ),
         ),
         Consumer(
           builder: (context, watch, child) {
             var provider = watch(userSelectionViewModel);
             if (provider.getUserList == null) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    ChatColors.purpleAppbarBackgroundColor),
+              ));
             } else if (provider.getUserSelectionSatus ==
                 UserSelectionStatus.Loaded) {
               return DoctorsList(userList: provider.getUserList);
@@ -56,6 +62,8 @@ class BuildDoctorListBody extends StatelessWidget {
               child: Container(
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      ChatColors.purpleAppbarBackgroundColor),
                 ),
               ),
             );
@@ -112,6 +120,8 @@ class BuildSearchBar extends StatelessWidget {
                   context.read(userSelectionViewModel).getUserByName(val);
                 },
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.only(bottom: 7),
+                  alignLabelWithHint: true,
                   hintText:
                       AppLocalizations.of(context).doctorListScreenHinttext,
                   border: InputBorder.none,
@@ -160,10 +170,10 @@ class SpecialtyButtonsComponent extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Container(
                   color: specialtiesMap.values.elementAt(index)
-                      ? ChatColors.specialtySelected
+                      ? ChatColors.notMyMsgColor
                       : ChatColors.specialtyUnSelected,
                   child: FlatButton(
-                    onPressed: () { 
+                    onPressed: () {
                       context
                           .read(userSelectionViewModel)
                           .getDoctorBySpecialty(index);
@@ -174,6 +184,7 @@ class SpecialtyButtonsComponent extends StatelessWidget {
                         Text(
                           specialtiesMap.keys.elementAt(index),
                           style: TextStyle(
+                            fontSize: 11,
                             color: specialtiesMap.values.elementAt(index)
                                 ? ChatColors.whiteColor
                                 : ChatColors.doctorsubtitleText,
@@ -192,6 +203,8 @@ class SpecialtyButtonsComponent extends StatelessWidget {
               width: 10,
               child: CircularProgressIndicator(
                 strokeWidth: 1,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    ChatColors.purpleAppbarBackgroundColor),
               ),
             ),
           );
@@ -260,7 +273,9 @@ class DoctorsList extends StatelessWidget {
                           userList[index].metadata['Specialty'] != null
                               ? Text(
                                   userList[index].metadata['Specialty'],
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12),
                                 )
                               : Container(),
                           Text(
