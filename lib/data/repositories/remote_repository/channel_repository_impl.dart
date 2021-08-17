@@ -11,7 +11,6 @@ import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/gro
 
 class ChannelRepositoryImpl implements ChannelRepository {
   final ChannelsDataSource channelsDataSource;
-
   ChannelRepositoryImpl({this.channelsDataSource});
 
   @override

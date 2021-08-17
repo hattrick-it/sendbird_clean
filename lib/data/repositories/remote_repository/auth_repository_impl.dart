@@ -1,5 +1,8 @@
+import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
+
 import '../../data_sources/remote_data_source/auth_data_source.dart';
 import '../../../domain/repositories/auth_repository.dart';
+import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/user.dart';
 
 class AuthRespositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
@@ -7,16 +10,17 @@ class AuthRespositoryImpl implements AuthRepository {
   AuthRespositoryImpl({this.authRemoteDataSource});
 
   @override
-  Future<void> connect(String userId, String nickname) async {
+  Future<ChatUser> connect(String userId, String nickname) async {
     try {
-      await authRemoteDataSource.connect(userId, nickname);
+      var user = await authRemoteDataSource.connect(userId, nickname);
+      return user.toDomain();
     } catch (e) {
       throw Exception(e);
     }
   }
 
-  Future<void> saveUserType(String userType) async {
-    await authRemoteDataSource.saveUserType(userType);
+  Future<void> saveUserType(String userType) {
+    authRemoteDataSource.saveUserType(userType);
   }
 
   void disconnect() {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendbirdtutorial/Core/chat_colors.dart';
 import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
 import 'package:sendbirdtutorial/presentation/screens/chat_screen/chat_screen.dart';
@@ -14,7 +14,6 @@ class DoctorListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userType = ModalRoute.of(context).settings.arguments as String;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read(userSelectionViewModel).getUsersByType();
     });
@@ -41,7 +40,7 @@ class BuildDoctorListBody extends StatelessWidget {
           height: 70,
           child: Container(
             height: 60,
-            padding: EdgeInsets.only(bottom: 22,top: 10),
+            padding: EdgeInsets.only(bottom: 22, top: 10),
             color: ChatColors.greyAppbarBackgroundColor,
             child: SpecialtyButtonsComponent(),
           ),
@@ -50,10 +49,13 @@ class BuildDoctorListBody extends StatelessWidget {
           builder: (context, watch, child) {
             var provider = watch(userSelectionViewModel);
             if (provider.getUserList == null) {
-              return Center(child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(
-                    ChatColors.purpleAppbarBackgroundColor),
-              ));
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    ChatColors.purpleAppbarBackgroundColor,
+                  ),
+                ),
+              );
             } else if (provider.getUserSelectionSatus ==
                 UserSelectionStatus.Loaded) {
               return DoctorsList(userList: provider.getUserList);
@@ -63,7 +65,8 @@ class BuildDoctorListBody extends StatelessWidget {
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                      ChatColors.purpleAppbarBackgroundColor),
+                    ChatColors.purpleAppbarBackgroundColor,
+                  ),
                 ),
               ),
             );
@@ -171,7 +174,7 @@ class SpecialtyButtonsComponent extends StatelessWidget {
                 return Container(
                   color: specialtiesMap.values.elementAt(index)
                       ? ChatColors.notMyMsgColor
-                      : ChatColors.specialtyUnSelected,
+                      : ChatColors.whiteColor,
                   child: FlatButton(
                     onPressed: () {
                       context
@@ -234,12 +237,12 @@ class DoctorsList extends StatelessWidget {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () async {
-              var gropuChannel = await context
+              var groupChannel = await context
                   .read(usersListViewModel)
                   .getChannelByIds(userList[index].userId);
-              if (gropuChannel != null) {
+              if (groupChannel != null) {
                 Navigator.of(context)
-                    .pushNamed(ChatScreen.routeName, arguments: gropuChannel);
+                    .pushNamed(ChatScreen.routeName, arguments: groupChannel);
               }
             },
             child: Container(

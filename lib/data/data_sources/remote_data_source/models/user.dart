@@ -14,3 +14,5 @@ extension UserExtension on User {
             this.connectionStatus == UserConnectionStatus.online ? true : false,
       );
 }
+
+

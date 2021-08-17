@@ -1,8 +1,10 @@
 
+import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
+
 abstract class AuthRepository {
-  Future<void> connect(String userId, String nickname);
+  Future<ChatUser> connect(String userId, String nickname);
 
   void disconnect();
 
-  Future<void> saveUserType(String userType);
+  void saveUserType(String userType);
 }

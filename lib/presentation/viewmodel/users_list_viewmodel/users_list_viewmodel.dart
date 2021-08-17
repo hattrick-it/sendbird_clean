@@ -6,9 +6,6 @@ import '../../../domain/controllers/chat_controller/chat_controller.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
 
-final usersListViewModel =
-    ChangeNotifierProvider<UsersListViewModel>((ref) => locator.get());
-
 enum UserListStatus {
   Empty,
   Loading,
@@ -16,9 +13,12 @@ enum UserListStatus {
   Error,
 }
 
+final usersListViewModel =
+    ChangeNotifierProvider<UsersListViewModel>((ref) => locator.get());
+
 class UsersListViewModel extends ChangeNotifier {
-  final ChatController chatController;
   final ChannelListController channelListController;
+  final ChatController chatController;
 
   UsersListViewModel({this.chatController, this.channelListController});
 
@@ -53,6 +53,8 @@ class UsersListViewModel extends ChangeNotifier {
   // Private methods
 
   // Public methodss
+
+
   Future<void> getUsers() async {
     try {
       _setStatus(UserListStatus.Loading);

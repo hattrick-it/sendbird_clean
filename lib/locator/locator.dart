@@ -32,13 +32,19 @@ import '../domain/repositories/auth_repository.dart';
 final locator = GetIt.instance;
 
 void setup() {
-  // SendbirdSdk
   locator.registerFactory<SendbirdSdk>(
-      () => SendbirdSdk(appId: Constants.api_key));
+          () => SendbirdSdk(appId: Constants.api_key));
 
-  // Repositories
-  locator.registerFactory<AuthRepository>(
-      () => AuthRespositoryImpl(authRemoteDataSource: locator.get()));
+  locator.registerFactory<ChannelRepository>(
+          () => ChannelRepositoryImpl(channelsDataSource: locator.get()));
+
+  locator.registerFactory<ChannelsDataSource>(
+          () => ChannelsDataSource(sendbird: locator.get()));
+
+  locator.registerSingleton<ChannelListController>(
+      ChannelListController(channelRepository: locator.get()));
+
+
 
   locator.registerFactory<ChatRepository>(() => ChatRepositoryImpl(
       chatRemoteDataSource: locator.get(),
@@ -48,14 +54,22 @@ void setup() {
   locator.registerFactory<UserSelectionRepository>(
       () => UserSelectionRepositoryImpl(usersDataSource: locator.get()));
 
-  locator.registerFactory<ChannelRepository>(
-      () => ChannelRepositoryImpl(channelsDataSource: locator.get()));
+
   locator.registerFactory<UsersRepository>(
       () => UsersRepositoryImpl(usersDataSource: locator.get()));
 
   locator.registerFactory<UserTypeRepository>(() => UserTypeRepositoryImpl(
         localUserTypeDataSource: locator.get(),
       ));
+
+  locator.registerFactory<LoginController>(
+          () => LoginController(authRepository: locator.get()));
+
+  locator.registerFactory<AuthRepository>(
+          () => AuthRespositoryImpl(authRemoteDataSource: locator.get()));
+
+  locator.registerFactory<AuthRemoteDataSource>(() => AuthRemoteDataSource(
+      sendbird: locator.get(), userTypeDataSource: locator.get()));
 
   // Data Sources
 
@@ -64,10 +78,8 @@ void setup() {
         channelsDataSource: locator.get(),
       ));
 
-  locator.registerFactory<ChannelsDataSource>(
-      () => ChannelsDataSource(sendbird: locator.get()));
-  locator.registerFactory<AuthRemoteDataSource>(() => AuthRemoteDataSource(
-      sendbird: locator.get(), userTypeDataSource: locator.get()));
+
+
   locator.registerFactory<UserBatchDataEntry>(
       () => UserBatchDataEntry(sendbird: locator.get()));
   locator.registerFactory<UserTypeDataSource>(() => UserTypeDataSource());
@@ -80,10 +92,11 @@ void setup() {
         chatRepository: locator.get(),
         usersRepository: locator.get(),
       ));
-  locator.registerSingleton<ChannelListController>(
-      ChannelListController(channelRepository: locator.get()));
-  locator.registerFactory<LoginController>(
-      () => LoginController(authRepository: locator.get()));
+
+
+  // locator.registerFactory<LoginController>(
+  //     () => LoginController(authRepository: locator.get()));
+
   locator
       .registerFactory<UserSelectionController>(() => UserSelectionController(
             localUserTypeRepository: locator.get(),

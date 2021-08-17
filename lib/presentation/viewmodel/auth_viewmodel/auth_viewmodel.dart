@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
 import '../../../domain/controllers/login_controller/login_controller.dart';
 import '../../../locator/locator.dart';
 
@@ -8,8 +9,6 @@ enum LoginState {
   Loading,
   Loaded,
   Error,
-  PatientLoaded,
-  DoctorLoaded,
 }
 
 final authViewModel =
@@ -21,22 +20,12 @@ class AuthViewModel extends ChangeNotifier {
   AuthViewModel({this.loginController});
 
   // Properties
-  var _userId = '';
-  var _nickname = '';
   LoginState _loginState = LoginState.Empty;
 
   // Getters
   LoginState get getState => _loginState;
 
   // Setters
-  set setUserId(String userid) {
-    _userId = userid;
-  }
-
-  set setNickname(String nickname) {
-    _nickname = nickname;
-  }
-
   void _setLoginState(LoginState state) {
     _loginState = state;
     notifyListeners();
@@ -45,18 +34,16 @@ class AuthViewModel extends ChangeNotifier {
   // Private Methods
 
   // Public Methods
-  Future<void> connect(
-      String userId, String nickname, String userType) async {
+  Future<ChatUser> connect(String userId, String nickname, String userType) async {
     try {
       _setLoginState(LoginState.Loading);
       loginController.saveUserType(userType);
-      await loginController.connect(userId, nickname);
-      _setLoginState(LoginState.Loaded);
+      return await loginController.connect(userId, nickname);
     } catch (e) {
       _setLoginState(LoginState.Error);
       throw Exception(e);
+    } finally {
+      _setLoginState(LoginState.Empty);
     }
   }
-
-
 }

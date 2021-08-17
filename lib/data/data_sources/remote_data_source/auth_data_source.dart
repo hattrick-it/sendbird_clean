@@ -9,7 +9,8 @@ class AuthRemoteDataSource {
 
   Future<User> connect(String userId, String nickname) async {
     try {
-      await sendbird.connect(userId, nickname: nickname);
+      var user = await sendbird.connect(userId, nickname: nickname);
+      return user;
     } catch (e) {
       throw Exception(e);
     }

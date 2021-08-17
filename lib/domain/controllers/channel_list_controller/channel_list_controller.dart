@@ -8,6 +8,11 @@ import '../../entities/chat_channel.dart';
 
 class ChannelListController {
   final ChannelRepository channelRepository;
+
+  StreamController<ChatMessage> _messageStreamController;
+
+  StreamController<List<ChatChannel>> _channelsStreamController;
+
   ChannelListController({this.channelRepository}) {
     _onInit();
   }
@@ -24,10 +29,6 @@ class ChannelListController {
     });
   }
 
-  StreamController<ChatMessage> _messageStreamController;
-
-  StreamController<List<ChatChannel>> _channelsStreamController;
-
   List<ChatChannel> _chatChannelList = [];
 
   Stream<List<ChatChannel>> get getChannels => _channelsStreamController.stream;
@@ -38,8 +39,8 @@ class ChannelListController {
     return channelRepository.getChannels();
   }
 
-  Future<ChatChannel> createChannel(String userId)  {
-    return  channelRepository.createChannel(userId);
+  Future<ChatChannel> createChannel(String userId) {
+    return channelRepository.createChannel(userId);
   }
 
   void _getChannelsStream() {
@@ -72,13 +73,6 @@ class ChannelListController {
   }
 
   Future<ChatChannel> getChannelByIds(String userId) async {
-    var chatChannel = await channelRepository.getChannelByIds(userId);
-    if(chatChannel == null){
-      var newChatChannel = await channelRepository.createChannel(userId);
-      return newChatChannel;
-    }else{
-      return chatChannel;
-    }
+    return await channelRepository.getChannelByIds(userId);
   }
-
 }

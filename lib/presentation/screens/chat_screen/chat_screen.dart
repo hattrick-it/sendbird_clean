@@ -123,6 +123,9 @@ class InputChat extends StatelessWidget {
                 ctrl.text = provider.getMsg;
                 return Expanded(
                   child: TextField(
+                    style: TextStyle(
+                      height: 1,
+                    ),
                     controller: ctrl,
                     onChanged: (val) {
                       context.read(chatViewModel).setUserMsg(val);
@@ -196,16 +199,6 @@ class NotMyMessage extends StatelessWidget {
         alignment: Alignment.bottomLeft,
         child: Row(
           children: [
-            // CircleAvatar(
-            //   maxRadius: 16,
-            //   backgroundColor: ChatColors.greyAppbarBackgroundColor,
-            //   child: CircleAvatar(
-            //     maxRadius: 15,
-            //     backgroundImage: chatMessage.sender.userId != 'WebAdmin'
-            //         ? NetworkImage(chatMessage.sender.profileUrl)
-            //         : AssetImage(ChatAssets.profileUrlPlaceholder),
-            //   ),
-            // ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -330,6 +323,7 @@ class MyMessage extends StatelessWidget {
             ],
           ),
           Container(
+            constraints: BoxConstraints(minWidth: 10, maxWidth: 200),
             margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
@@ -338,7 +332,10 @@ class MyMessage extends StatelessWidget {
             ),
             child: Text(
               chatMessage.message,
-              style: TextStyle(color: ChatColors.whiteColor),
+              maxLines: 3,
+              style: TextStyle(
+                color: ChatColors.whiteColor,
+              ),
             ),
           ),
         ],

@@ -1,3 +1,5 @@
+import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
+
 import '../../repositories/auth_repository.dart';
 
 class LoginController {
@@ -5,15 +7,15 @@ class LoginController {
 
   LoginController({this.authRepository});
 
-  Future<void> connect(String userId, String nickname) async {
+  Future<ChatUser> connect(String userId, String nickname) {
     try {
-      await authRepository.connect(userId, nickname);
+      return authRepository.connect(userId, nickname);
     } catch (e) {
       throw Exception(e);
     }
   }
 
-  Future<void> saveUserType(String userType) async {
-    await authRepository.saveUserType(userType);
+  void saveUserType(String userType) {
+    authRepository.saveUserType(userType);
   }
 }

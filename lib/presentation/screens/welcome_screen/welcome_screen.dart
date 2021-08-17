@@ -65,27 +65,16 @@ class BuildTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 100,
-      left: 30,
+      top: 110,
+      left: 50,
       child: Container(
         width: 350,
         child: Text(
           AppLocalizations.of(context).welcomeScreenTitle,
           style: TextStyle(
-            fontSize: 60,
+            fontSize: 44,
             fontWeight: FontWeight.bold,
-            shadows: <Shadow>[
-              Shadow(
-                offset: Offset(1.5, 1.5),
-                blurRadius: 5.0,
-                color: ChatColors.whiteColor,
-              ),
-              Shadow(
-                offset: Offset(3.0, 3.0),
-                blurRadius: 8.0,
-                color: ChatColors.whiteColor,
-              ),
-            ],
+            color: ChatColors.whiteColor,
           ),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
@@ -106,11 +95,13 @@ class BuildSelectorButtons extends ConsumerWidget {
         BuildSelectorButton(
           title: AppLocalizations.of(context).selectionPagePatient,
           onPressed: () async {
-            await context
+            var chatUser = await context
                 .read(authViewModel)
-                .connect('Patient_3', 'Black Widow', 'Patient');
-            Navigator.of(context).pushNamed(DoctorListScreen.routeName,
-                arguments: AppLocalizations.of(context).userTypePatient);
+                .connect('Patient_3', 'Michael Williams', 'Patient');
+            if (chatUser != null) {
+              Navigator.of(context).pushNamed(DoctorListScreen.routeName,
+                  arguments: AppLocalizations.of(context).userTypePatient);
+            }
           },
           buttonColor: ChatColors.notMyMsgColor,
           textColor: ChatColors.whiteColor,
@@ -119,15 +110,19 @@ class BuildSelectorButtons extends ConsumerWidget {
         BuildSelectorButton(
           title: AppLocalizations.of(context).selectionPageDoctor,
           onPressed: () async {
-            await context
+            var chatUser = await context
                 .read(authViewModel)
-                .connect('Doctor_2', 'Dr.Kevin Zeng M.D.', 'Doctor');
-            Navigator.of(context).pushNamed(PatientsListScreen.routeName,
-                arguments: AppLocalizations.of(context).userTypeDoctor);
+                .connect('Doctor_2', 'Andrea Miller.', 'Doctor');
+            if (chatUser != null) {
+              Navigator.of(context).pushNamed(PatientsListScreen.routeName,
+                  arguments: AppLocalizations.of(context).userTypeDoctor);
+            }
           },
           buttonColor: ChatColors.welcomeScreenWhiteButton,
           textColor: ChatColors.blackColor,
         ),
+        SizedBox(height: 20),
+        // BuildLoadDummyDataButton(),
       ],
     );
   }
@@ -187,10 +182,10 @@ class BuildLoadDummyDataButton extends StatelessWidget {
             color: ChatColors.blackColor,
           ),
         ),
-        onPressed: () {
-          // var batchClass = SendbirdUserSelectionDataSource();
-          // batchClass.createPatients();
-          // batchClass.createDoctors();
+        onPressed: () async {
+          var batchClass = UserBatchDataEntry();
+          await batchClass.createPatients();
+          await batchClass.createDoctors();
         },
         child: Text(
           AppLocalizations.of(context).selectionPageLoadDummyData,
