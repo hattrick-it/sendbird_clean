@@ -54,7 +54,7 @@ class UserBatchDataEntry {
   final SendbirdSdk sendbird;
   UserBatchDataEntry({this.sendbird});
 
-  final send = SendbirdSdk(appId: '81E3CC1F-64AF-4F04-BDE8-A7B632250808');
+  final send = SendbirdSdk(appId: '39814E2B-8467-40F9-9A85-BCC8492AE252');
 
   Future<List<User>> getUsers() {
     try {
@@ -65,6 +65,11 @@ class UserBatchDataEntry {
     }
   }
 
+  Future<bool> dbExists() async {
+    var users = await getUsers();
+    return users.length > 1;
+  }
+
   Future<void> createDoctors() async {
     for (var item in doctorUsers) {
       await send.connect(item.userId);
@@ -72,6 +77,7 @@ class UserBatchDataEntry {
           nickname: item.nickname,
           fileInfo: FileInfo.fromUrl(
             url: item.profileUrl,
+            mimeType: null,
           ));
       final user = send.currentUser;
       final data = item.metadata;
@@ -86,6 +92,7 @@ class UserBatchDataEntry {
           nickname: item.nickname,
           fileInfo: FileInfo.fromUrl(
             url: item.profileUrl,
+            mimeType: null,
           ));
       final user = send.currentUser;
       final data = item.metadata;

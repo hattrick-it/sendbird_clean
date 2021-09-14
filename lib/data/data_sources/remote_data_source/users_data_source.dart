@@ -55,19 +55,19 @@ class UsersDataSource {
       final usertype = await getTypeByUserLogged();
       final listQuery = ApplicationUserListQuery();
       var userList = await listQuery.loadNext();
-      var returnList = userList.where((element) =>
-          element.metaData['userType'] == usertype);
+      var returnList =
+          userList.where((element) => element.metaData['userType'] == usertype);
       return returnList.map((e) => e.toDomain()).toList();
     } catch (e) {
       Exception(e);
     }
   }
 
-  Future<String> getTypeByUserLogged()async{
+  Future<String> getTypeByUserLogged() async {
     final currentType = await getCurrentType();
-    if(currentType == 'Patient'){
+    if (currentType == 'Patient') {
       return 'Doctor';
-    }else{
+    } else {
       return 'Patient';
     }
   }

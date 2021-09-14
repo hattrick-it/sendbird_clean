@@ -34,7 +34,8 @@ class AuthViewModel extends ChangeNotifier {
   // Private Methods
 
   // Public Methods
-  Future<ChatUser> connect(String userId, String nickname, String userType) async {
+  Future<ChatUser> connect(
+      String userId, String nickname, String userType) async {
     try {
       _setLoginState(LoginState.Loading);
       loginController.saveUserType(userType);

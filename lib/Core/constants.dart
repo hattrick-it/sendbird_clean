@@ -1,12 +1,12 @@
 class Constants {
-  static const api_key = '81E3CC1F-64AF-4F04-BDE8-A7B632250808';
+  static const api_key = '39814E2B-8467-40F9-9A85-BCC8492AE252';
   static const double HeaderHeight = 60;
 
-  static const patientId = 'Doctor_2';
-  static const patientNickname = 'Dr.Kevin Zeng M.D.';
-  static const patientType = 'Doctor';
+  // static const patientId = 'Doctor_2';
+  // static const patientNickname = 'Dr.Kevin Zeng M.D.';
+  // static const patientType = 'Doctor';
 
-  static const doctorId = 'Patient_3';
-  static const doctorNickname = 'Black Widow';
-  static const doctorType = 'Patient';
+  // static const doctorId = 'Patient_3';
+  // static const doctorNickname = 'Black Widow';
+  // static const doctorType = 'Patient';
 }

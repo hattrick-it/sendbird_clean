@@ -122,7 +122,7 @@ class BuildSelectorButtons extends ConsumerWidget {
           textColor: ChatColors.blackColor,
         ),
         SizedBox(height: 20),
-        // BuildLoadDummyDataButton(),
+        BuildLoadDummyDataButton(),
       ],
     );
   }
@@ -165,11 +165,11 @@ class BuildSelectorButton extends StatelessWidget {
   }
 }
 
-class BuildLoadDummyDataButton extends StatelessWidget {
+class BuildLoadDummyDataButton extends ConsumerWidget {
   const BuildLoadDummyDataButton();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, watch) {
     return Container(
       width: 200,
       child: ElevatedButton(
@@ -184,6 +184,9 @@ class BuildLoadDummyDataButton extends StatelessWidget {
         ),
         onPressed: () async {
           var batchClass = UserBatchDataEntry();
+          await context.read(authViewModel).connect('admin', 'admin', 'admin');
+          var dbExists = await batchClass.dbExists();
+          if (!dbExists) {}
           await batchClass.createPatients();
           await batchClass.createDoctors();
         },
