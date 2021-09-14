@@ -165,11 +165,9 @@ class BuildSelectorButton extends StatelessWidget {
   }
 }
 
-class BuildLoadDummyDataButton extends ConsumerWidget {
-  const BuildLoadDummyDataButton();
-
+class BuildLoadDummyDataButton extends StatelessWidget {
   @override
-  Widget build(BuildContext context, watch) {
+  Widget build(BuildContext context) {
     return Container(
       width: 200,
       child: ElevatedButton(
@@ -183,12 +181,19 @@ class BuildLoadDummyDataButton extends ConsumerWidget {
           ),
         ),
         onPressed: () async {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return alert;
+            },
+          );
           var batchClass = UserBatchDataEntry();
           await context.read(authViewModel).connect('admin', 'admin', 'admin');
           var dbExists = await batchClass.dbExists();
-          if (!dbExists) {}
-          await batchClass.createPatients();
-          await batchClass.createDoctors();
+          if (!dbExists) {
+            await batchClass.createPatients();
+            await batchClass.createDoctors();
+          }
         },
         child: Text(
           AppLocalizations.of(context).selectionPageLoadDummyData,
@@ -197,4 +202,11 @@ class BuildLoadDummyDataButton extends ConsumerWidget {
       ),
     );
   }
+
+  AlertDialog alert = AlertDialog(
+    title: Text("Adding users"),
+    content: Text(
+        "Wait a minute while users are created and press outside this box to dismiss."),
+    actions: [],
+  );
 }
