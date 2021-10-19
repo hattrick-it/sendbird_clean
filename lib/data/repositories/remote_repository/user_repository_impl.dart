@@ -1,7 +1,7 @@
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/users_data_source.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/domain/repositories/users_repository.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/user.dart';
+import '../../../domain/entities/chat_user.dart';
+import '../../../domain/repositories/users_repository.dart';
+import '../../data_sources/remote_data_source/models/user.dart';
+import '../../data_sources/remote_data_source/users_data_source.dart';
 
 class UsersRepositoryImpl implements UsersRepository {
   UsersDataSource usersDataSource;

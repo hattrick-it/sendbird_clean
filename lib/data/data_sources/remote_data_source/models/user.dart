@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:sendbird_sdk/sendbird_sdk.dart';
+
 import '../../../../domain/entities/chat_user.dart';
 
 extension UserExtension on User {
@@ -14,5 +14,3 @@ extension UserExtension on User {
             this.connectionStatus == UserConnectionStatus.online ? true : false,
       );
 }
-
-

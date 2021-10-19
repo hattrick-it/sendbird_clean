@@ -1,5 +1,6 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'package:sendbirdtutorial/data/data_sources/local_data_source/user_type_data_source.dart';
+
+import '../local_data_source/user_type_data_source.dart';
 
 class AuthRemoteDataSource {
   final SendbirdSdk sendbird;

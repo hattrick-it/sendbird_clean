@@ -1,10 +1,9 @@
 import 'dart:async';
 
+import '../../entities/chat_channel.dart';
 import '../../entities/chat_message.dart';
 import '../../entities/chat_user.dart';
 import '../../repositories/channel_repository.dart';
-
-import '../../entities/chat_channel.dart';
 
 class ChannelListController {
   final ChannelRepository channelRepository;

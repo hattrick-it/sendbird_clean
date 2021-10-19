@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'package:sendbirdtutorial/Core/string_constants.dart';
+
+import '../../../Core/string_constants.dart';
 
 class ChannelsDataSource extends ChannelEventHandler {
   final SendbirdSdk sendbird;

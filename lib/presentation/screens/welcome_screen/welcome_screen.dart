@@ -1,21 +1,22 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/Core/chat_assets.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/user_batch_data_entry.dart';
-import 'package:sendbirdtutorial/presentation/screens/doctors_list_screen/doctor_list_screen.dart';
-import 'package:sendbirdtutorial/presentation/screens/patients_list_screen/patients_list_screen.dart';
-import 'package:sendbirdtutorial/presentation/viewmodel/auth_viewmodel/auth_viewmodel.dart';
-import '../../../Core/chat_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../Core/chat_assets.dart';
+import '../../../Core/chat_colors.dart';
+import '../../../data/data_sources/remote_data_source/user_batch_data_entry.dart';
+import '../../viewmodel/auth_viewmodel/auth_viewmodel.dart';
+import '../doctors_list_screen/doctor_list_screen.dart';
+import '../patients_list_screen/patients_list_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   static const String routeName = '/welcome-screen';
 
   @override
   Widget build(BuildContext context) {
+    // context.read(authViewModel).setFirstRun(true);
+    WidgetsBinding.instance.addPostFrameCallback((_) => checkFirstRun(context));
     return Scaffold(
       body: Stack(
         children: [
@@ -122,11 +123,79 @@ class BuildSelectorButtons extends ConsumerWidget {
           textColor: ChatColors.blackColor,
         ),
         SizedBox(height: 20),
-        BuildLoadDummyDataButton(),
+        // BuildLoadDummyDataButton(),
+        CheckFirstRun(),
       ],
     );
   }
 }
+
+class CheckFirstRun extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: context.read(authViewModel).isFirstRun(),
+      builder: (context, snapshot) {
+        var isFirstRun = snapshot.data;
+        print(isFirstRun);
+        if (isFirstRun != null) {
+          if (isFirstRun) {
+            checkFirstRun(context);
+          }
+        } else {
+          return BuildSelectorButton();
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+}
+
+checkFirstRun(BuildContext context) async {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      createUsers(context);
+      return alert;
+    },
+  );
+}
+
+void createUsers(BuildContext context) async {
+  var batchClass = UserBatchDataEntry();
+  await context.read(authViewModel).connectAdmin('admin', 'admin', 'admin');
+  var dbExists = await batchClass.dbExists();
+  if (!dbExists) {
+    var usersLoaded = await batchClass.createUsers();
+    if (usersLoaded) {
+      context.read(authViewModel).setFirstRun(false);
+      Navigator.of(context).pop();
+    }
+  }
+  ;
+}
+
+AlertDialog alert = AlertDialog(
+  title: Text("Adding users"),
+  content: Container(
+    height: 150,
+    child: Column(
+      children: [
+        Text(
+            "Crating dummy users for testing, please wait until this proccess finish."),
+        Text('This dialog will close itself.'),
+        Divider(),
+        Center(
+          child: CircularProgressIndicator(),
+        ),
+      ],
+    ),
+  ),
+  actions: [],
+);
 
 class BuildSelectorButton extends StatelessWidget {
   final String title;
@@ -165,48 +234,44 @@ class BuildSelectorButton extends StatelessWidget {
   }
 }
 
-class BuildLoadDummyDataButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 200,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          elevation: 0,
-          shadowColor: ChatColors.disbleSendButton,
-          primary: ChatColors.whiteColor,
-          side: BorderSide(
-            width: 2,
-            color: ChatColors.blackColor,
-          ),
-        ),
-        onPressed: () async {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return alert;
-            },
-          );
-          var batchClass = UserBatchDataEntry();
-          await context.read(authViewModel).connect('admin', 'admin', 'admin');
-          var dbExists = await batchClass.dbExists();
-          if (!dbExists) {
-            await batchClass.createPatients();
-            await batchClass.createDoctors();
-          }
-        },
-        child: Text(
-          AppLocalizations.of(context).selectionPageLoadDummyData,
-          style: TextStyle(color: ChatColors.blackColor),
-        ),
-      ),
-    );
-  }
-
-  AlertDialog alert = AlertDialog(
-    title: Text("Adding users"),
-    content: Text(
-        "Wait a minute while users are created and press outside this box to dismiss."),
-    actions: [],
-  );
-}
+// class BuildLoadDummyDataButton extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: 200,
+//       child: ElevatedButton(
+//         style: ElevatedButton.styleFrom(
+//           elevation: 0,
+//           shadowColor: ChatColors.disbleSendButton,
+//           primary: ChatColors.whiteColor,
+//           side: BorderSide(
+//             width: 2,
+//             color: ChatColors.blackColor,
+//           ),
+//         ),
+//         onPressed: () async {
+//           showDialog(
+//             barrierDismissible: false,
+//             context: context,
+//             builder: (BuildContext context) {
+//               return alert;
+//             },
+//           );
+//           var batchClass = UserBatchDataEntry();
+//           await context.read(authViewModel).connect('admin', 'admin', 'admin');
+//           var dbExists = await batchClass.dbExists();
+//           if (!dbExists) {
+//             var usersLoaded = await batchClass.createUsers();
+//             if (usersLoaded) {
+//               Navigator.of(context).pop();
+//             }
+//           }
+//         },
+//         child: Text(
+//           AppLocalizations.of(context).selectionPageLoadDummyData,
+//           style: TextStyle(color: ChatColors.blackColor),
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:sendbirdtutorial/Core/chat_colors.dart';
-import 'package:sendbirdtutorial/Core/constants.dart';
+
+import '../../../Core/chat_colors.dart';
+import '../../../Core/constants.dart';
 
 class CommonAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Color appbarColor;
-  const CommonAppbar({this.title,this.appbarColor});
+  const CommonAppbar({this.title, this.appbarColor});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,5 @@ class CommonAppbar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize =>
-      Size.fromHeight(Constants.HeaderHeight);
+  Size get preferredSize => Size.fromHeight(Constants.HeaderHeight);
 }

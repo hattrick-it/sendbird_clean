@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_channel.dart';
+
 import '../../../domain/controllers/channel_list_controller/channel_list_controller.dart';
 import '../../../domain/controllers/chat_controller/chat_controller.dart';
+import '../../../domain/entities/chat_channel.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
 
@@ -53,7 +54,6 @@ class UsersListViewModel extends ChangeNotifier {
   // Private methods
 
   // Public methodss
-
 
   Future<void> getUsers() async {
     try {

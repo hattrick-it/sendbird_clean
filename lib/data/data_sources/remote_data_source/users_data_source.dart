@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'package:sendbirdtutorial/data/data_sources/local_data_source/user_type_data_source.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/user.dart';
+
+import '../../../domain/entities/chat_user.dart';
+import '../local_data_source/user_type_data_source.dart';
+import 'models/user.dart';
 
 class UsersDataSource {
   final SendbirdSdk sendbird;

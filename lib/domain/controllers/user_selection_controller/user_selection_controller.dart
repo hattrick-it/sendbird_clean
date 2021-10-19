@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:sendbirdtutorial/domain/repositories/chat_repository.dart';
+import '../../repositories/chat_repository.dart';
 
 import '../../entities/chat_user.dart';
 import '../../repositories/local_user_type_repository.dart';
@@ -25,21 +25,19 @@ class UserSelectionController {
     return localUserTypeRepository.getCurrentUserType();
   }
 
-  Future<List<ChatUser>> getUserByName(String name){
+  Future<List<ChatUser>> getUserByName(String name) {
     return userSelectorRepository.getUserByName(name);
   }
 
-  Future<List<ChatUser>> getUsersByType()async{
+  Future<List<ChatUser>> getUsersByType() async {
     return await userSelectorRepository.getUsersByType();
   }
 
-  Future<List<ChatUser>> getDoctorBySpecialty(String specialty){
+  Future<List<ChatUser>> getDoctorBySpecialty(String specialty) {
     return userSelectorRepository.getDoctorBySpecialty(specialty);
   }
 
-  Future<Map<String,bool>> getSpecialtiesMap() async{
+  Future<Map<String, bool>> getSpecialtiesMap() async {
     return await userSelectorRepository.getSpecialtyMap();
   }
 }
-
-

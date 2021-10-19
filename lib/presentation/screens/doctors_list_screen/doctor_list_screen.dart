@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/Core/chat_colors.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/presentation/screens/chat_screen/chat_screen.dart';
-import 'package:sendbirdtutorial/presentation/screens/common_widgets/common_appbar.dart';
-import 'package:sendbirdtutorial/presentation/viewmodel/user_selection_viewmodel/user_selection_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:sendbirdtutorial/presentation/viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../Core/chat_colors.dart';
+import '../../../domain/entities/chat_user.dart';
+import '../../viewmodel/user_selection_viewmodel/user_selection_viewmodel.dart';
+import '../../viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
+import '../chat_screen/chat_screen.dart';
+import '../common_widgets/common_appbar.dart';
 
 class DoctorListScreen extends StatelessWidget {
   static const String routeName = '/doctor-list-screen';

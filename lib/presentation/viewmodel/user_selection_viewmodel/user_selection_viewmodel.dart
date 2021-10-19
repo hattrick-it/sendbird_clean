@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../domain/controllers/login_controller/login_controller.dart';
 import '../../../domain/controllers/user_selection_controller/user_selection_controller.dart';
 import '../../../domain/entities/chat_user.dart';
@@ -139,7 +140,7 @@ class UserSelectionViewModel extends ChangeNotifier {
     try {
       _setStatus(UserSelectionStatus.Loading);
       var chatUsers =
-      await userSelectionController.getDoctorBySpecialty(speciality);
+          await userSelectionController.getDoctorBySpecialty(speciality);
       _setUserList(chatUsers);
       _setStatus(UserSelectionStatus.Loaded);
     } catch (e) {

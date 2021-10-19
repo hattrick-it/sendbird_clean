@@ -1,8 +1,7 @@
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-
-import '../../data_sources/remote_data_source/auth_data_source.dart';
+import '../../../domain/entities/chat_user.dart';
 import '../../../domain/repositories/auth_repository.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/user.dart';
+import '../../data_sources/remote_data_source/auth_data_source.dart';
+import '../../data_sources/remote_data_source/models/user.dart';
 
 class AuthRespositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;

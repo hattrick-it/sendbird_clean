@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
-import 'package:flutter_riverpod/all.dart';
-import 'package:sendbirdtutorial/Core/chat_colors.dart';
-import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
-import 'package:sendbirdtutorial/presentation/screens/chat_screen/chat_screen.dart';
-import 'package:sendbirdtutorial/presentation/screens/common_widgets/common_appbar.dart';
-import 'package:sendbirdtutorial/presentation/viewmodel/user_selection_viewmodel/user_selection_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:sendbirdtutorial/presentation/viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
+import 'package:flutter_riverpod/all.dart';
+
+import '../../../Core/chat_colors.dart';
+import '../../../domain/entities/chat_user.dart';
+import '../../viewmodel/user_selection_viewmodel/user_selection_viewmodel.dart';
+import '../../viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
+import '../chat_screen/chat_screen.dart';
+import '../common_widgets/common_appbar.dart';
 
 class PatientsListScreen extends StatelessWidget {
   static const String routeName = '/patient-list-screen';
@@ -36,12 +37,12 @@ class BuildPatientsListBody extends StatelessWidget {
     return Column(
       children: [
         SearchComponent(),
-
         Consumer(
           builder: (context, watch, child) {
             var provider = watch(userSelectionViewModel);
             if (provider.getUserList == null) {
-              return Center(child: CircularProgressIndicator(
+              return Center(
+                  child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
                     ChatColors.purpleAppbarBackgroundColor),
               ));
@@ -105,14 +106,14 @@ class BuildSearchBar extends StatelessWidget {
             Expanded(
               child: TextField(
                 style:
-                TextStyle(color: ChatColors.disbleSendButton, fontSize: 12),
+                    TextStyle(color: ChatColors.disbleSendButton, fontSize: 12),
                 cursorColor: ChatColors.disbleSendButton,
                 onChanged: (val) {
                   context.read(userSelectionViewModel).getUserByName(val);
                 },
                 decoration: InputDecoration(
                   hintText:
-                  AppLocalizations.of(context).doctorListScreenHinttext,
+                      AppLocalizations.of(context).doctorListScreenHinttext,
                   border: InputBorder.none,
                 ),
               ),
@@ -127,7 +128,6 @@ class BuildSearchBar extends StatelessWidget {
     );
   }
 }
-
 
 class PatientsList extends StatelessWidget {
   final List<ChatUser> userList;
@@ -187,9 +187,9 @@ class PatientsList extends StatelessWidget {
                         children: [
                           userList[index].metadata['Specialty'] != null
                               ? Text(
-                            userList[index].metadata['Specialty'],
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )
+                                  userList[index].metadata['Specialty'],
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
                               : Container(),
                           Text(
                             userList[index].nickname,

@@ -1,5 +1,4 @@
 import 'chat_message.dart';
-
 import 'chat_user.dart';
 
 class ChatChannel {

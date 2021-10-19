@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:sendbirdtutorial/domain/repositories/users_repository.dart';
-
 import '../../entities/chat_message.dart';
 import '../../entities/chat_user.dart';
 import '../../repositories/chat_repository.dart';
+import '../../repositories/users_repository.dart';
 
 class ChatController {
   final ChatRepository chatRepository;
@@ -50,10 +49,10 @@ class ChatController {
       final message = _chatMessagesList.firstWhere(
           (element) => element.requestId == event.requestId,
           orElse: () => null);
-      if(message == null){
+      if (message == null) {
         _chatMessagesList.add(event);
         _chatStreamController.sink.add(_chatMessagesList);
-      }else{
+      } else {
         message.sendingStatus = event.sendingStatus;
         _chatStreamController.sink.add(_chatMessagesList);
       }

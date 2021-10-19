@@ -1,9 +1,8 @@
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/users_data_source.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../../domain/repositories/user_selection_repository.dart';
+import '../../data_sources/remote_data_source/users_data_source.dart';
 
 class UserSelectionRepositoryImpl implements UserSelectionRepository {
-
   UsersDataSource usersDataSource;
 
   UserSelectionRepositoryImpl({
@@ -26,7 +25,7 @@ class UserSelectionRepositoryImpl implements UserSelectionRepository {
     return usersDataSource.getDoctorBySpecialty(specialty);
   }
 
-  Future<Map<String,bool>> getSpecialtyMap()async{
+  Future<Map<String, bool>> getSpecialtyMap() async {
     return usersDataSource.getSpecialtyMap();
   }
 }

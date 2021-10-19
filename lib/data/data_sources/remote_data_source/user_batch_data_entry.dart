@@ -1,4 +1,5 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
+
 import '../../../domain/entities/chat_doctor.dart';
 import '../../../domain/entities/chat_user.dart';
 
@@ -54,7 +55,7 @@ class UserBatchDataEntry {
   final SendbirdSdk sendbird;
   UserBatchDataEntry({this.sendbird});
 
-  final send = SendbirdSdk(appId: '39814E2B-8467-40F9-9A85-BCC8492AE252');
+  final send = SendbirdSdk(appId: 'D3B9C520-3FF0-498A-8271-E72A58B41392');
 
   Future<List<User>> getUsers() {
     try {
@@ -68,6 +69,12 @@ class UserBatchDataEntry {
   Future<bool> dbExists() async {
     var users = await getUsers();
     return users.length > 1;
+  }
+
+  Future<bool> createUsers() async {
+    await createDoctors();
+    await createPatients();
+    return true;
   }
 
   Future<void> createDoctors() async {

@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'package:sendbirdtutorial/Core/string_constants.dart';
+
+import '../../../Core/string_constants.dart';
 import 'channels_data_source.dart';
 
 class ChatRemoteDataSource with ChannelEventHandler {
@@ -20,7 +21,6 @@ class ChatRemoteDataSource with ChannelEventHandler {
   }
 
   Stream<BaseMessage> get getMessageStream => _chatStreamController.stream;
-
 
   String _channelUrl;
 
