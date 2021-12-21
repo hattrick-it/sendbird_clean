@@ -15,14 +15,14 @@ class UserSelectionViewModel extends ChangeNotifier {
   final UserSelectionController userSelectionController;
 
   UserSelectionViewModel({
-    this.loginController,
-    this.userSelectionController,
+    required this.loginController,
+    required this.userSelectionController,
   }) {
     adminConnect();
   }
 
   // Properties
-  String _userType;
+  String _userType = '';
 
   // Getters
 
@@ -36,8 +36,8 @@ class UserSelectionViewModel extends ChangeNotifier {
     _userType = userType;
   }
 
-  Future<String> getCurrentUserType() {
-    return userSelectionController.getCurrentUserType();
+  Future<String?> getCurrentUserType() async {
+    return await userSelectionController.getCurrentUserType();
   }
 
   Future<void> adminConnect() async {

@@ -11,7 +11,7 @@ class UserTypeDataSource {
     }
   }
 
-  Future<String> getCurrentUserType() async {
+  Future<String?> getCurrentUserType() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       return prefs.getString(StringConstants.userTypeKey);

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sendbird_sdk/sdk/sendbird_sdk_api.dart';
 import 'package:sendbirdtutorial/data/data_sources/remote_data_source/user_batch_data_entry.dart';
+import 'package:sendbirdtutorial/locator/locator.dart';
 import '../../../Core/chat_colors.dart';
 import '../user_selection_screen/user_selection_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -42,11 +44,11 @@ class BuildTitle extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            AppLocalizations.of(context).selectionPageTelemedicine,
+            AppLocalizations.of(context)!.selectionPageTelemedicine,
             style: TextStyle(fontSize: 40),
           ),
           Text(
-            AppLocalizations.of(context).selectionPageDemostrator,
+            AppLocalizations.of(context)!.selectionPageDemostrator,
             style: TextStyle(fontSize: 40),
           ),
         ],
@@ -63,17 +65,17 @@ class BuildSelectorButtons extends StatelessWidget {
     return Column(
       children: [
         BuildSelectorButton(
-          title: AppLocalizations.of(context).selectionPagePatient,
+          title: AppLocalizations.of(context)!.selectionPagePatient,
           onPressed: () {
             Navigator.of(context).popAndPushNamed(UserSelectionScreen.routeName,
-                arguments: AppLocalizations.of(context).userTypePatient);
+                arguments: AppLocalizations.of(context)!.userTypePatient);
           },
         ),
         BuildSelectorButton(
-          title: AppLocalizations.of(context).selectionPageDoctor,
+          title: AppLocalizations.of(context)!.selectionPageDoctor,
           onPressed: () {
             Navigator.of(context).popAndPushNamed(UserSelectionScreen.routeName,
-                arguments: AppLocalizations.of(context).userTypeDoctor);
+                arguments: AppLocalizations.of(context)!.userTypeDoctor);
           },
         ),
       ],
@@ -85,7 +87,7 @@ class BuildSelectorButton extends StatelessWidget {
   final String title;
   final GestureTapCallback onPressed;
 
-  const BuildSelectorButton({this.title, this.onPressed});
+  const BuildSelectorButton({required this.title, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -128,13 +130,13 @@ class BuildLoadDummyDataButton extends StatelessWidget {
             color: ChatColors.blackColor,
           ),
         ),
-        onPressed: (){
-          var batchClass = UserBatchDataEntry();
+        onPressed: () {
+          var batchClass = UserBatchDataEntry(sendbird: locator.get());
           batchClass.createPatients();
           batchClass.createDoctors();
         },
         child: Text(
-          AppLocalizations.of(context).selectionPageLoadDummyData,
+          AppLocalizations.of(context)!.selectionPageLoadDummyData,
           style: TextStyle(color: ChatColors.blackColor),
         ),
       ),

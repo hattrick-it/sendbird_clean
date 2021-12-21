@@ -15,9 +15,9 @@ class ChatRepositoryImpl implements ChatRepository {
   final UsersDataSource usersDataSource;
 
   ChatRepositoryImpl(
-      {this.sendbirdChannelsDataSource,
-      this.localUserTypeDataSource,
-      this.usersDataSource});
+      {required this.sendbirdChannelsDataSource,
+      required this.localUserTypeDataSource,
+      required this.usersDataSource});
 
   @override
   Stream<ChatMessage> getMessageStream() {
@@ -26,14 +26,16 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<List<ChatUser>> getUsers() async {
+  Future<List<ChatUser>?> getUsers() async {
     var currentUserType = await localUserTypeDataSource.getCurrentUserType();
     try {
       List<User> users = await usersDataSource.getUsers();
       var chatUsers = users.map((e) => e.toDomain()).toList();
-      return chatUsers.where((element) =>
-          element.metadata.containsKey(StringConstants.userTypeKey) &&
-          element.metadata[StringConstants.userTypeKey] != currentUserType);
+      return chatUsers
+          .where((element) =>
+              element.metadata!.containsKey(StringConstants.userTypeKey) &&
+              element.metadata![StringConstants.userTypeKey] != currentUserType)
+          .toList();
     } catch (e) {
       throw Exception(e);
     }
@@ -52,11 +54,11 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   ChatUser getCurrentUser() {
-    return usersDataSource.getCurrentUser().toDomain();
+    return usersDataSource.getCurrentUser()!.toDomain();
   }
 
   @override
-  Future<List<ChatMessage>> getMessagesList() async {
+  Future<List<ChatMessage>?> getMessagesList() async {
     var baseMessages = await sendbirdChannelsDataSource.getMessages();
     if (baseMessages != null) {
       return baseMessages.map((e) => e.toDomain()).toList();

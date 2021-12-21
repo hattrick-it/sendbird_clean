@@ -1,14 +1,14 @@
 import 'chat_user.dart';
 
 class ChatMessage {
-  int createdAt;
-  String data;
-  int messageId;
-  String type;
-  List<ChatUser> mentionedUsers;
-  String channelUrl;
-  String message;
-  ChatUser sender;
+  int? createdAt;
+  String? data;
+  int? messageId;
+  String? type;
+  List<ChatUser>? mentionedUsers;
+  String? channelUrl;
+  String? message;
+  ChatUser? sender;
 
   ChatMessage({
     this.createdAt,

@@ -41,6 +41,7 @@ void setup() {
   locator.registerFactory<ChatRepository>(() => ChatRepositoryImpl(
         sendbirdChannelsDataSource: locator.get(),
         localUserTypeDataSource: locator.get(),
+        usersDataSource: locator.get(),
       ));
   locator.registerFactory<UserSelectionRepository>(() =>
       UserSelectionRepositoryImpl(

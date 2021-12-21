@@ -4,33 +4,33 @@ import '../../../domain/entities/chat_user.dart';
 import '../../viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class UsersListScreen extends StatelessWidget {
+class UsersListScreen extends ConsumerWidget {
   static const String routeName = '/users-list-screen';
   const UsersListScreen();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      context.read(usersListViewModel).getUsers();
+      ref.read(usersListViewModel).getUsers();
     });
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).usersListPageAppBarTitle),
+        title: Text(AppLocalizations.of(context)!.usersListPageAppBarTitle),
       ),
       body: BuildChannelListBody(),
     );
   }
 }
 
-class BuildChannelListBody extends StatelessWidget {
+class BuildChannelListBody extends ConsumerWidget {
   const BuildChannelListBody();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Center(
       child: Consumer(
         builder: (context, watch, child) {
-          final provider = watch(usersListViewModel);
+          final provider = ref.watch(usersListViewModel);
           if (provider.userListStatus == UserListStatus.Loaded) {
             return BuildUsersList(provider.usersList);
           } else if (provider.userListStatus == UserListStatus.Loading) {
@@ -45,27 +45,27 @@ class BuildChannelListBody extends StatelessWidget {
   }
 }
 
-class BuildUsersList extends StatelessWidget {
+class BuildUsersList extends ConsumerWidget {
   final List<ChatUser> usersList;
 
   const BuildUsersList(this.usersList);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListView.builder(
       itemCount: usersList.length,
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
-            context
+            ref
                 .read(usersListViewModel)
-                .createChannel(usersList[index].userId);
+                .createChannel(usersList[index].userId!);
           },
           child: ListTile(
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(usersList[index].profileUrl),
+              backgroundImage: NetworkImage(usersList[index].profileUrl!),
             ),
-            title: Text(usersList[index].nickname),
+            title: Text(usersList[index].nickname!),
           ),
         );
       },

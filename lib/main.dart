@@ -22,7 +22,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    adminConnect(context);
+    adminConnect();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: UserSelectorScreen.routeName,
@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void adminConnect(BuildContext context)async{
-  await context.read(authViewModel).adminConnect('admin','admin');
+void adminConnect() async {
+  final container = ProviderContainer();
+  await container.read(authViewModel).adminConnect('admin', 'admin');
 }

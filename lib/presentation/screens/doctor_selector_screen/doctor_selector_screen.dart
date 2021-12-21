@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../Core/chat_colors.dart';
 import '../../../Core/chat_resources.dart';
 import '../../../domain/entities/chat_doctor.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 var docList = [
   ChatDoctor(
@@ -42,14 +43,15 @@ class DoctorSelectorScreen extends StatelessWidget {
         ),
         backgroundColor: ChatColors.doctorAppbarBackground,
         title: Text(
-          'Providers',
+          AppLocalizations.of(context)!.doctor_selector_providers,
           style: TextStyle(fontSize: 15),
         ),
         centerTitle: true,
         actions: [
-          FlatButton(
+          TextButton(
+            onPressed: () {},
             child: Text(
-              'Specialty',
+              AppLocalizations.of(context)!.doctor_selector_specialty,
               style: TextStyle(
                 fontSize: 15,
                 color: ChatColors.whiteColor,
@@ -120,7 +122,7 @@ class BuildSubTitle extends StatelessWidget {
         children: [
           SizedBox(width: 10),
           Text(
-            'Select your Preferred Provider',
+            AppLocalizations.of(context)!.doctor_selector_select_provider,
             style: TextStyle(color: ChatColors.doctorsubtitleText),
           ),
         ],
@@ -150,7 +152,7 @@ class BuildDoctorsList extends StatelessWidget {
 class BuildDoctorCard extends StatelessWidget {
   final ChatDoctor doctor;
 
-  const BuildDoctorCard({this.doctor});
+  const BuildDoctorCard({required this.doctor});
 
   @override
   Widget build(BuildContext context) {
@@ -164,8 +166,8 @@ class BuildDoctorCard extends StatelessWidget {
               margin: EdgeInsets.all(5),
               height: 80,
               width: 80,
-              child: doctor.profileUrl.isNotEmpty
-                  ? Image.asset(doctor.profileUrl)
+              child: doctor.profileUrl!.isNotEmpty
+                  ? Image.asset(doctor.profileUrl!)
                   : Image.asset(ChatResources.profileUrlPlaceholder),
             ),
             Flexible(
@@ -174,21 +176,23 @@ class BuildDoctorCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    doctor.nickname,
+                    doctor.nickname!,
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    doctor.specialty,
+                    doctor.specialty!,
                     style: TextStyle(color: ChatColors.primaryColor),
                   ),
-                  doctor.isOnline
+                  doctor.isOnline!
                       ? Text(
-                          'Available now',
+                          AppLocalizations.of(context)!
+                              .doctor_selector_available_now,
                           style: TextStyle(color: ChatColors.doctorAvailable),
                         )
                       : Text(
-                          'Accepts Scheduled Visits',
+                          AppLocalizations.of(context)!
+                              .doctor_selector_select_schedule_visits,
                           style:
                               TextStyle(color: ChatColors.doctorNotAvailable),
                         ),

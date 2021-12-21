@@ -19,7 +19,8 @@ class UsersListViewModel extends ChangeNotifier {
   final ChatController chatController;
   final ChannelListController channelListController;
 
-  UsersListViewModel({this.chatController, this.channelListController});
+  UsersListViewModel(
+      {required this.chatController, required this.channelListController});
 
   // Properties
   List<ChatUser> _usersList = [];
@@ -59,7 +60,7 @@ class UsersListViewModel extends ChangeNotifier {
       _setUsersList(users);
       _setStatus(UserListStatus.Loaded);
     } catch (e) {
-      _setErrorMsg(e);
+      _setErrorMsg(e.toString());
       _setStatus(UserListStatus.Error);
     }
   }

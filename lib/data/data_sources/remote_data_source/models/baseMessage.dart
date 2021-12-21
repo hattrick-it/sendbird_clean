@@ -16,7 +16,7 @@ extension BaseMessageExtension on BaseMessage {
         message: this.message != null ? this.message : null,
         channelUrl: this.channelUrl,
         sender: this.sender != null
-            ? this.sender.toDomain()
+            ? this.sender!.toDomain()
             : ChatUser(userId: StringConstants.baseMessageAdminKey),
       );
 }
@@ -31,5 +31,5 @@ extension SenderExtension on Sender {
 }
 
 extension ChatMessageExtension on ChatMessage {
-  bool get isMyMessage => sender?.userId == sendbird.currentUser.userId;
+  bool get isMyMessage => sender?.userId == sendbird.currentUser!.userId;
 }

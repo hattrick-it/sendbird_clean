@@ -20,7 +20,7 @@ enum ChatState {
 class ChatViewModel extends ChangeNotifier {
   final ChatController chatController;
 
-  ChatViewModel({this.chatController});
+  ChatViewModel({required this.chatController});
 
   // Properties
   String _userMsg = '';
@@ -41,7 +41,7 @@ class ChatViewModel extends ChangeNotifier {
     chatController.setChannelUrl(channelUrl);
   }
 
-  void clearMsg(){
+  void clearMsg() {
     _userMsg = '';
     notifyListeners();
   }
@@ -79,7 +79,7 @@ class ChatViewModel extends ChangeNotifier {
       }
       _setState(ChatState.Send);
     } catch (e) {
-      _setErrorMsg(e);
+      _setErrorMsg(e.toString());
       _setState(ChatState.Error);
     }
   }

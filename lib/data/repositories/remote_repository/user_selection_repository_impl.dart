@@ -7,7 +7,7 @@ import '../../data_sources/remote_data_source/models/user.dart';
 
 class UserSelectionRepositoryImpl implements UserSelectionRepository {
   UserBatchDataEntry sendbirdUserSelectionDataSource;
-  UserSelectionRepositoryImpl({this.sendbirdUserSelectionDataSource});
+  UserSelectionRepositoryImpl({required this.sendbirdUserSelectionDataSource});
 
   @override
   Future<List<ChatUser>> getUsersByType(String userType) async {

@@ -2,7 +2,7 @@ import 'package:sendbird_sdk/sendbird_sdk.dart';
 
 class UsersDataSource {
   final SendbirdSdk sendbird;
-  UsersDataSource({this.sendbird});
+  UsersDataSource({required this.sendbird});
 
   Future<List<User>> getUsers() {
     try {
@@ -13,7 +13,7 @@ class UsersDataSource {
     }
   }
 
-  User getCurrentUser() {
+  User? getCurrentUser() {
     try {
       return sendbird.currentUser;
     } catch (e) {

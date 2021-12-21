@@ -7,7 +7,8 @@ class UserSelectionController {
   final UserTypeRepository localUserTypeRepository;
 
   UserSelectionController(
-      {this.userSelectorRepository, this.localUserTypeRepository});
+      {required this.userSelectorRepository,
+      required this.localUserTypeRepository});
 
   Future<List<ChatUser>> getUsersByType(String userType) {
     return userSelectorRepository.getUsersByType(userType);
@@ -17,7 +18,7 @@ class UserSelectionController {
     localUserTypeRepository.saveUserType(userType);
   }
 
-  Future<String> getCurrentUserType() {
+  Future<String?> getCurrentUserType() {
     return localUserTypeRepository.getCurrentUserType();
   }
 }

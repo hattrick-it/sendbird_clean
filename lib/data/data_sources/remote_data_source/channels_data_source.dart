@@ -6,30 +6,33 @@ import 'package:sendbirdtutorial/Core/string_constants.dart';
 class ChannelsDataSource extends ChannelEventHandler {
   final SendbirdSdk sendbird;
 
-  StreamController<BaseMessage> _messageStreamController;
-  StreamController<BaseChannel> _channelsStreamController;
+  StreamController<BaseMessage>? _messageStreamController;
+  StreamController<BaseChannel>? _channelsStreamController;
 
-  ChannelsDataSource({this.sendbird}) {
+  ChannelsDataSource({required this.sendbird}) {
     _messageStreamController = StreamController<BaseMessage>();
 
     _channelsStreamController = StreamController<GroupChannel>(
-        onListen: () => sendbird.addChannelEventHandler(StringConstants.channelHandlerKey, this),
-        onCancel: () => sendbird.removeChannelEventHandler(StringConstants.channelHandlerKey));
+        onListen: () => sendbird.addChannelEventHandler(
+            StringConstants.channelHandlerKey, this),
+        onCancel: () => sendbird
+            .removeChannelEventHandler(StringConstants.channelHandlerKey));
   }
 
-  Stream<BaseMessage> get onChannelNewMessage => _messageStreamController.stream;
+  Stream<BaseMessage> get onChannelNewMessage =>
+      _messageStreamController!.stream;
 
-  Stream<GroupChannel> get onChannelNewChanged => _channelsStreamController.stream;
+  Stream<BaseChannel> get onChannelNewChanged =>
+      _channelsStreamController!.stream;
 
   void closeStream() {
-    _messageStreamController.close();
-    _channelsStreamController.close();
+    _messageStreamController!.close();
+    _channelsStreamController!.close();
   }
 
   @override
   void onChannelChanged(BaseChannel channel) {
-    GroupChannel groupChannel = channel;
-    _channelsStreamController.sink.add(groupChannel);
+    _channelsStreamController!.sink.add(channel);
   }
 
   // Methods
@@ -59,7 +62,7 @@ class ChannelsDataSource extends ChannelEventHandler {
     return channels.firstWhere((element) => element.channelUrl == channelUrl);
   }
 
-  User getCurrentUser()  {
+  User? getCurrentUser() {
     return sendbird.currentUser;
   }
 }

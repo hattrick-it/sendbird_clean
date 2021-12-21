@@ -6,11 +6,11 @@ import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/use
 class UsersRepositoryImpl implements UsersRepository {
   UsersDataSource usersDataSource;
 
-  UsersRepositoryImpl({this.usersDataSource});
+  UsersRepositoryImpl({required this.usersDataSource});
 
   @override
   ChatUser getCurrentUser() {
-    return usersDataSource.getCurrentUser().toDomain();
+    return usersDataSource.getCurrentUser()!.toDomain();
   }
 
   @override

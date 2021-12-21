@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/controllers/login_controller/login_controller.dart';
-import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
 
 enum AuthState {
@@ -17,7 +16,7 @@ final authViewModel =
 class AuthViewModel extends ChangeNotifier {
   final LoginController loginController;
 
-  AuthViewModel({this.loginController});
+  AuthViewModel({required this.loginController});
 
   // Properties
   var _userId = '';
@@ -50,7 +49,6 @@ class AuthViewModel extends ChangeNotifier {
       var chatUser = await loginController.connect(userId, nickname);
       if (chatUser != null) {
         _setState(AuthState.Loaded);
-        return chatUser;
       } else {
         return null;
       }
@@ -61,6 +59,8 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<void> adminConnect(String userId, String nickname) async {
+    //TODO remove the return (its only for testing)
     var chatUser = await loginController.connect(userId, nickname);
+    print(chatUser.nickname);
   }
 }

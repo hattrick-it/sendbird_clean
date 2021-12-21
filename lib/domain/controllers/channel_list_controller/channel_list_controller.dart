@@ -8,7 +8,7 @@ import '../../entities/chat_channel.dart';
 
 class ChannelListController {
   final ChannelRepository channelRepository;
-  ChannelListController({this.channelRepository}) {
+  ChannelListController({required this.channelRepository}) {
     _onInit();
   }
 
@@ -24,9 +24,9 @@ class ChannelListController {
     });
   }
 
-  StreamController<ChatMessage> _messageStreamController;
+  late StreamController<ChatMessage> _messageStreamController;
 
-  StreamController<List<ChatChannel>> _channelsStreamController;
+  late StreamController<List<ChatChannel>> _channelsStreamController;
 
   List<ChatChannel> _chatChannelList = [];
 
@@ -41,7 +41,7 @@ class ChannelListController {
   void createChannel(String userId) {
     List<String> userIds = [];
     ChatUser currentUser = channelRepository.getCurrentUser();
-    userIds.add(currentUser.userId);
+    userIds.add(currentUser.userId!);
     userIds.add(userId);
     channelRepository.createChannel(userIds);
   }

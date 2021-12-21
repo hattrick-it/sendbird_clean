@@ -10,20 +10,21 @@ class ChatController {
   final ChatRepository chatRepository;
   final UsersRepository usersRepository;
 
-  ChatController({this.chatRepository, this.usersRepository}) {
+  ChatController(
+      {required this.chatRepository, required this.usersRepository}) {
     _chatStreamController =
         StreamController<List<ChatMessage>>(onListen: () async {
       _chatMessagesList = await getMessagesList();
-      _chatStreamController.sink.add(_chatMessagesList);
+      _chatStreamController.sink.add(_chatMessagesList!);
       _getMessageStream();
     });
   }
 
-  StreamController<List<ChatMessage>> _chatStreamController;
+  late StreamController<List<ChatMessage>> _chatStreamController;
 
   Stream<List<ChatMessage>> get getMessages => _chatStreamController.stream;
 
-  List<ChatMessage> _chatMessagesList = [];
+  List<ChatMessage>? _chatMessagesList = [];
 
   Future<List<ChatUser>> getUsers() {
     return usersRepository.getUsers();
@@ -36,8 +37,8 @@ class ChatController {
   Future<void> sendMessage(String message) async {
     var messageSent = await chatRepository.sendMessage(message);
     if (messageSent != null) {
-      _chatMessagesList.add(messageSent);
-      _chatStreamController.sink.add(_chatMessagesList);
+      _chatMessagesList!.add(messageSent);
+      _chatStreamController.sink.add(_chatMessagesList!);
     }
   }
 
@@ -45,14 +46,14 @@ class ChatController {
     chatRepository.setChannelUrl(channelUrl);
   }
 
-  Future<List<ChatMessage>> getMessagesList() async {
+  Future<List<ChatMessage>?> getMessagesList() async {
     return await chatRepository.getMessagesList();
   }
 
   void _getMessageStream() {
-    chatRepository.getMessageStream().listen((event) {
-      _chatMessagesList.add(event);
-      _chatStreamController.sink.add(_chatMessagesList);
+    chatRepository.getMessageStream()!.listen((event) {
+      _chatMessagesList!.add(event);
+      _chatStreamController.sink.add(_chatMessagesList!);
     });
   }
 }

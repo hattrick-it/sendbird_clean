@@ -1,13 +1,13 @@
 import 'chat_user.dart';
 
 class ChatMember extends ChatUser {
-  String userId;
-  String nickname;
-  String profileUrl;
-  bool isActive;
-  bool isOnline;
-  int lastSeenAt;
-  Map<String, String> metadata;
+  String? userId;
+  String? nickname;
+  String? profileUrl;
+  bool? isActive;
+  bool? isOnline;
+  int? lastSeenAt;
+  Map<String, String>? metadata;
 
   ChatMember({
     this.userId,

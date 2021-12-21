@@ -1,54 +1,21 @@
 {
   "userTypeDoctor": "Doctor",
-  "@userTypeDoctor": {
-    "description": "Doctor text"
-  },
   "userTypePatient": "Patient",
-  "@userTypePatient": {
-    "description": "Patient text"
-  },
   "doctorSpecialty": "Specialty",
-  "@doctorSpecialty": {
-    "description": "Patient text"
-  },
   "adminUserIdNickname": "admin",
-  "@adminUserIdNickname": {
-    "description": "admin text for id and nickname"
-  },
   "selectionPageTelemedicine": "Telemedicine",
-  "@selectionPageTelemedicine": {
-    "description": ""
-  },
   "selectionPageDemostrator": "Demostrator",
-  "@selectionPageDemostrator": {
-    "description": ""
-  },
   "selectionPagePatient": "Iam a Patient",
-  "@selectionPagePatient": {
-    "description": ""
-  },
   "selectionPageDoctor": "Iam a Doctor",
-  "@selectionPageDoctor": {
-    "description": ""
-  },
   "selectionPageLoadDummyData": "Load dummy data",
-  "@selectionPageLoadDummyData": {
-    "description": ""
-  },
   "userSelectionPageAppBarTitle": "Select a ",
-  "@userSelectionPageAppBarTitle": {
-    "description": ""
-  },
   "chatScreenSendButtonText": "Send Message",
-  "@chatScreenSendButtonText": {
-    "description": ""
-  },
   "usersListPageAppBarTitle": "Create new chat",
-  "@usersListPageAppBarTitle": {
-    "description": ""
-  },
   "channelScreenNoMessagesYet": "No messages yet",
-  "@channelScreenNoMessagesYet": {
-    "description": ""
-  }
+
+  "doctor_selector_providers": "Providers",
+  "doctor_selector_specialty": "Specialty",
+  "doctor_selector_select_provider": "Select your Preferred Provider",
+  "doctor_selector_available_now": "Available now",
+  "doctor_selector_select_schedule_visits": "Accepts Scheduled Visits"
 }

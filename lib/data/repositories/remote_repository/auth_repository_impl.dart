@@ -1,4 +1,3 @@
-
 import '../../data_sources/remote_data_source/auth_data_source.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../../domain/repositories/auth_repository.dart';
@@ -6,7 +5,7 @@ import 'package:sendbirdtutorial/data/data_sources/remote_data_source/models/use
 
 class AuthRespositoryImpl implements AuthRepository {
   final AuthRemoteDataSource sendbirdUserRemoteDataSource;
-  AuthRespositoryImpl({this.sendbirdUserRemoteDataSource});
+  AuthRespositoryImpl({required this.sendbirdUserRemoteDataSource});
 
   @override
   Future<ChatUser> connect(String userId, String nickname) async {

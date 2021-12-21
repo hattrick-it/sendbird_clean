@@ -1,9 +1,8 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
 
-
 class AuthRemoteDataSource {
   final SendbirdSdk sendbird;
-AuthRemoteDataSource({this.sendbird});
+  AuthRemoteDataSource({required this.sendbird});
 
   Future<User> connect(String userId, String nickname) async {
     try {

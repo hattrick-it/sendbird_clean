@@ -19,7 +19,7 @@ enum ChatChannelState {
 class ChatChannelViewModel extends ChangeNotifier {
   final ChannelListController channelListController;
 
-  ChatChannelViewModel({this.channelListController});
+  ChatChannelViewModel({required this.channelListController});
 
   // Properties
   List<ChatChannel> _channelList = [];
