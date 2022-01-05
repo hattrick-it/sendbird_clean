@@ -3,15 +3,16 @@ import '../../../domain/repositories/local_user_type_repository.dart';
 
 class UserTypeRepositoryImpl implements UserTypeRepository {
   final UserTypeDataSource localUserTypeDataSource;
-  UserTypeRepositoryImpl({this.localUserTypeDataSource});
+  UserTypeRepositoryImpl({required this.localUserTypeDataSource});
 
   @override
-  Future<void> saveUserType(String userType) {
+  Future<void> saveUserType(String userType) async {
     localUserTypeDataSource.saveUserType(userType);
   }
 
   @override
-  Future<String> getCurrentUserType() {
-    return localUserTypeDataSource.getCurrentUserType();
+  Future<String?> getCurrentUserType() async {
+    var currentUserType = await localUserTypeDataSource.getCurrentUserType();
+    return currentUserType;
   }
 }

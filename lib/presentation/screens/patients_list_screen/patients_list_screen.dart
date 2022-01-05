@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../Core/chat_colors.dart';
 import '../../../domain/entities/chat_user.dart';
@@ -10,18 +10,18 @@ import '../../viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
 import '../chat_screen/chat_screen.dart';
 import '../common_widgets/common_appbar.dart';
 
-class PatientsListScreen extends StatelessWidget {
+class PatientsListScreen extends ConsumerWidget {
   static const String routeName = '/patient-list-screen';
 
   @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read(userSelectionViewModel).getUsersByType();
+  Widget build(BuildContext context, ref) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      ref.read(userSelectionViewModel).getUsersByType();
     });
 
     return Scaffold(
       appBar: CommonAppbar(
-        title: AppLocalizations.of(context).patientListScreenAppbarTitle,
+        title: AppLocalizations.of(context)!.patientListScreenAppbarTitle,
         appbarColor: ChatColors.greyAppbarBackgroundColor,
       ),
       body: BuildPatientsListBody(),
@@ -38,8 +38,8 @@ class BuildPatientsListBody extends StatelessWidget {
       children: [
         SearchComponent(),
         Consumer(
-          builder: (context, watch, child) {
-            var provider = watch(userSelectionViewModel);
+          builder: (context, ref, child) {
+            var provider = ref.watch(userSelectionViewModel);
             if (provider.getUserList == null) {
               return Center(
                   child: CircularProgressIndicator(
@@ -84,11 +84,11 @@ class SearchComponent extends StatelessWidget {
   }
 }
 
-class BuildSearchBar extends StatelessWidget {
+class BuildSearchBar extends ConsumerWidget {
   const BuildSearchBar();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return Container(
       width: 350,
       height: 50,
@@ -109,11 +109,11 @@ class BuildSearchBar extends StatelessWidget {
                     TextStyle(color: ChatColors.disbleSendButton, fontSize: 12),
                 cursorColor: ChatColors.disbleSendButton,
                 onChanged: (val) {
-                  context.read(userSelectionViewModel).getUserByName(val);
+                  ref.read(userSelectionViewModel).getUserByName(val);
                 },
                 decoration: InputDecoration(
                   hintText:
-                      AppLocalizations.of(context).doctorListScreenHinttext,
+                      AppLocalizations.of(context)!.doctorListScreenHinttext,
                   border: InputBorder.none,
                 ),
               ),
@@ -129,13 +129,13 @@ class BuildSearchBar extends StatelessWidget {
   }
 }
 
-class PatientsList extends StatelessWidget {
+class PatientsList extends ConsumerWidget {
   final List<ChatUser> userList;
 
-  const PatientsList({this.userList});
+  const PatientsList({required this.userList});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return Expanded(
       child: ListView.separated(
         physics: BouncingScrollPhysics(),
@@ -149,9 +149,9 @@ class PatientsList extends StatelessWidget {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () async {
-              var gropuChannel = await context
+              var gropuChannel = await ref
                   .read(usersListViewModel)
-                  .getChannelByIds(userList[index].userId);
+                  .getChannelByIds(userList[index].userId!);
               if (gropuChannel != null) {
                 Navigator.of(context)
                     .pushNamed(ChatScreen.routeName, arguments: gropuChannel);
@@ -165,7 +165,7 @@ class PatientsList extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(left: 20, top: 5),
                     child: AdvancedAvatar(
-                      image: NetworkImage(userList[index].profileUrl),
+                      image: NetworkImage(userList[index].profileUrl!),
                       foregroundDecoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
@@ -175,7 +175,7 @@ class PatientsList extends StatelessWidget {
                       ),
                       size: 60,
                       statusSize: 16,
-                      statusColor: userList[index].isOnline
+                      statusColor: userList[index].isOnline!
                           ? ChatColors.doctorAvailable
                           : ChatColors.doctorNotAvailable,
                     ),
@@ -185,14 +185,14 @@ class PatientsList extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          userList[index].metadata['Specialty'] != null
+                          userList[index].metadata!['Specialty'] != null
                               ? Text(
-                                  userList[index].metadata['Specialty'],
+                                  userList[index].metadata!['Specialty']!,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )
                               : Container(),
                           Text(
-                            userList[index].nickname,
+                            userList[index].nickname!,
                             style: TextStyle(fontSize: 18),
                           ),
                         ],

@@ -18,9 +18,9 @@ class ChatRepositoryImpl implements ChatRepository {
   final UsersDataSource usersDataSource;
 
   ChatRepositoryImpl({
-    this.chatRemoteDataSource,
-    this.userTypeDataSource,
-    this.usersDataSource,
+    required this.chatRemoteDataSource,
+    required this.userTypeDataSource,
+    required this.usersDataSource,
   });
 
   @override
@@ -35,9 +35,10 @@ class ChatRepositoryImpl implements ChatRepository {
     try {
       List<User> users = await usersDataSource.getUsers();
       var chatUsers = users.map((e) => e.toDomain()).toList();
-      return chatUsers.where((element) =>
-          element.metadata.containsKey(StringConstants.userTypeKey) &&
-          element.metadata[StringConstants.userTypeKey] != currentUserType);
+      var usersList = chatUsers.where((element) =>
+          element.metadata!.containsKey(StringConstants.userTypeKey) &&
+          element.metadata![StringConstants.userTypeKey] != currentUserType);
+      return usersList.toList();
     } catch (e) {
       throw Exception(e);
     }
@@ -51,20 +52,16 @@ class ChatRepositoryImpl implements ChatRepository {
   Future<ChatMessage> sendMessage(String message) {
     return chatRemoteDataSource
         .sendMessage(message)
-        .then((message) => message.toDomain());
+        .then((message) => message!.toDomain());
   }
 
   ChatUser getCurrentUser() {
-    return usersDataSource.getCurrentUser().toDomain();
+    return usersDataSource.getCurrentUser()!.toDomain();
   }
 
   @override
   Future<List<ChatMessage>> getMessagesList() async {
     var baseMessages = await chatRemoteDataSource.getMessages();
-    if (baseMessages != null) {
-      return baseMessages.map((e) => e.toDomain()).toList();
-    } else {
-      return null;
-    }
+    return baseMessages.map((e) => e.toDomain()).toList();
   }
 }

@@ -4,22 +4,20 @@ import '../../../Core/chat_colors.dart';
 import '../../../domain/entities/chat_channel.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../chat_screen/chat_screen.dart';
-
-// import '../users_list_screen/users_list.dart';
 import '../../viewmodel/channel_list_viewmodel/chat_channel_list_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ChannelListScreen extends StatelessWidget {
+class ChannelListScreen extends ConsumerWidget {
   static const String routeName = '/channel-list';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     WidgetsBinding.instance?.addPostFrameCallback((_) {});
-    ChatUser chatUser = context.read(chatChannelViewModel).getCurrentUser();
+    ChatUser chatUser = ref.read(chatChannelViewModel).getCurrentUser();
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          chatUser.nickname,
+          chatUser.nickname!,
           style: TextStyle(fontSize: 14),
         ),
         centerTitle: true,
@@ -35,23 +33,22 @@ class ChannelListScreen extends StatelessWidget {
   }
 }
 
-class BuildChannelListBody extends StatelessWidget {
+class BuildChannelListBody extends ConsumerWidget {
   const BuildChannelListBody();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     WidgetsBinding.instance?.addPostFrameCallback((_) {});
 
     return StreamBuilder(
-      stream: context.read(chatChannelViewModel).onNewChannelEvent,
+      stream: ref.read(chatChannelViewModel).onNewChannelEvent,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List<ChatChannel> channelList = snapshot.data;
+          List<ChatChannel> channelList = snapshot.data as List<ChatChannel>;
           return ListView.builder(
             itemCount: channelList.length,
             itemBuilder: (context, index) {
-              var chatUser =
-                  context.read(chatChannelViewModel).getCurrentUser();
+              var chatUser = ref.read(chatChannelViewModel).getCurrentUser();
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushNamed(ChatScreen.routeName,
@@ -62,18 +59,19 @@ class BuildChannelListBody extends StatelessWidget {
                     height: 40,
                     width: 40,
                     child:
-                        channelList[index].members[0].userId == chatUser.userId
+                        channelList[index].members![0].userId == chatUser.userId
                             ? Image.network(
-                                channelList[index].members[1].profileUrl)
+                                channelList[index].members![1].profileUrl!)
                             : Image.network(
-                                channelList[index].members[0].profileUrl),
+                                channelList[index].members![0].profileUrl!),
                   ),
-                  title: channelList[index].members[0].userId == chatUser.userId
-                      ? Text(channelList[index].members[1].nickname)
-                      : Text(channelList[index].members[0].nickname),
+                  title:
+                      channelList[index].members![0].userId == chatUser.userId
+                          ? Text(channelList[index].members![1].nickname!)
+                          : Text(channelList[index].members![0].nickname!),
                   trailing: channelList[index].lastMessage != null
-                      ? Text(channelList[index].lastMessage.message)
-                      : Text(AppLocalizations.of(context)
+                      ? Text(channelList[index].lastMessage!.message!)
+                      : Text(AppLocalizations.of(context)!
                           .channelScreenNoMessagesYet),
                 ),
               );

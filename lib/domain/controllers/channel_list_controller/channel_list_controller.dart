@@ -8,11 +8,11 @@ import '../../repositories/channel_repository.dart';
 class ChannelListController {
   final ChannelRepository channelRepository;
 
-  StreamController<ChatMessage> _messageStreamController;
+  late StreamController<ChatMessage> _messageStreamController;
 
-  StreamController<List<ChatChannel>> _channelsStreamController;
+  late StreamController<List<ChatChannel>> _channelsStreamController;
 
-  ChannelListController({this.channelRepository}) {
+  ChannelListController({required this.channelRepository}) {
     _onInit();
   }
 

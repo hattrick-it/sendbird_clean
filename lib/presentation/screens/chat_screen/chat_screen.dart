@@ -10,15 +10,15 @@ import '../../../domain/entities/chat_channel.dart';
 import '../../../domain/entities/chat_message.dart';
 import '../../viewmodel/chat_viewmodel/chat_viewmodel.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends ConsumerWidget {
   static const String routeName = '/chat-screen';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final chatChannel =
-        ModalRoute.of(context).settings.arguments as ChatChannel;
-    context.read(chatViewModel).setChannelUrl(chatChannel.channelUrl);
-    context.read(chatViewModel).setCurrentUser();
+        ModalRoute.of(context)!.settings.arguments as ChatChannel;
+    ref.read(chatViewModel).setChannelUrl(chatChannel.channelUrl!);
+    ref.read(chatViewModel).setCurrentUser();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -40,22 +40,22 @@ class ChatScreen extends StatelessWidget {
         title: Column(
           children: [
             CircleAvatar(
-              child: chatChannel.members[0].userId ==
-                      context.read(chatViewModel).getCurrentUser.userId
-                  ? Text('${chatChannel.members[1].nickname[0]}',
+              child: chatChannel.members![0].userId ==
+                      ref.read(chatViewModel).getCurrentUser!.userId
+                  ? Text('${chatChannel.members![1].nickname![0]}',
                       style: TextStyle(fontSize: 12))
-                  : Text('${chatChannel.members[0].nickname[0]}',
+                  : Text('${chatChannel.members![0].nickname![0]}',
                       style: TextStyle(fontSize: 12)),
               backgroundColor: ChatColors.notMyMsgColor,
               maxRadius: 10,
             ),
             SizedBox(height: 3),
-            chatChannel.members[0].userId ==
-                    context.read(chatViewModel).getCurrentUser.userId
-                ? Text(chatChannel.members[1].nickname,
+            chatChannel.members![0].userId ==
+                    ref.read(chatViewModel).getCurrentUser!.userId
+                ? Text(chatChannel.members![1].nickname!,
                     style:
                         TextStyle(color: ChatColors.blackColor, fontSize: 12))
-                : Text(chatChannel.members[0].nickname,
+                : Text(chatChannel.members![0].nickname!,
                     style:
                         TextStyle(color: ChatColors.blackColor, fontSize: 12)),
           ],
@@ -72,10 +72,11 @@ class ChatScreen extends StatelessWidget {
                 builder: (context, watch, child) {
                   return StreamBuilder(
                     initialData: [],
-                    stream: watch(chatViewModel).onNewMessage,
+                    stream: ref.watch(chatViewModel).onNewMessage,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.active) {
-                        List<ChatMessage> list = snapshot.data;
+                        List<ChatMessage> list =
+                            snapshot.data as List<ChatMessage>;
                         var reversed = list.reversed.toList();
                         return ListView.builder(
                           physics: BouncingScrollPhysics(),
@@ -109,9 +110,9 @@ class ChatScreen extends StatelessWidget {
   }
 }
 
-class InputChat extends StatelessWidget {
+class InputChat extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     TextEditingController ctrl = TextEditingController();
     return SafeArea(
       child: Container(
@@ -119,8 +120,8 @@ class InputChat extends StatelessWidget {
         child: Row(
           children: [
             Consumer(
-              builder: (context, watch, child) {
-                final provider = watch(chatViewModel);
+              builder: (context, ref, child) {
+                final provider = ref.watch(chatViewModel);
                 ctrl.text = provider.getMsg;
                 return Expanded(
                   child: TextField(
@@ -129,10 +130,10 @@ class InputChat extends StatelessWidget {
                     ),
                     controller: ctrl,
                     onChanged: (val) {
-                      context.read(chatViewModel).setUserMsg(val);
+                      ref.read(chatViewModel).setUserMsg(val);
                     },
                     decoration: InputDecoration.collapsed(
-                        hintText: AppLocalizations.of(context)
+                        hintText: AppLocalizations.of(context)!
                             .chatScreenSendButtonText),
                   ),
                 );
@@ -146,11 +147,11 @@ class InputChat extends StatelessWidget {
   }
 }
 
-class SendButton extends StatelessWidget {
+class SendButton extends ConsumerWidget {
   const SendButton();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 4),
       child: IconButton(
@@ -161,24 +162,24 @@ class SendButton extends StatelessWidget {
           color: ChatColors.purpleAppbarBackgroundColor,
         ),
         onPressed: () {
-          context.read(chatViewModel).sendMessage();
-          context.read(chatViewModel).clearMsg();
+          ref.read(chatViewModel).sendMessage();
+          ref.read(chatViewModel).clearMsg();
         },
       ),
     );
   }
 }
 
-class BuildChatMessage extends StatelessWidget {
+class BuildChatMessage extends ConsumerWidget {
   final ChatMessage message;
 
   const BuildChatMessage(this.message);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return Container(
-      child: message.sender.userId ==
-              context.read(chatViewModel).getCurrentUser.userId
+      child: message.sender!.userId ==
+              ref.read(chatViewModel).getCurrentUser!.userId
           ? MyMessage(message)
           : NotMyMessage(message),
     );
@@ -192,7 +193,8 @@ class NotMyMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var date = DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt);
+    var created = chatMessage.createdAt;
+    var date = DateTime.fromMillisecondsSinceEpoch(created!);
     var formattedDate = DateFormat('hh:mm a').format(date);
     return Padding(
       padding: EdgeInsets.all(10),
@@ -208,9 +210,9 @@ class NotMyMessage extends StatelessWidget {
                     SizedBox(
                       width: 45,
                     ),
-                    chatMessage.sender.userId != 'WebAdmin'
+                    chatMessage.sender!.userId != 'WebAdmin'
                         ? Text(
-                            chatMessage.sender.nickname,
+                            chatMessage.sender!.nickname ?? '',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -218,7 +220,7 @@ class NotMyMessage extends StatelessWidget {
                             ),
                           )
                         : Text(
-                            AppLocalizations.of(context).chatScreenWebAdmin,
+                            AppLocalizations.of(context)!.chatScreenWebAdmin,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -229,22 +231,36 @@ class NotMyMessage extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          maxRadius: 14,
-                          backgroundColor: ChatColors.greyAppbarBackgroundColor,
-                          child: CircleAvatar(
-                            maxRadius: 13,
-                            backgroundImage: chatMessage.sender.userId !=
-                                    'WebAdmin'
-                                ? NetworkImage(chatMessage.sender.profileUrl)
-                                : AssetImage(ChatAssets.profileUrlPlaceholder),
+                    chatMessage.sender!.userId != 'WebAdmin'
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                maxRadius: 14,
+                                backgroundColor:
+                                    ChatColors.greyAppbarBackgroundColor,
+                                child: CircleAvatar(
+                                    maxRadius: 13,
+                                    backgroundImage: NetworkImage(
+                                        chatMessage.sender!.profileUrl!)),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                maxRadius: 14,
+                                backgroundColor:
+                                    ChatColors.greyAppbarBackgroundColor,
+                                child: CircleAvatar(
+                                  maxRadius: 13,
+                                  backgroundImage: AssetImage(
+                                      ChatAssets.profileUrlPlaceholder),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                     Container(
                       constraints: BoxConstraints(minWidth: 100, maxWidth: 200),
                       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -254,7 +270,7 @@ class NotMyMessage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Text(
-                        chatMessage.message,
+                        chatMessage.message ?? '',
                       ),
                     ),
                     Column(
@@ -290,7 +306,8 @@ class MyMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var date = DateTime.fromMillisecondsSinceEpoch(chatMessage.createdAt);
+    var created = chatMessage.createdAt;
+    var date = DateTime.fromMillisecondsSinceEpoch(created!);
     var formattedDate = DateFormat('hh:mm a').format(date);
     return Align(
       alignment: Alignment.bottomRight,
@@ -332,7 +349,7 @@ class MyMessage extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
             ),
             child: Text(
-              chatMessage.message,
+              chatMessage.message ?? '',
               maxLines: 3,
               style: TextStyle(
                 color: ChatColors.whiteColor,

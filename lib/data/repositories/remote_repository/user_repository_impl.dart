@@ -6,11 +6,11 @@ import '../../data_sources/remote_data_source/users_data_source.dart';
 class UsersRepositoryImpl implements UsersRepository {
   UsersDataSource usersDataSource;
 
-  UsersRepositoryImpl({this.usersDataSource});
+  UsersRepositoryImpl({required this.usersDataSource});
 
   @override
   ChatUser getCurrentUser() {
-    return usersDataSource.getCurrentUser().toDomain();
+    return usersDataSource.getCurrentUser()!.toDomain();
   }
 
   @override

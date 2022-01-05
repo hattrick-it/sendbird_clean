@@ -2,27 +2,27 @@ import 'chat_user.dart';
 
 class ChatDoctor extends ChatUser {
   @override
-  String userId;
+  String? userId;
 
   @override
-  String nickname;
+  String? nickname;
 
   @override
-  String profileUrl;
+  String? profileUrl;
 
   @override
-  bool isActive;
+  bool? isActive;
 
   @override
-  bool isOnline;
+  bool? isOnline;
 
   @override
-  int lastSeenAt;
+  int? lastSeenAt;
 
   @override
-  Map<String, String> metadata;
+  Map<String, String>? metadata;
 
-  String specialty;
+  String? specialty;
 
   ChatDoctor({
     this.userId,

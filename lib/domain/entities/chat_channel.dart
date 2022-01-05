@@ -2,11 +2,11 @@ import 'chat_message.dart';
 import 'chat_user.dart';
 
 class ChatChannel {
-  ChatMessage lastMessage;
-  String coverUrl;
-  String channelUrl;
-  List<ChatUser> members;
-  int createdAt;
+  ChatMessage? lastMessage;
+  String? coverUrl;
+  String? channelUrl;
+  List<ChatUser>? members;
+  int? createdAt;
 
   ChatChannel({
     this.coverUrl,

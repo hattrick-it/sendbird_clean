@@ -6,22 +6,22 @@ class UserSelectionRepositoryImpl implements UserSelectionRepository {
   UsersDataSource usersDataSource;
 
   UserSelectionRepositoryImpl({
-    this.usersDataSource,
+    required this.usersDataSource,
   });
 
   // add to repo interface
   @override
-  Future<List<ChatUser>> getUserByName(String name) async {
+  Future<List<ChatUser>?> getUserByName(String name) async {
     return usersDataSource.getUserByName(name);
   }
 
   @override
-  Future<List<ChatUser>> getUsersByType() async {
+  Future<List<ChatUser>?> getUsersByType() async {
     return await usersDataSource.getUsersByType();
   }
 
   @override
-  Future<List<ChatUser>> getDoctorBySpecialty(String specialty) async {
+  Future<List<ChatUser>?> getDoctorBySpecialty(String specialty) async {
     return usersDataSource.getDoctorBySpecialty(specialty);
   }
 

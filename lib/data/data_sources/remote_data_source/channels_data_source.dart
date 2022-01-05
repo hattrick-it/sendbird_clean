@@ -7,10 +7,10 @@ import '../../../Core/string_constants.dart';
 class ChannelsDataSource extends ChannelEventHandler {
   final SendbirdSdk sendbird;
 
-  StreamController<BaseMessage> _messageStreamController;
-  StreamController<BaseChannel> _channelsStreamController;
+  late StreamController<BaseMessage> _messageStreamController;
+  late StreamController<BaseChannel> _channelsStreamController;
 
-  ChannelsDataSource({this.sendbird}) {
+  ChannelsDataSource({required this.sendbird}) {
     _messageStreamController = StreamController<BaseMessage>();
 
     _channelsStreamController = StreamController<GroupChannel>(
@@ -23,7 +23,7 @@ class ChannelsDataSource extends ChannelEventHandler {
   Stream<BaseMessage> get onChannelNewMessage =>
       _messageStreamController.stream;
 
-  Stream<GroupChannel> get onChannelNewChanged =>
+  Stream<BaseChannel> get onChannelNewChanged =>
       _channelsStreamController.stream;
 
   void closeStream() {
@@ -39,7 +39,7 @@ class ChannelsDataSource extends ChannelEventHandler {
 
   @override
   void onChannelChanged(BaseChannel channel) {
-    GroupChannel groupChannel = channel;
+    BaseChannel groupChannel = channel;
     _channelsStreamController.sink.add(groupChannel);
   }
 
@@ -73,7 +73,7 @@ class ChannelsDataSource extends ChannelEventHandler {
     return channels.firstWhere((element) => element.channelUrl == channelUrl);
   }
 
-  User getCurrentUser() {
+  User? getCurrentUser() {
     return sendbird.currentUser;
   }
 

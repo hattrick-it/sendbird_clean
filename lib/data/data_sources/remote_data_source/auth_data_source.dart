@@ -6,7 +6,8 @@ class AuthRemoteDataSource {
   final SendbirdSdk sendbird;
   final UserTypeDataSource userTypeDataSource;
 
-  AuthRemoteDataSource({this.sendbird, this.userTypeDataSource});
+  AuthRemoteDataSource(
+      {required this.sendbird, required this.userTypeDataSource});
 
   Future<User> connect(String userId, String nickname) async {
     try {

@@ -10,18 +10,18 @@ import '../../viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
 import '../chat_screen/chat_screen.dart';
 import '../common_widgets/common_appbar.dart';
 
-class DoctorListScreen extends StatelessWidget {
+class DoctorListScreen extends ConsumerWidget {
   static const String routeName = '/doctor-list-screen';
 
   @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read(userSelectionViewModel).getUsersByType();
+  Widget build(BuildContext context, ref) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      ref.read(userSelectionViewModel).getUsersByType();
     });
 
     return Scaffold(
       appBar: CommonAppbar(
-        title: AppLocalizations.of(context).doctorListScreenAppbarTitle,
+        title: AppLocalizations.of(context)!.doctorListScreenAppbarTitle,
         appbarColor: ChatColors.greyAppbarBackgroundColor,
       ),
       body: BuildDoctorListBody(),
@@ -47,8 +47,8 @@ class BuildDoctorListBody extends StatelessWidget {
           ),
         ),
         Consumer(
-          builder: (context, watch, child) {
-            var provider = watch(userSelectionViewModel);
+          builder: (context, ref, child) {
+            var provider = ref.watch(userSelectionViewModel);
             if (provider.getUserList == null) {
               return Center(
                 child: CircularProgressIndicator(
@@ -96,11 +96,11 @@ class SearchComponent extends StatelessWidget {
   }
 }
 
-class BuildSearchBar extends StatelessWidget {
+class BuildSearchBar extends ConsumerWidget {
   const BuildSearchBar();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return Container(
       width: 350,
       height: 50,
@@ -121,13 +121,13 @@ class BuildSearchBar extends StatelessWidget {
                     TextStyle(color: ChatColors.disbleSendButton, fontSize: 12),
                 cursorColor: ChatColors.disbleSendButton,
                 onChanged: (val) {
-                  context.read(userSelectionViewModel).getUserByName(val);
+                  ref.read(userSelectionViewModel).getUserByName(val);
                 },
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(bottom: 7),
                   alignLabelWithHint: true,
                   hintText:
-                      AppLocalizations.of(context).doctorListScreenHinttext,
+                      AppLocalizations.of(context)!.doctorListScreenHinttext,
                   border: InputBorder.none,
                 ),
               ),
@@ -143,24 +143,25 @@ class BuildSearchBar extends StatelessWidget {
   }
 }
 
-class SpecialtyButtonsComponent extends StatelessWidget {
+class SpecialtyButtonsComponent extends ConsumerWidget {
   const SpecialtyButtonsComponent();
 
   @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read(userSelectionViewModel).getSpecialtyMap();
+  Widget build(BuildContext context, ref) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      ref.read(userSelectionViewModel).getSpecialtyMap();
     });
 
     return Container(
       height: 40,
       margin: EdgeInsets.only(left: 15),
       child: Consumer(
-        builder: (context, watch, child) {
-          final status = watch(userSelectionViewModel).getSpecialtyListStatus;
+        builder: (context, ref, child) {
+          final status =
+              ref.watch(userSelectionViewModel).getSpecialtyListStatus;
           if (status == SpecialtyListStatus.Loaded) {
             final specialtiesMap =
-                watch(userSelectionViewModel).getSpecialtiesMap;
+                ref.watch(userSelectionViewModel).getSpecialtiesMap;
             return ListView.separated(
               separatorBuilder: (context, index) {
                 return Divider(
@@ -178,7 +179,7 @@ class SpecialtyButtonsComponent extends StatelessWidget {
                       : ChatColors.whiteColor,
                   child: FlatButton(
                     onPressed: () {
-                      context
+                      ref
                           .read(userSelectionViewModel)
                           .getDoctorBySpecialty(index);
                     },
@@ -218,13 +219,13 @@ class SpecialtyButtonsComponent extends StatelessWidget {
   }
 }
 
-class DoctorsList extends StatelessWidget {
+class DoctorsList extends ConsumerWidget {
   final List<ChatUser> userList;
 
-  const DoctorsList({this.userList});
+  const DoctorsList({required this.userList});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return Expanded(
       child: ListView.separated(
         physics: BouncingScrollPhysics(),
@@ -238,9 +239,9 @@ class DoctorsList extends StatelessWidget {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () async {
-              var groupChannel = await context
+              var groupChannel = await ref
                   .read(usersListViewModel)
-                  .getChannelByIds(userList[index].userId);
+                  .getChannelByIds(userList[index].userId!);
               if (groupChannel != null) {
                 Navigator.of(context)
                     .pushNamed(ChatScreen.routeName, arguments: groupChannel);
@@ -254,7 +255,7 @@ class DoctorsList extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(left: 20, top: 5),
                     child: AdvancedAvatar(
-                      image: NetworkImage(userList[index].profileUrl),
+                      image: NetworkImage(userList[index].profileUrl!),
                       foregroundDecoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
@@ -264,7 +265,7 @@ class DoctorsList extends StatelessWidget {
                       ),
                       size: 60,
                       statusSize: 16,
-                      statusColor: userList[index].isOnline
+                      statusColor: userList[index].isOnline!
                           ? ChatColors.doctorAvailable
                           : ChatColors.doctorNotAvailable,
                     ),
@@ -274,16 +275,16 @@ class DoctorsList extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          userList[index].metadata['Specialty'] != null
+                          userList[index].metadata!['Specialty'] != null
                               ? Text(
-                                  userList[index].metadata['Specialty'],
+                                  userList[index].metadata!['Specialty']!,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12),
                                 )
                               : Container(),
                           Text(
-                            userList[index].nickname,
+                            userList[index].nickname!,
                             style: TextStyle(fontSize: 18),
                           ),
                         ],

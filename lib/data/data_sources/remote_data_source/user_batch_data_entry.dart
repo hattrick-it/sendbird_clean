@@ -53,9 +53,9 @@ var patientsUsers = [
 
 class UserBatchDataEntry {
   final SendbirdSdk sendbird;
-  UserBatchDataEntry({this.sendbird});
+  UserBatchDataEntry({required this.sendbird});
 
-  final send = SendbirdSdk(appId: 'D3B9C520-3FF0-498A-8271-E72A58B41392');
+  final send = SendbirdSdk(appId: '8431DE7B-30C4-4C16-BC27-B827BF4B5C6A');
 
   Future<List<User>> getUsers() {
     try {
@@ -79,7 +79,7 @@ class UserBatchDataEntry {
 
   Future<void> createDoctors() async {
     for (var item in doctorUsers) {
-      await send.connect(item.userId);
+      await send.connect(item.userId!);
       await send.updateCurrentUserInfo(
           nickname: item.nickname,
           fileInfo: FileInfo.fromUrl(
@@ -88,13 +88,13 @@ class UserBatchDataEntry {
           ));
       final user = send.currentUser;
       final data = item.metadata;
-      await user.createMetaData(data);
+      await user!.createMetaData(data!);
     }
   }
 
   Future<void> createPatients() async {
     for (var item in patientsUsers) {
-      await send.connect(item.userId);
+      await send.connect(item.userId!);
       await send.updateCurrentUserInfo(
           nickname: item.nickname,
           fileInfo: FileInfo.fromUrl(
@@ -103,7 +103,7 @@ class UserBatchDataEntry {
           ));
       final user = send.currentUser;
       final data = item.metadata;
-      await user.createMetaData(data);
+      await user!.createMetaData(data!);
     }
   }
 }

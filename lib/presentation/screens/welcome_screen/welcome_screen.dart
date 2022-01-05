@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/locator/locator.dart';
 
 import '../../../Core/chat_assets.dart';
 import '../../../Core/chat_colors.dart';
@@ -10,13 +11,14 @@ import '../../viewmodel/auth_viewmodel/auth_viewmodel.dart';
 import '../doctors_list_screen/doctor_list_screen.dart';
 import '../patients_list_screen/patients_list_screen.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends ConsumerWidget {
   static const String routeName = '/welcome-screen';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     // context.read(authViewModel).setFirstRun(true);
-    WidgetsBinding.instance.addPostFrameCallback((_) => checkFirstRun(context));
+    WidgetsBinding.instance!
+        .addPostFrameCallback((_) => checkFirstRun(context, ref));
     return Scaffold(
       body: Stack(
         children: [
@@ -36,8 +38,8 @@ class WelcomeScreen extends StatelessWidget {
             child: BuildSelectorButtons(),
           ),
           Consumer(
-            builder: (context, watch, child) {
-              var state = watch(authViewModel).getState;
+            builder: (context, ref, child) {
+              var state = ref.watch(authViewModel).getState;
               if (state == LoginState.Loading) {
                 return Container(
                   height: double.infinity,
@@ -71,7 +73,7 @@ class BuildTitle extends StatelessWidget {
       child: Container(
         width: 350,
         child: Text(
-          AppLocalizations.of(context).welcomeScreenTitle,
+          AppLocalizations.of(context)!.welcomeScreenTitle,
           style: TextStyle(
             fontSize: 44,
             fontWeight: FontWeight.bold,
@@ -89,19 +91,19 @@ class BuildSelectorButtons extends ConsumerWidget {
   const BuildSelectorButtons();
 
   @override
-  Widget build(BuildContext context, watch) {
+  Widget build(BuildContext context, ref) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
         BuildSelectorButton(
-          title: AppLocalizations.of(context).selectionPagePatient,
+          title: AppLocalizations.of(context)!.selectionPagePatient,
           onPressed: () async {
-            var chatUser = await context
+            var chatUser = await ref
                 .read(authViewModel)
                 .connect('Patient_3', 'Michael Williams', 'Patient');
             if (chatUser != null) {
               Navigator.of(context).pushNamed(DoctorListScreen.routeName,
-                  arguments: AppLocalizations.of(context).userTypePatient);
+                  arguments: AppLocalizations.of(context)!.userTypePatient);
             }
           },
           buttonColor: ChatColors.notMyMsgColor,
@@ -109,20 +111,21 @@ class BuildSelectorButtons extends ConsumerWidget {
         ),
         SizedBox(height: 20),
         BuildSelectorButton(
-          title: AppLocalizations.of(context).selectionPageDoctor,
+          title: AppLocalizations.of(context)!.selectionPageDoctor,
           onPressed: () async {
-            var chatUser = await context
+            var chatUser = await ref
                 .read(authViewModel)
                 .connect('Doctor_2', 'Andrea Miller.', 'Doctor');
             if (chatUser != null) {
               Navigator.of(context).pushNamed(PatientsListScreen.routeName,
-                  arguments: AppLocalizations.of(context).userTypeDoctor);
+                  arguments: AppLocalizations.of(context)!.userTypeDoctor);
             }
           },
           buttonColor: ChatColors.welcomeScreenWhiteButton,
           textColor: ChatColors.blackColor,
         ),
         SizedBox(height: 20),
+        //TODO delete this for good
         // BuildLoadDummyDataButton(),
         CheckFirstRun(),
       ],
@@ -130,17 +133,17 @@ class BuildSelectorButtons extends ConsumerWidget {
   }
 }
 
-class CheckFirstRun extends StatelessWidget {
+class CheckFirstRun extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return FutureBuilder<bool>(
-      future: context.read(authViewModel).isFirstRun(),
+      future: ref.read(authViewModel).isFirstRun(),
       builder: (context, snapshot) {
         var isFirstRun = snapshot.data;
         print(isFirstRun);
         if (isFirstRun != null) {
           if (isFirstRun) {
-            checkFirstRun(context);
+            checkFirstRun(context, ref);
           }
         } else {
           return BuildSelectorButton();
@@ -153,25 +156,25 @@ class CheckFirstRun extends StatelessWidget {
   }
 }
 
-checkFirstRun(BuildContext context) async {
+checkFirstRun(BuildContext context, WidgetRef ref) async {
   showDialog(
     barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
-      createUsers(context);
+      createUsers(context, ref);
       return alert;
     },
   );
 }
 
-void createUsers(BuildContext context) async {
-  var batchClass = UserBatchDataEntry();
-  await context.read(authViewModel).connectAdmin('admin', 'admin', 'admin');
+void createUsers(BuildContext context, WidgetRef ref) async {
+  var batchClass = UserBatchDataEntry(sendbird: locator.get());
+  await ref.read(authViewModel).connectAdmin('admin', 'admin', 'admin');
   var dbExists = await batchClass.dbExists();
   if (!dbExists) {
     var usersLoaded = await batchClass.createUsers();
     if (usersLoaded) {
-      context.read(authViewModel).setFirstRun(false);
+      ref.read(authViewModel).setFirstRun(false);
       Navigator.of(context).pop();
     }
   }
@@ -198,10 +201,10 @@ AlertDialog alert = AlertDialog(
 );
 
 class BuildSelectorButton extends StatelessWidget {
-  final String title;
-  final GestureTapCallback onPressed;
-  final Color buttonColor;
-  final Color textColor;
+  final String? title;
+  final GestureTapCallback? onPressed;
+  final Color? buttonColor;
+  final Color? textColor;
 
   const BuildSelectorButton({
     this.title,
@@ -223,7 +226,7 @@ class BuildSelectorButton extends StatelessWidget {
         ),
         onPressed: onPressed,
         child: Text(
-          title,
+          title ?? '',
           style: TextStyle(
             color: textColor,
             fontSize: 18,

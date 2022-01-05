@@ -6,7 +6,7 @@ import '../../../Core/constants.dart';
 class CommonAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Color appbarColor;
-  const CommonAppbar({this.title, this.appbarColor});
+  const CommonAppbar({required this.title, required this.appbarColor});
 
   @override
   Widget build(BuildContext context) {

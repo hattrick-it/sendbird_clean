@@ -6,7 +6,7 @@ import '../../data_sources/remote_data_source/models/user.dart';
 class AuthRespositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
 
-  AuthRespositoryImpl({this.authRemoteDataSource});
+  AuthRespositoryImpl({required this.authRemoteDataSource});
 
   @override
   Future<ChatUser> connect(String userId, String nickname) async {
@@ -18,7 +18,7 @@ class AuthRespositoryImpl implements AuthRepository {
     }
   }
 
-  Future<void> saveUserType(String userType) {
+  Future<void> saveUserType(String userType) async {
     authRemoteDataSource.saveUserType(userType);
   }
 

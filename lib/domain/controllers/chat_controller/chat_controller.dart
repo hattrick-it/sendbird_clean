@@ -9,7 +9,8 @@ class ChatController {
   final ChatRepository chatRepository;
   final UsersRepository usersRepository;
 
-  ChatController({this.chatRepository, this.usersRepository}) {
+  ChatController(
+      {required this.chatRepository, required this.usersRepository}) {
     _chatStreamController =
         StreamController<List<ChatMessage>>(onListen: () async {
       _chatMessagesList = await getMessagesList();
@@ -18,7 +19,7 @@ class ChatController {
     });
   }
 
-  StreamController<List<ChatMessage>> _chatStreamController;
+  late StreamController<List<ChatMessage>> _chatStreamController;
 
   Stream<List<ChatMessage>> get getMessages => _chatStreamController.stream;
 
@@ -47,8 +48,8 @@ class ChatController {
   void _getMessageStream() {
     chatRepository.getMessageStream().listen((event) {
       final message = _chatMessagesList.firstWhere(
-          (element) => element.requestId == event.requestId,
-          orElse: () => null);
+        (element) => element.requestId == event.requestId,
+      );
       if (message == null) {
         _chatMessagesList.add(event);
         _chatStreamController.sink.add(_chatMessagesList);

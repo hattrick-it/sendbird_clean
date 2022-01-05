@@ -12,7 +12,7 @@ extension GroupChannelExtension on GroupChannel {
         coverUrl: this.coverUrl,
         members: this.members.map((e) => e.toDomain()).toList(),
         lastMessage:
-            this.lastMessage != null ? this.lastMessage.toDomain() : null,
+            this.lastMessage != null ? this.lastMessage!.toDomain() : null,
       );
 }
 

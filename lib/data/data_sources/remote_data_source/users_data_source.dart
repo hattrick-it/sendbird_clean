@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-
 import '../../../domain/entities/chat_user.dart';
 import '../local_data_source/user_type_data_source.dart';
 import 'models/user.dart';
@@ -11,8 +9,8 @@ class UsersDataSource {
   final UserTypeDataSource localUserTypeDataSource;
 
   UsersDataSource({
-    this.sendbird,
-    this.localUserTypeDataSource,
+    required this.sendbird,
+    required this.localUserTypeDataSource,
   });
 
   Future<List<User>> getUsers() async {
@@ -21,11 +19,11 @@ class UsersDataSource {
       final list = await query.loadNext();
       return list;
     } catch (e) {
-      throw Exception(e);
+      throw Exception(e.toString());
     }
   }
 
-  User getCurrentUser() {
+  User? getCurrentUser() {
     try {
       return sendbird.currentUser;
     } catch (e) {
@@ -33,17 +31,18 @@ class UsersDataSource {
     }
   }
 
-  Future<String> getCurrentType() async {
-    return await localUserTypeDataSource.getCurrentUserType();
+  Future<String?> getCurrentType() async {
+    var current = await localUserTypeDataSource.getCurrentUserType();
+    return current;
   }
 
 // getUserByName(String name)
-  Future<List<ChatUser>> getUserByName(String name) async {
+  Future<List<ChatUser>?> getUserByName(String name) async {
     try {
       var list = await getUsersByType();
-      return list
+      return list!
           .where((element) =>
-              element.nickname.toLowerCase().contains(name.toLowerCase()))
+              element.nickname!.toLowerCase().contains(name.toLowerCase()))
           .toList();
     } catch (e) {
       Exception(e);
@@ -51,7 +50,7 @@ class UsersDataSource {
   }
 
   // getUsersByType()
-  Future<List<ChatUser>> getUsersByType() async {
+  Future<List<ChatUser>?> getUsersByType() async {
     try {
       final usertype = await getTypeByUserLogged();
       final listQuery = ApplicationUserListQuery();
@@ -73,7 +72,7 @@ class UsersDataSource {
     }
   }
 
-  Future<List<ChatUser>> getDoctorBySpecialty(String specialty) async {
+  Future<List<ChatUser>?> getDoctorBySpecialty(String specialty) async {
     try {
       final userList = await ApplicationUserListQuery().loadNext();
       if (specialty == 'All') {
@@ -98,7 +97,7 @@ class UsersDataSource {
           .toSet()
           .toList()
           .forEach((element) {
-        returnMap[element] = false;
+        returnMap[element!] = false;
       });
       return returnMap;
     } catch (e) {

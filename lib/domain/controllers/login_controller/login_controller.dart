@@ -4,7 +4,7 @@ import '../../repositories/auth_repository.dart';
 class LoginController {
   final AuthRepository authRepository;
 
-  LoginController({this.authRepository});
+  LoginController({required this.authRepository});
 
   Future<ChatUser> connect(String userId, String nickname) {
     try {

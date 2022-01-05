@@ -21,13 +21,13 @@ enum ChatState {
 class ChatViewModel extends ChangeNotifier {
   final ChatController chatController;
 
-  ChatViewModel({this.chatController});
+  ChatViewModel({required this.chatController});
 
   // Properties
   String _userMsg = '';
   String _errorMsg = '';
   ChatState _chatState = ChatState.Empty;
-  ChatUser _currentUser = null;
+  ChatUser? _currentUser = null;
 
   // Getters
   Stream<List<ChatMessage>> get onNewMessage => chatController.getMessages;
@@ -38,7 +38,7 @@ class ChatViewModel extends ChangeNotifier {
 
   String get getMsg => _userMsg;
 
-  ChatUser get getCurrentUser => _currentUser;
+  ChatUser? get getCurrentUser => _currentUser;
 
   // Setters
   void setChannelUrl(String channelUrl) {

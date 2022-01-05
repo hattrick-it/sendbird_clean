@@ -19,7 +19,7 @@ final authViewModel =
 class AuthViewModel extends ChangeNotifier {
   final LoginController loginController;
 
-  AuthViewModel({this.loginController});
+  AuthViewModel({required this.loginController});
 
   // Properties
   LoginState _loginState = LoginState.Empty;

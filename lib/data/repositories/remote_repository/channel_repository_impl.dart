@@ -11,12 +11,12 @@ import '../../data_sources/remote_data_source/models/user.dart';
 
 class ChannelRepositoryImpl implements ChannelRepository {
   final ChannelsDataSource channelsDataSource;
-  ChannelRepositoryImpl({this.channelsDataSource});
+  ChannelRepositoryImpl({required this.channelsDataSource});
 
   @override
   Future<ChatChannel> createChannel(String userId) async {
     List<String> usersIds = [];
-    usersIds.add(getCurrentUser().userId);
+    usersIds.add(getCurrentUser().userId!);
     usersIds.add(userId);
     var groupChannel = await channelsDataSource.createChannel(usersIds);
     return groupChannel.toDomain();
@@ -43,13 +43,15 @@ class ChannelRepositoryImpl implements ChannelRepository {
 
   @override
   ChatUser getCurrentUser() {
-    return channelsDataSource.getCurrentUser().toDomain();
+    return channelsDataSource.getCurrentUser()!.toDomain();
   }
 
   @override
   Future<ChatChannel> getChannelByIds(String userId) async {
     try {
-      List<String> usersIds = [getCurrentUser().userId, userId];
+      var currentUser = getCurrentUser();
+      var currentUserId = currentUser.userId;
+      List<String> usersIds = [currentUserId!, userId];
       var groupChannel = await channelsDataSource.getChannelByIds(usersIds);
       return groupChannel.toDomain();
     } catch (e) {

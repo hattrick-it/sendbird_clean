@@ -29,16 +29,16 @@ class UserSelectionViewModel extends ChangeNotifier {
   final UserSelectionController userSelectionController;
 
   UserSelectionViewModel({
-    this.loginController,
-    this.userSelectionController,
+    required this.loginController,
+    required this.userSelectionController,
   }) {
     // adminConnect();
   }
 
   // Properties
-  String _userType;
-  List<ChatUser> _userList = List<ChatUser>();
-  List<String> _specialtyList = List<String>();
+  String? _userType;
+  List<ChatUser> _userList = [];
+  List<String> _specialtyList = [];
   Map<String, bool> _specialtiesMap = {};
   UserSelectionStatus _userSelectionStatus = UserSelectionStatus.Empty;
   SpecialtyListStatus _specialtyListStatus = SpecialtyListStatus.Empty;
@@ -94,8 +94,9 @@ class UserSelectionViewModel extends ChangeNotifier {
     _userType = userType;
   }
 
-  Future<String> getCurrentUserType() {
-    return userSelectionController.getCurrentUserType();
+  Future<String?> getCurrentUserType() async {
+    var currentUserType = await userSelectionController.getCurrentUserType();
+    return currentUserType;
   }
 
   Future<void> getSpecialtyMap() async {
@@ -113,9 +114,12 @@ class UserSelectionViewModel extends ChangeNotifier {
   Future<void> getUsersByType() async {
     try {
       _setStatus(UserSelectionStatus.Loading);
-      List<ChatUser> chatUsers = await userSelectionController.getUsersByType();
-      _setUserList(chatUsers);
-      _setStatus(UserSelectionStatus.Loaded);
+      List<ChatUser>? chatUsers =
+          await userSelectionController.getUsersByType();
+      if (chatUsers != null) {
+        _setUserList(chatUsers);
+        _setStatus(UserSelectionStatus.Loaded);
+      }
     } catch (e) {
       _setStatus(UserSelectionStatus.Error);
       throw Exception(e);
@@ -126,7 +130,7 @@ class UserSelectionViewModel extends ChangeNotifier {
     try {
       _setStatus(UserSelectionStatus.Loading);
       var chatUsers = await userSelectionController.getUserByName(name);
-      _setUserList(chatUsers);
+      _setUserList(chatUsers!);
       _setStatus(UserSelectionStatus.Loaded);
     } catch (e) {
       _setStatus(UserSelectionStatus.Error);
@@ -141,7 +145,7 @@ class UserSelectionViewModel extends ChangeNotifier {
       _setStatus(UserSelectionStatus.Loading);
       var chatUsers =
           await userSelectionController.getDoctorBySpecialty(speciality);
-      _setUserList(chatUsers);
+      _setUserList(chatUsers!);
       _setStatus(UserSelectionStatus.Loaded);
     } catch (e) {
       _setStatus(UserSelectionStatus.Error);

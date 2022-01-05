@@ -12,28 +12,28 @@ class UserSelectionController {
   final ChatRepository chatRepository;
 
   UserSelectionController({
-    this.userSelectorRepository,
-    this.localUserTypeRepository,
-    this.chatRepository,
+    required this.userSelectorRepository,
+    required this.localUserTypeRepository,
+    required this.chatRepository,
   });
 
   void saveUserType(String userType) {
     localUserTypeRepository.saveUserType(userType);
   }
 
-  Future<String> getCurrentUserType() {
+  Future<String?> getCurrentUserType() {
     return localUserTypeRepository.getCurrentUserType();
   }
 
-  Future<List<ChatUser>> getUserByName(String name) {
+  Future<List<ChatUser>?> getUserByName(String name) {
     return userSelectorRepository.getUserByName(name);
   }
 
-  Future<List<ChatUser>> getUsersByType() async {
+  Future<List<ChatUser>?> getUsersByType() async {
     return await userSelectorRepository.getUsersByType();
   }
 
-  Future<List<ChatUser>> getDoctorBySpecialty(String specialty) {
+  Future<List<ChatUser>?> getDoctorBySpecialty(String specialty) {
     return userSelectorRepository.getDoctorBySpecialty(specialty);
   }
 
