@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'package:sendbird_sdk/sendbird_sdk.dart';
+import 'package:sendbirdtutorial/Core/constants.dart';
+import 'package:sendbirdtutorial/data/data_sources/remote_data_source/user_batch_data_entry.dart';
+import 'package:sendbird_sdk/query/user_list/user_list_query.dart' as sendQuery;
 import '../../../domain/entities/chat_user.dart';
 import '../local_data_source/user_type_data_source.dart';
 import 'models/user.dart';
@@ -14,10 +17,24 @@ class UsersDataSource {
   });
 
   Future<List<User>> getUsers() async {
+    await sendbird.connect(Constants.adminUserId,
+        nickname: Constants.adminNickName);
+    final query = sendQuery.ApplicationUserListQuery();
     try {
-      final query = ApplicationUserListQuery();
-      final list = await query.loadNext();
+      var list = await query.loadNext();
+      if (list.length <= 1) await createUsers();
       return list;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<bool> createUsers() async {
+    try {
+      var batch = UserBatchDataEntry(sendbird: sendbird);
+      await batch.createDoctors();
+      await batch.createPatients();
+      return true;
     } catch (e) {
       throw Exception(e.toString());
     }

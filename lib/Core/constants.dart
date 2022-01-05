@@ -2,6 +2,9 @@ class Constants {
   static const api_key = 'D3B9C520-3FF0-498A-8271-E72A58B41392';
   static const double HeaderHeight = 60;
 
+  static const String adminUserId = 'admin';
+  static const String adminNickName = 'admin';
+
   // static const patientId = 'Doctor_2';
   // static const patientNickname = 'Dr.Kevin Zeng M.D.';
   // static const patientType = 'Doctor';

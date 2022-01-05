@@ -41,7 +41,9 @@ class AuthViewModel extends ChangeNotifier {
     try {
       _setLoginState(LoginState.Loading);
       loginController.saveUserType(userType);
-      return await loginController.connect(userId, nickname);
+      var chatUser = await loginController.connect(userId, nickname);
+      _setLoginState(LoginState.Loaded);
+      return chatUser;
     } catch (e) {
       _setLoginState(LoginState.Error);
       throw Exception(e);
@@ -60,18 +62,18 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> isFirstRun() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var isFirstRun = prefs.getBool('isFirstRun');
-    if (isFirstRun == null || isFirstRun == false) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // Future<bool> isFirstRun() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var isFirstRun = prefs.getBool('isFirstRun');
+  //   if (isFirstRun == null || isFirstRun == false) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
-  Future<void> setFirstRun(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isFirstRun', true);
-  }
+  // Future<void> setFirstRun(bool value) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setBool('isFirstRun', true);
+  // }
 }

@@ -16,9 +16,9 @@ class WelcomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    // context.read(authViewModel).setFirstRun(true);
-    WidgetsBinding.instance!
-        .addPostFrameCallback((_) => checkFirstRun(context, ref));
+    // ref.read(authViewModel).setFirstRun(true);
+    // WidgetsBinding.instance!
+    //     .addPostFrameCallback((_) => checkFirstRun(context, ref));
     return Scaffold(
       body: Stack(
         children: [
@@ -113,13 +113,15 @@ class BuildSelectorButtons extends ConsumerWidget {
         BuildSelectorButton(
           title: AppLocalizations.of(context)!.selectionPageDoctor,
           onPressed: () async {
-            var chatUser = await ref
+            await ref
                 .read(authViewModel)
-                .connect('Doctor_2', 'Andrea Miller.', 'Doctor');
-            if (chatUser != null) {
-              Navigator.of(context).pushNamed(PatientsListScreen.routeName,
-                  arguments: AppLocalizations.of(context)!.userTypeDoctor);
-            }
+                .connect('Doctor_2', 'Andrea Miller.', 'Doctor')
+                .then((user) {
+              if (user != null) {
+                Navigator.of(context).pushNamed(PatientsListScreen.routeName,
+                    arguments: AppLocalizations.of(context)!.userTypeDoctor);
+              }
+            });
           },
           buttonColor: ChatColors.welcomeScreenWhiteButton,
           textColor: ChatColors.blackColor,
@@ -127,78 +129,78 @@ class BuildSelectorButtons extends ConsumerWidget {
         SizedBox(height: 20),
         //TODO delete this for good
         // BuildLoadDummyDataButton(),
-        CheckFirstRun(),
+        // CheckFirstRun(),
       ],
     );
   }
 }
 
-class CheckFirstRun extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, ref) {
-    return FutureBuilder<bool>(
-      future: ref.read(authViewModel).isFirstRun(),
-      builder: (context, snapshot) {
-        var isFirstRun = snapshot.data;
-        print(isFirstRun);
-        if (isFirstRun != null) {
-          if (isFirstRun) {
-            checkFirstRun(context, ref);
-          }
-        } else {
-          return BuildSelectorButton();
-        }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-  }
-}
+// class CheckFirstRun extends ConsumerWidget {
+//   @override
+//   Widget build(BuildContext context, ref) {
+//     return FutureBuilder<bool>(
+//       future: ref.read(authViewModel).isFirstRun(),
+//       builder: (context, snapshot) {
+//         var isFirstRun = snapshot.data;
+//         print(isFirstRun);
+//         if (isFirstRun != null) {
+//           if (isFirstRun) {
+//             checkFirstRun(context, ref);
+//           }
+//         } else {
+//           return BuildSelectorButton();
+//         }
+//         return Center(
+//           child: CircularProgressIndicator(),
+//         );
+//       },
+//     );
+//   }
+// }
 
-checkFirstRun(BuildContext context, WidgetRef ref) async {
-  showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext context) {
-      createUsers(context, ref);
-      return alert;
-    },
+// checkFirstRun(BuildContext context, WidgetRef ref) async {
+//   showDialog(
+//     barrierDismissible: false,
+//     context: context,
+//     builder: (BuildContext context) {
+//       createUsers(context, ref);
+//       return alert(context);
+//     },
+//   );
+// }
+
+// void createUsers(BuildContext context, WidgetRef ref) async {
+//   var batchClass = UserBatchDataEntry(sendbird: locator.get());
+//   await ref.read(authViewModel).connectAdmin('admin', 'admin', 'admin');
+//   var dbExists = await batchClass.dbExists();
+//   if (!dbExists) {
+//     var usersLoaded = await batchClass.createUsers();
+//     if (usersLoaded) {
+//       ref.read(authViewModel).setFirstRun(false);
+//       Navigator.of(context).pop();
+//     }
+//   }
+// }
+
+AlertDialog alert(BuildContext context) {
+  return AlertDialog(
+    title: Text(AppLocalizations.of(context)!.welcome_screen_alert_title),
+    content: Container(
+      height: 150,
+      child: Column(
+        children: [
+          Text(AppLocalizations.of(context)!.welcome_screen_alert_text),
+          Text(AppLocalizations.of(context)!.welcome_screen_alert_dismiss_text),
+          Divider(),
+          Center(
+            child: CircularProgressIndicator(),
+          ),
+        ],
+      ),
+    ),
+    actions: [],
   );
 }
-
-void createUsers(BuildContext context, WidgetRef ref) async {
-  var batchClass = UserBatchDataEntry(sendbird: locator.get());
-  await ref.read(authViewModel).connectAdmin('admin', 'admin', 'admin');
-  var dbExists = await batchClass.dbExists();
-  if (!dbExists) {
-    var usersLoaded = await batchClass.createUsers();
-    if (usersLoaded) {
-      ref.read(authViewModel).setFirstRun(false);
-      Navigator.of(context).pop();
-    }
-  }
-  ;
-}
-
-AlertDialog alert = AlertDialog(
-  title: Text("Adding users"),
-  content: Container(
-    height: 150,
-    child: Column(
-      children: [
-        Text(
-            "Crating dummy users for testing, please wait until this proccess finish."),
-        Text('This dialog will close itself.'),
-        Divider(),
-        Center(
-          child: CircularProgressIndicator(),
-        ),
-      ],
-    ),
-  ),
-  actions: [],
-);
 
 class BuildSelectorButton extends StatelessWidget {
   final String? title;
