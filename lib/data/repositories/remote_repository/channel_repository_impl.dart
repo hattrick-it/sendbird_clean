@@ -43,7 +43,8 @@ class ChannelRepositoryImpl implements ChannelRepository {
 
   @override
   ChatUser getCurrentUser() {
-    return channelsDataSource.getCurrentUser()!.toDomain();
+    var currentUser = channelsDataSource.getCurrentUser()!.toDomain();
+    return currentUser;
   }
 
   @override

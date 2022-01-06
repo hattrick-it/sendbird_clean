@@ -49,10 +49,13 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<ChatMessage> sendMessage(String message) {
-    return chatRemoteDataSource
-        .sendMessage(message)
-        .then((message) => message!.toDomain());
+  Future<ChatMessage> sendMessage(String message) async {
+    var chatMessage;
+    var baseMessage = await chatRemoteDataSource.sendMessage(message);
+    if (baseMessage != null) {
+      chatMessage = baseMessage.toDomain();
+    }
+    return chatMessage;
   }
 
   ChatUser getCurrentUser() {

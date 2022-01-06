@@ -113,7 +113,7 @@ class BuildSearchBar extends ConsumerWidget {
                 },
                 decoration: InputDecoration(
                   hintText:
-                      AppLocalizations.of(context)!.doctorListScreenHinttext,
+                      AppLocalizations.of(context)!.patientListScreenHinttext,
                   border: InputBorder.none,
                 ),
               ),

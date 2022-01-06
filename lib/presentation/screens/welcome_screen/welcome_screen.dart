@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/locator/locator.dart';
-
+import 'package:sendbirdtutorial/presentation/screens/welcome_screen/welcome_screen_button.dart';
+import 'package:sendbirdtutorial/presentation/viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
 import '../../../Core/chat_assets.dart';
 import '../../../Core/chat_colors.dart';
-import '../../../data/data_sources/remote_data_source/user_batch_data_entry.dart';
 import '../../viewmodel/auth_viewmodel/auth_viewmodel.dart';
 import '../doctors_list_screen/doctor_list_screen.dart';
 import '../patients_list_screen/patients_list_screen.dart';
@@ -16,9 +15,12 @@ class WelcomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    // ref.read(authViewModel).setFirstRun(true);
-    // WidgetsBinding.instance!
-    //     .addPostFrameCallback((_) => checkFirstRun(context, ref));
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.read(usersListViewModel).getUsers();
+    });
+    //TODO agregar un mensaje mientras se esta cargando usuarios (usar state del viewmodel), capaz LoginState?
+    // TODO hablar con Juan, proponer a Dongsheng limpiar el codigo de backend de app, quitar commentarios
+    // y prints, codigo comentado, etc
     return Scaffold(
       body: Stack(
         children: [
@@ -39,6 +41,23 @@ class WelcomeScreen extends ConsumerWidget {
           ),
           Consumer(
             builder: (context, ref, child) {
+              var state = ref.watch(usersListViewModel).userListStatus;
+              if (state == UserListStatus.Loading) {
+                // return alert(context);
+                return Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  color: Colors.black38.withAlpha(200),
+                  child: Center(
+                    child: alert(context),
+                  ),
+                );
+              }
+              return SizedBox.shrink();
+            },
+          ),
+          Consumer(
+            builder: (context, ref, child) {
               var state = ref.watch(authViewModel).getState;
               if (state == LoginState.Loading) {
                 return Container(
@@ -53,7 +72,7 @@ class WelcomeScreen extends ConsumerWidget {
                   ),
                 );
               }
-              return Container();
+              return SizedBox.shrink();
             },
           ),
         ],
@@ -69,7 +88,8 @@ class BuildTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       top: 110,
-      left: 50,
+      left: 20,
+      right: 20,
       child: Container(
         width: 350,
         child: Text(
@@ -92,12 +112,16 @@ class BuildSelectorButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    var viewmodel = ref.read(authViewModel);
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
         BuildSelectorButton(
           title: AppLocalizations.of(context)!.selectionPagePatient,
           onPressed: () async {
+            //TODO llevar a viewmodel (y todo el camino hasta el repository), un metodo que
+            // elija random entre pacientes o doctores segun el boton, uno para loguearse
+            // SACAR LOGICA DE LA VISTA !!!!!!
             var chatUser = await ref
                 .read(authViewModel)
                 .connect('Patient_3', 'Michael Williams', 'Patient');
@@ -113,170 +137,56 @@ class BuildSelectorButtons extends ConsumerWidget {
         BuildSelectorButton(
           title: AppLocalizations.of(context)!.selectionPageDoctor,
           onPressed: () async {
-            await ref
+            var chatUser = await ref
                 .read(authViewModel)
-                .connect('Doctor_2', 'Andrea Miller.', 'Doctor')
-                .then((user) {
-              if (user != null) {
-                Navigator.of(context).pushNamed(PatientsListScreen.routeName,
-                    arguments: AppLocalizations.of(context)!.userTypeDoctor);
-              }
-            });
+                .connect('Doctor_2', 'Andrea Miller.', 'Doctor');
+            if (chatUser != null) {
+              Navigator.of(context).pushNamed(PatientsListScreen.routeName,
+                  arguments: AppLocalizations.of(context)!.userTypePatient);
+            }
           },
           buttonColor: ChatColors.welcomeScreenWhiteButton,
           textColor: ChatColors.blackColor,
         ),
         SizedBox(height: 20),
-        //TODO delete this for good
-        // BuildLoadDummyDataButton(),
-        // CheckFirstRun(),
       ],
     );
   }
 }
 
-// class CheckFirstRun extends ConsumerWidget {
-//   @override
-//   Widget build(BuildContext context, ref) {
-//     return FutureBuilder<bool>(
-//       future: ref.read(authViewModel).isFirstRun(),
-//       builder: (context, snapshot) {
-//         var isFirstRun = snapshot.data;
-//         print(isFirstRun);
-//         if (isFirstRun != null) {
-//           if (isFirstRun) {
-//             checkFirstRun(context, ref);
-//           }
-//         } else {
-//           return BuildSelectorButton();
-//         }
-//         return Center(
-//           child: CircularProgressIndicator(),
-//         );
-//       },
-//     );
-//   }
-// }
-
-// checkFirstRun(BuildContext context, WidgetRef ref) async {
-//   showDialog(
-//     barrierDismissible: false,
-//     context: context,
-//     builder: (BuildContext context) {
-//       createUsers(context, ref);
-//       return alert(context);
-//     },
-//   );
-// }
-
-// void createUsers(BuildContext context, WidgetRef ref) async {
-//   var batchClass = UserBatchDataEntry(sendbird: locator.get());
-//   await ref.read(authViewModel).connectAdmin('admin', 'admin', 'admin');
-//   var dbExists = await batchClass.dbExists();
-//   if (!dbExists) {
-//     var usersLoaded = await batchClass.createUsers();
-//     if (usersLoaded) {
-//       ref.read(authViewModel).setFirstRun(false);
-//       Navigator.of(context).pop();
-//     }
-//   }
-// }
-
 AlertDialog alert(BuildContext context) {
   return AlertDialog(
-    title: Text(AppLocalizations.of(context)!.welcome_screen_alert_title),
+    title: Center(
+      child: Text(AppLocalizations.of(context)!.welcome_screen_alert_title),
+    ),
     content: Container(
       height: 150,
       child: Column(
         children: [
-          Text(AppLocalizations.of(context)!.welcome_screen_alert_text),
-          Text(AppLocalizations.of(context)!.welcome_screen_alert_dismiss_text),
-          Divider(),
-          Center(
-            child: CircularProgressIndicator(),
+          Align(
+              alignment: Alignment.center,
+              child: Text(
+                  AppLocalizations.of(context)!.welcome_screen_alert_text)),
+          Expanded(
+            child: SizedBox.expand(),
           ),
+          Center(
+            child: Container(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                color: Colors.purple,
+                strokeWidth: 2,
+              ),
+            ),
+          ),
+          Expanded(
+            child: SizedBox.expand(),
+          ),
+          Text(AppLocalizations.of(context)!.welcome_screen_alert_dismiss_text),
         ],
       ),
     ),
     actions: [],
   );
 }
-
-class BuildSelectorButton extends StatelessWidget {
-  final String? title;
-  final GestureTapCallback? onPressed;
-  final Color? buttonColor;
-  final Color? textColor;
-
-  const BuildSelectorButton({
-    this.title,
-    this.onPressed,
-    this.buttonColor,
-    this.textColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 500,
-      height: 70,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          elevation: 0,
-          shadowColor: ChatColors.disbleSendButton,
-          primary: buttonColor,
-        ),
-        onPressed: onPressed,
-        child: Text(
-          title ?? '',
-          style: TextStyle(
-            color: textColor,
-            fontSize: 18,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// class BuildLoadDummyDataButton extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: 200,
-//       child: ElevatedButton(
-//         style: ElevatedButton.styleFrom(
-//           elevation: 0,
-//           shadowColor: ChatColors.disbleSendButton,
-//           primary: ChatColors.whiteColor,
-//           side: BorderSide(
-//             width: 2,
-//             color: ChatColors.blackColor,
-//           ),
-//         ),
-//         onPressed: () async {
-//           showDialog(
-//             barrierDismissible: false,
-//             context: context,
-//             builder: (BuildContext context) {
-//               return alert;
-//             },
-//           );
-//           var batchClass = UserBatchDataEntry();
-//           await context.read(authViewModel).connect('admin', 'admin', 'admin');
-//           var dbExists = await batchClass.dbExists();
-//           if (!dbExists) {
-//             var usersLoaded = await batchClass.createUsers();
-//             if (usersLoaded) {
-//               Navigator.of(context).pop();
-//             }
-//           }
-//         },
-//         child: Text(
-//           AppLocalizations.of(context).selectionPageLoadDummyData,
-//           style: TextStyle(color: ChatColors.blackColor),
-//         ),
-//       ),
-//     );
-//   }
-// }

@@ -4,6 +4,7 @@ import '../../entities/chat_message.dart';
 import '../../entities/chat_user.dart';
 import '../../repositories/chat_repository.dart';
 import '../../repositories/users_repository.dart';
+import 'package:collection/collection.dart';
 
 class ChatController {
   final ChatRepository chatRepository;
@@ -45,11 +46,10 @@ class ChatController {
     return await chatRepository.getMessagesList();
   }
 
-  void _getMessageStream() {
+  void _getMessageStream() async {
     chatRepository.getMessageStream().listen((event) {
-      final message = _chatMessagesList.firstWhere(
-        (element) => element.requestId == event.requestId,
-      );
+      final message = _chatMessagesList
+          .firstWhereOrNull((element) => element.requestId == event.requestId);
       if (message == null) {
         _chatMessagesList.add(event);
         _chatStreamController.sink.add(_chatMessagesList);

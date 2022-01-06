@@ -79,7 +79,7 @@
   "@chatScreenWebAdmin": {
     "description": ""
   },
-  "welcome_screen_alert_title": "Adding users",
-  "welcome_screen_alert_text": "Crating dummy users for testing, please wait until this proccess finish.",
+  "welcome_screen_alert_title": "Adding or retrieving users",
+  "welcome_screen_alert_text": "Retrieving or creating dummy users for testing, please wait until this proccess finish.",
   "welcome_screen_alert_dismiss_text": "This dialog will close itself. "
 }

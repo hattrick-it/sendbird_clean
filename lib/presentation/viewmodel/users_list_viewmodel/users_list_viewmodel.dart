@@ -22,7 +22,9 @@ class UsersListViewModel extends ChangeNotifier {
   final ChatController chatController;
 
   UsersListViewModel(
-      {required this.chatController, required this.channelListController});
+      {required this.chatController, required this.channelListController}) {
+    // getUsers();
+  }
 
   // Properties
   List<ChatUser> _usersList = [];
@@ -31,9 +33,7 @@ class UsersListViewModel extends ChangeNotifier {
 
   // Getters
   List<ChatUser> get usersList => _usersList;
-
   String get errorMsg => _errorMsg;
-
   UserListStatus get userListStatus => _userListStatus;
 
   // Setters

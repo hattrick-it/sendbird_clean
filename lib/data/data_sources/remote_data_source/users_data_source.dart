@@ -22,7 +22,7 @@ class UsersDataSource {
     final query = sendQuery.ApplicationUserListQuery();
     try {
       var list = await query.loadNext();
-      if (list.length <= 1) await createUsers();
+      if (list.length <= 2) await createUsers();
       return list;
     } catch (e) {
       throw Exception(e.toString());

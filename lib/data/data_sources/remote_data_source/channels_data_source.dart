@@ -74,7 +74,8 @@ class ChannelsDataSource extends ChannelEventHandler {
   }
 
   User? getCurrentUser() {
-    return sendbird.currentUser;
+    User? currentUser = sendbird.currentUser;
+    return currentUser;
   }
 
   Future<GroupChannel> getChannelByIds(List<String> usersIds) async {
