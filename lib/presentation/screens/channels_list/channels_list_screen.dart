@@ -24,9 +24,7 @@ class ChannelListScreen extends ConsumerWidget {
       ),
       body: BuildChannelListBody(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigator.of(context).pushNamed(UsersListScreen.routeName);
-        },
+        onPressed: () {},
         child: Text('Add'),
       ),
     );

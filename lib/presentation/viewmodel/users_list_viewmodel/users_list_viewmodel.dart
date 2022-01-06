@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../domain/controllers/channel_list_controller/channel_list_controller.dart';
 import '../../../domain/controllers/chat_controller/chat_controller.dart';
 import '../../../domain/entities/chat_channel.dart';

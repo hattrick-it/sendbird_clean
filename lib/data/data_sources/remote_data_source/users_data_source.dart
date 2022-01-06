@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'package:sendbirdtutorial/Core/constants.dart';
-import 'package:sendbirdtutorial/data/data_sources/remote_data_source/user_batch_data_entry.dart';
+import '../../../Core/constants.dart';
+import 'user_batch_data_entry.dart';
 import 'package:sendbird_sdk/query/user_list/user_list_query.dart' as sendQuery;
 import '../../../domain/entities/chat_user.dart';
 import '../local_data_source/user_type_data_source.dart';
@@ -53,7 +53,6 @@ class UsersDataSource {
     return current;
   }
 
-// getUserByName(String name)
   Future<List<ChatUser>?> getUserByName(String name) async {
     try {
       var list = await getUsersByType();
@@ -66,7 +65,6 @@ class UsersDataSource {
     }
   }
 
-  // getUsersByType()
   Future<List<ChatUser>?> getUsersByType() async {
     try {
       final usertype = await getTypeByUserLogged();

@@ -84,7 +84,7 @@ class ChannelsDataSource extends ChannelEventHandler {
       query.setUserIdsIncludeFilter(
           [usersIds[0], usersIds[1]], GroupChannelListQueryType.and);
       final result = await query.loadNext();
-      if (result != null && result.length > 0) {
+      if (result.length > 0) {
         return result.first;
       } else {
         var newChannel = await createChannel(usersIds);

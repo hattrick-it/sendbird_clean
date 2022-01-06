@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sendbirdtutorial/Core/chat_colors.dart';
+import '../../../Core/chat_colors.dart';
 
 class BuildSelectorButton extends StatelessWidget {
   final String? title;

@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-
 import '../../../Core/string_constants.dart';
 import '../../../domain/entities/chat_message.dart';
 import '../../../domain/entities/chat_user.dart';

@@ -6,6 +6,7 @@ import '../../../Core/string_constants.dart';
 import 'channels_data_source.dart';
 
 class ChatRemoteDataSource with ChannelEventHandler {
+  // ignore: close_sinks
   late StreamController<BaseMessage> _chatStreamController;
 
   late final ChannelsDataSource channelsDataSource;

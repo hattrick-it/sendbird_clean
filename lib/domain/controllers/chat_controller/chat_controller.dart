@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import '../../entities/chat_message.dart';
 import '../../entities/chat_user.dart';
 import '../../repositories/chat_repository.dart';

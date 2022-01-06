@@ -4,7 +4,6 @@ import '../../../Core/string_constants.dart';
 
 class UserTypeDataSource {
   Future<void> saveUserType(String userType) async {
-    if (userType == null) userType = 'admin';
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString(StringConstants.userTypeKey, userType);

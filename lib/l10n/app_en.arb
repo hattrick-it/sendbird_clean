@@ -80,6 +80,6 @@
     "description": ""
   },
   "welcome_screen_alert_title": "Adding or retrieving users",
-  "welcome_screen_alert_text": "Retrieving or creating dummy users for testing, please wait until this proccess finish.",
+  "welcome_screen_alert_text": "Creating or retrieving dummy users for testing purposes, please wait until this proccess finish.",
   "welcome_screen_alert_dismiss_text": "This dialog will close itself. "
 }

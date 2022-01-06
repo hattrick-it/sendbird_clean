@@ -71,12 +71,6 @@ class UserBatchDataEntry {
     return users.length > 1;
   }
 
-  Future<bool> createUsers() async {
-    await createDoctors();
-    await createPatients();
-    return true;
-  }
-
   Future<void> createDoctors() async {
     for (var item in doctorUsers) {
       await send.connect(item.userId!);

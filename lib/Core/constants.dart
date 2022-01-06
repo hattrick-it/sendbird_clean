@@ -5,11 +5,11 @@ class Constants {
   static const String adminUserId = 'admin';
   static const String adminNickName = 'admin';
 
-  // static const patientId = 'Doctor_2';
-  // static const patientNickname = 'Dr.Kevin Zeng M.D.';
-  // static const patientType = 'Doctor';
+  static const doctorId = 'Doctor_2';
+  static const doctorNickname = 'Andrea Miller';
+  static const doctorType = 'Doctor';
 
-  // static const doctorId = 'Patient_3';
-  // static const doctorNickname = 'Black Widow';
-  // static const doctorType = 'Patient';
+  static const patientId = 'Patient_3';
+  static const patientNickname = 'Michael Williams';
+  static const patientType = 'Patient';
 }

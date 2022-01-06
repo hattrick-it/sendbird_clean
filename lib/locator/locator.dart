@@ -1,6 +1,5 @@
 import 'package:get_it/get_it.dart';
 import 'package:sendbird_sdk/sdk/sendbird_sdk_api.dart';
-
 import '../Core/constants.dart';
 import '../data/data_sources/local_data_source/user_type_data_source.dart';
 import '../data/data_sources/remote_data_source/auth_data_source.dart';
@@ -88,9 +87,6 @@ void setup() {
         chatRepository: locator.get(),
         usersRepository: locator.get(),
       ));
-
-  // locator.registerFactory<LoginController>(
-  //     () => LoginController(authRepository: locator.get()));
 
   locator
       .registerFactory<UserSelectionController>(() => UserSelectionController(

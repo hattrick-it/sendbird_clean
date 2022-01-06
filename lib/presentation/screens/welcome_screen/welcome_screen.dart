@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendbirdtutorial/presentation/screens/welcome_screen/welcome_screen_button.dart';
-import 'package:sendbirdtutorial/presentation/viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
+import 'welcome_screen_button.dart';
+import '../../viewmodel/users_list_viewmodel/users_list_viewmodel.dart';
 import '../../../Core/chat_assets.dart';
 import '../../../Core/chat_colors.dart';
 import '../../viewmodel/auth_viewmodel/auth_viewmodel.dart';
@@ -18,9 +18,6 @@ class WelcomeScreen extends ConsumerWidget {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       ref.read(usersListViewModel).getUsers();
     });
-    //TODO agregar un mensaje mientras se esta cargando usuarios (usar state del viewmodel), capaz LoginState?
-    // TODO hablar con Juan, proponer a Dongsheng limpiar el codigo de backend de app, quitar commentarios
-    // y prints, codigo comentado, etc
     return Scaffold(
       body: Stack(
         children: [
@@ -43,11 +40,10 @@ class WelcomeScreen extends ConsumerWidget {
             builder: (context, ref, child) {
               var state = ref.watch(usersListViewModel).userListStatus;
               if (state == UserListStatus.Loading) {
-                // return alert(context);
                 return Container(
                   height: double.infinity,
                   width: double.infinity,
-                  color: Colors.black38.withAlpha(200),
+                  color: ChatColors.blackColor.withAlpha(200),
                   child: Center(
                     child: alert(context),
                   ),
@@ -63,11 +59,11 @@ class WelcomeScreen extends ConsumerWidget {
                 return Container(
                   height: double.infinity,
                   width: double.infinity,
-                  color: Colors.black38.withAlpha(200),
+                  color: ChatColors.blackColor.withAlpha(200),
                   child: Center(
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                          ChatColors.purpleAppbarBackgroundColor),
+                          ChatColors.generalPurpleColor),
                     ),
                   ),
                 );
@@ -112,23 +108,15 @@ class BuildSelectorButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    var viewmodel = ref.read(authViewModel);
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
         BuildSelectorButton(
           title: AppLocalizations.of(context)!.selectionPagePatient,
           onPressed: () async {
-            //TODO llevar a viewmodel (y todo el camino hasta el repository), un metodo que
-            // elija random entre pacientes o doctores segun el boton, uno para loguearse
-            // SACAR LOGICA DE LA VISTA !!!!!!
-            var chatUser = await ref
-                .read(authViewModel)
-                .connect('Patient_3', 'Michael Williams', 'Patient');
-            if (chatUser != null) {
-              Navigator.of(context).pushNamed(DoctorListScreen.routeName,
-                  arguments: AppLocalizations.of(context)!.userTypePatient);
-            }
+            await ref.read(authViewModel).loginPatient();
+            Navigator.of(context).pushNamed(DoctorListScreen.routeName,
+                arguments: AppLocalizations.of(context)!.userTypePatient);
           },
           buttonColor: ChatColors.notMyMsgColor,
           textColor: ChatColors.whiteColor,
@@ -137,13 +125,9 @@ class BuildSelectorButtons extends ConsumerWidget {
         BuildSelectorButton(
           title: AppLocalizations.of(context)!.selectionPageDoctor,
           onPressed: () async {
-            var chatUser = await ref
-                .read(authViewModel)
-                .connect('Doctor_2', 'Andrea Miller.', 'Doctor');
-            if (chatUser != null) {
-              Navigator.of(context).pushNamed(PatientsListScreen.routeName,
-                  arguments: AppLocalizations.of(context)!.userTypePatient);
-            }
+            await ref.read(authViewModel).loginDoctor();
+            Navigator.of(context).pushNamed(PatientsListScreen.routeName,
+                arguments: AppLocalizations.of(context)!.userTypePatient);
           },
           buttonColor: ChatColors.welcomeScreenWhiteButton,
           textColor: ChatColors.blackColor,
@@ -167,15 +151,13 @@ AlertDialog alert(BuildContext context) {
               alignment: Alignment.center,
               child: Text(
                   AppLocalizations.of(context)!.welcome_screen_alert_text)),
-          Expanded(
-            child: SizedBox.expand(),
-          ),
+          Expanded(child: SizedBox.expand()),
           Center(
             child: Container(
               height: 20,
               width: 20,
               child: CircularProgressIndicator(
-                color: Colors.purple,
+                color: ChatColors.generalPurpleColor,
                 strokeWidth: 2,
               ),
             ),

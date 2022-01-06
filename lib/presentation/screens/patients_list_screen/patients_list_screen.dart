@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../Core/chat_colors.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../viewmodel/user_selection_viewmodel/user_selection_viewmodel.dart';

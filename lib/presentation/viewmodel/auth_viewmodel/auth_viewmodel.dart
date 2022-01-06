@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../../Core/constants.dart';
 import '../../../domain/controllers/login_controller/login_controller.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
@@ -52,28 +51,40 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> loginPatient() async {
+    try {
+      await connect(
+        Constants.patientId,
+        Constants.patientNickname,
+        Constants.patientType,
+      );
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> loginDoctor() async {
+    try {
+      await connect(
+        Constants.doctorId,
+        Constants.doctorNickname,
+        Constants.doctorType,
+      );
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future<ChatUser> connectAdmin(
       String userId, String nickname, String userType) async {
     try {
       loginController.saveUserType(userType);
-      return await loginController.connect(userId, nickname);
+      return await loginController.connect(
+        userId,
+        nickname,
+      );
     } catch (e) {
       throw Exception(e);
     }
   }
-
-  // Future<bool> isFirstRun() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   var isFirstRun = prefs.getBool('isFirstRun');
-  //   if (isFirstRun == null || isFirstRun == false) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-  // Future<void> setFirstRun(bool value) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setBool('isFirstRun', true);
-  // }
 }

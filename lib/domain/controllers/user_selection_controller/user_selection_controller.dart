@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import '../../repositories/chat_repository.dart';
-
 import '../../entities/chat_user.dart';
 import '../../repositories/local_user_type_repository.dart';
 import '../../repositories/user_selection_repository.dart';
@@ -29,15 +27,15 @@ class UserSelectionController {
     return userSelectorRepository.getUserByName(name);
   }
 
-  Future<List<ChatUser>?> getUsersByType() async {
-    return await userSelectorRepository.getUsersByType();
+  Future<List<ChatUser>?> getUsersByType() {
+    return userSelectorRepository.getUsersByType();
   }
 
   Future<List<ChatUser>?> getDoctorBySpecialty(String specialty) {
     return userSelectorRepository.getDoctorBySpecialty(specialty);
   }
 
-  Future<Map<String, bool>> getSpecialtiesMap() async {
-    return await userSelectorRepository.getSpecialtyMap();
+  Future<Map<String, bool>> getSpecialtiesMap() {
+    return userSelectorRepository.getSpecialtyMap();
   }
 }

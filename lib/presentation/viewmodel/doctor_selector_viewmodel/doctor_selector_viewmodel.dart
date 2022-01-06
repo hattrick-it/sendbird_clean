@@ -15,7 +15,6 @@ enum DoctorStates {
 class DoctorSelectionViewModel extends ChangeNotifier {
   // Properties
 
-
   // Getters
 
   // Setters
@@ -23,5 +22,4 @@ class DoctorSelectionViewModel extends ChangeNotifier {
   // Private methods
 
   // Public methods
-  void getDoctorList() {}
 }

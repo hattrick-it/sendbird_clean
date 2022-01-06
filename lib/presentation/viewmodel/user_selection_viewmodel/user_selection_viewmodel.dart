@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../domain/controllers/login_controller/login_controller.dart';
 import '../../../domain/controllers/user_selection_controller/user_selection_controller.dart';
 import '../../../domain/entities/chat_user.dart';
@@ -61,12 +60,6 @@ class UserSelectionViewModel extends ChangeNotifier {
   void _setUserList(List<ChatUser> list) {
     _userList = [];
     _userList = list;
-    notifyListeners();
-  }
-
-  void _setSpecialtyList(List<String> list) {
-    _specialtyList = [];
-    _specialtyList = list;
     notifyListeners();
   }
 

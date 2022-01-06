@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sendbirdtutorial/Core/string_constants.dart';
 import '../../../Core/chat_assets.dart';
 import '../../../Core/chat_colors.dart';
 import '../../../domain/entities/chat_channel.dart';
@@ -209,7 +210,8 @@ class NotMyMessage extends StatelessWidget {
                     SizedBox(
                       width: 45,
                     ),
-                    chatMessage.sender!.userId != 'WebAdmin'
+                    chatMessage.sender!.userId !=
+                            StringConstants.baseMessageAdminKey
                         ? Text(
                             chatMessage.sender!.nickname ?? '',
                             style: TextStyle(
@@ -230,7 +232,8 @@ class NotMyMessage extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    chatMessage.sender!.userId != 'WebAdmin'
+                    chatMessage.sender!.userId !=
+                            StringConstants.baseMessageAdminKey
                         ? Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [

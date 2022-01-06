@@ -27,7 +27,7 @@ class ChatViewModel extends ChangeNotifier {
   String _userMsg = '';
   String _errorMsg = '';
   ChatState _chatState = ChatState.Empty;
-  ChatUser? _currentUser = null;
+  ChatUser? _currentUser;
 
   // Getters
   Stream<List<ChatMessage>> get onNewMessage => chatController.getMessages;

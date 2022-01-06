@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../Core/chat_colors.dart';
 import '../../../Core/constants.dart';
 

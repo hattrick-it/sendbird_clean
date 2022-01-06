@@ -25,7 +25,6 @@ class ChatChannelViewModel extends ChangeNotifier {
   // Properties
   List<ChatChannel> _channelList = [];
   ChatChannelState _chatChannelState = ChatChannelState.Empty;
-  String _errorMsg = '';
 
   // Getters
   List<ChatChannel> get channelList => _channelList;
@@ -37,23 +36,7 @@ class ChatChannelViewModel extends ChangeNotifier {
 
   ChatChannelState get chatChannelState => _chatChannelState;
 
-  String get errorMsg => _errorMsg;
-
   // Setters
-  void _setChannelList(List<ChatChannel> list) {
-    _channelList = list;
-    notifyListeners();
-  }
-
-  void _setChatChannelState(ChatChannelState state) {
-    _chatChannelState = state;
-    notifyListeners();
-  }
-
-  void _setErrorMsg(String msg) {
-    _errorMsg = msg;
-    notifyListeners();
-  }
 
   // Private methods
 

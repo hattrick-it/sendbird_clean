@@ -1,3 +1,5 @@
+import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
+
 import '../entities/chat_message.dart';
 
 abstract class ChatRepository {
@@ -8,4 +10,6 @@ abstract class ChatRepository {
   Future<ChatMessage> sendMessage(String message);
 
   Future<List<ChatMessage>> getMessagesList();
+
+  Future<List<ChatUser>> getUsers();
 }
