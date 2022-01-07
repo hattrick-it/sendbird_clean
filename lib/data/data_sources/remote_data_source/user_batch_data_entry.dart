@@ -1,58 +1,61 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
+import 'package:sendbirdtutorial/Core/constants.dart';
 import '../../../domain/entities/chat_doctor.dart';
 import '../../../domain/entities/chat_user.dart';
 
 var doctorUsers = [
   ChatDoctor(
     userId: 'Doctor_1',
-    nickname: 'Dr.Edwin Ching MBBS,MIRCP',
+    nickname: 'Ava Davis',
     metadata: {'userType': 'Doctor', 'Specialty': 'General Practice'},
     profileUrl:
-        'https://res.cloudinary.com/hattrick-it/image/upload/v1624907937/users/doctor_1.jpg',
+        'https://res.cloudinary.com/hattrick-it/image/upload/v1628607567/telemedicine/ava_davis_d1_bnabao.jpg',
   ),
   ChatDoctor(
     userId: 'Doctor_2',
-    nickname: 'Dr.Kevin Zeng M.D.',
+    nickname: 'Andrea Miller',
     metadata: {'userType': 'Doctor', 'Specialty': 'Hospitalist'},
     profileUrl:
-        'https://res.cloudinary.com/hattrick-it/image/upload/v1624907946/users/doctor_2.jpg',
+        'https://res.cloudinary.com/hattrick-it/image/upload/v1628607567/telemedicine/andrea_miller_d2_x0vgu8.jpg',
   ),
   ChatDoctor(
     userId: 'Doctor_3',
-    nickname: 'Dr.Jhon Shi Chang Su MBBS',
+    nickname: 'Robert Anderson',
     metadata: {'userType': 'Doctor', 'Specialty': 'Family Medicine'},
     profileUrl:
-        'https://res.cloudinary.com/hattrick-it/image/upload/v1624907952/users/doctor_3.jpg',
+        'https://res.cloudinary.com/hattrick-it/image/upload/v1628690466/telemedicine/E952E12E-FC7A-4E86-82AA-A98893E6B4C4_1_105_c_j2p6r7.jpg',
   ),
 ];
 
 var patientsUsers = [
   ChatUser(
     userId: 'Patient_1',
-    nickname: 'Steve Rogers',
+    nickname: 'Olivia Jackson',
     metadata: {'userType': 'Patient'},
     profileUrl:
-        'https://res.cloudinary.com/hattrick-it/image/upload/v1624909040/users/steve_rogers.jpg',
+        'https://res.cloudinary.com/hattrick-it/image/upload/v1628690672/telemedicine/2FC97148-EE30-435F-9A0F-10464A390FF9_1_201_a_k3anhc.jpg',
   ),
   ChatUser(
     userId: 'Patient_2',
-    nickname: 'Tony Stark',
+    nickname: 'Emma Smith',
     metadata: {'userType': 'Patient'},
     profileUrl:
-        'https://res.cloudinary.com/hattrick-it/image/upload/v1624909049/users/tony_stark.jpg',
+        'https://res.cloudinary.com/hattrick-it/image/upload/v1628690796/telemedicine/5873800D-D9AE-43CD-8C47-519E63357E2A_1_105_c_lr3ruv.jpg',
   ),
   ChatUser(
     userId: 'Patient_3',
-    nickname: 'Black Widow',
+    nickname: 'Michael Williams',
     metadata: {'userType': 'Patient'},
     profileUrl:
-        'https://res.cloudinary.com/hattrick-it/image/upload/v1624909075/users/black_widow.jpg',
+        'https://res.cloudinary.com/hattrick-it/image/upload/v1628607567/telemedicine/michael_williams_p3_d7fwcv.jpg',
   ),
 ];
 
 class UserBatchDataEntry {
   final SendbirdSdk sendbird;
   UserBatchDataEntry({required this.sendbird});
+
+  final send = SendbirdSdk(appId: Constants.api_key);
 
   Future<List<User>> getUsers() {
     try {
@@ -63,15 +66,21 @@ class UserBatchDataEntry {
     }
   }
 
+  Future<bool> dbExists() async {
+    var users = await getUsers();
+    return users.length > 1;
+  }
+
   Future<void> createDoctors() async {
     for (var item in doctorUsers) {
-      await sendbird.connect(item.userId!);
-      await sendbird.updateCurrentUserInfo(
+      await send.connect(item.userId!);
+      await send.updateCurrentUserInfo(
           nickname: item.nickname,
           fileInfo: FileInfo.fromUrl(
             url: item.profileUrl,
+            mimeType: null,
           ));
-      final user = sendbird.currentUser;
+      final user = send.currentUser;
       final data = item.metadata;
       await user!.createMetaData(data!);
     }
@@ -79,13 +88,14 @@ class UserBatchDataEntry {
 
   Future<void> createPatients() async {
     for (var item in patientsUsers) {
-      await sendbird.connect(item.userId!);
-      await sendbird.updateCurrentUserInfo(
+      await send.connect(item.userId!);
+      await send.updateCurrentUserInfo(
           nickname: item.nickname,
           fileInfo: FileInfo.fromUrl(
             url: item.profileUrl,
+            mimeType: null,
           ));
-      final user = sendbird.currentUser;
+      final user = send.currentUser;
       final data = item.metadata;
       await user!.createMetaData(data!);
     }

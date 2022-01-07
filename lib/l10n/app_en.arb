@@ -5,17 +5,54 @@
   "adminUserIdNickname": "admin",
   "selectionPageTelemedicine": "Telemedicine",
   "selectionPageDemostrator": "Demostrator",
-  "selectionPagePatient": "Iam a Patient",
-  "selectionPageDoctor": "Iam a Doctor",
+  "@selectionPageDemostrator": {
+    "description": ""
+  },
+  "selectionPagePatient": "I am a Patient",
+  "@selectionPagePatient": {
+    "description": ""
+  },
+  "selectionPageDoctor": "I am a Doctor",
+  "@selectionPageDoctor": {
+    "description": ""
+  },
   "selectionPageLoadDummyData": "Load dummy data",
   "userSelectionPageAppBarTitle": "Select a ",
   "chatScreenSendButtonText": "Send Message",
   "usersListPageAppBarTitle": "Create new chat",
   "channelScreenNoMessagesYet": "No messages yet",
-
-  "doctor_selector_providers": "Providers",
-  "doctor_selector_specialty": "Specialty",
-  "doctor_selector_select_provider": "Select your Preferred Provider",
-  "doctor_selector_available_now": "Available now",
-  "doctor_selector_select_schedule_visits": "Accepts Scheduled Visits"
+  "@channelScreenNoMessagesYet": {
+    "description": ""
+  },
+  "welcomeScreenTitle": "Hello, Welcome!",
+  "@welcomeScreenTitle": {
+    "description": ""
+  },
+  "doctorListScreenAppbarTitle": "Doctors",
+  "@doctorListScreenAppbarTitle": {
+    "description": ""
+  },
+  "patientListScreenAppbarTitle": "Patients",
+  "@patientListScreenAppbarTitle": {
+    "description": ""
+  },
+  "patientsListScreenHinttext": "Patients list",
+  "@patientsListScreenHinttext": {
+    "description": ""
+  },
+  "doctorListScreenHinttext": "Search doctor by name",
+  "@doctorListScreenHinttext": {
+    "description": ""
+  },
+  "patientListScreenHinttext": "Search patient by name",
+  "@patientListScreenHinttext": {
+    "description": ""
+  },
+  "chatScreenWebAdmin": "Web Admin",
+  "@chatScreenWebAdmin": {
+    "description": ""
+  },
+  "welcome_screen_alert_title": "Adding or retrieving users",
+  "welcome_screen_alert_text": "Creating or retrieving dummy users for testing purposes, please wait until this proccess finish.",
+  "welcome_screen_alert_dismiss_text": "This dialog will close itself. "
 }

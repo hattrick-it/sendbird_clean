@@ -1,13 +1,16 @@
 import 'dart:async';
-
+import '../../entities/chat_channel.dart';
 import '../../entities/chat_message.dart';
 import '../../entities/chat_user.dart';
 import '../../repositories/channel_repository.dart';
 
-import '../../entities/chat_channel.dart';
-
 class ChannelListController {
   final ChannelRepository channelRepository;
+
+  late StreamController<ChatMessage> _messageStreamController;
+
+  late StreamController<List<ChatChannel>> _channelsStreamController;
+
   ChannelListController({required this.channelRepository}) {
     _onInit();
   }
@@ -24,10 +27,6 @@ class ChannelListController {
     });
   }
 
-  late StreamController<ChatMessage> _messageStreamController;
-
-  late StreamController<List<ChatChannel>> _channelsStreamController;
-
   List<ChatChannel> _chatChannelList = [];
 
   Stream<List<ChatChannel>> get getChannels => _channelsStreamController.stream;
@@ -38,12 +37,8 @@ class ChannelListController {
     return channelRepository.getChannels();
   }
 
-  void createChannel(String userId) {
-    List<String> userIds = [];
-    ChatUser currentUser = channelRepository.getCurrentUser();
-    userIds.add(currentUser.userId!);
-    userIds.add(userId);
-    channelRepository.createChannel(userIds);
+  Future<ChatChannel> createChannel(String userId) {
+    return channelRepository.createChannel(userId);
   }
 
   void _getChannelsStream() {
@@ -73,5 +68,9 @@ class ChannelListController {
 
   ChatUser getCurrentUser() {
     return channelRepository.getCurrentUser();
+  }
+
+  Future<ChatChannel> getChannelByIds(String userId) async {
+    return await channelRepository.getChannelByIds(userId);
   }
 }

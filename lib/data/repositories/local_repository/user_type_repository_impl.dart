@@ -7,11 +7,12 @@ class UserTypeRepositoryImpl implements UserTypeRepository {
 
   @override
   Future<void> saveUserType(String userType) async {
-    await localUserTypeDataSource.saveUserType(userType);
+    localUserTypeDataSource.saveUserType(userType);
   }
 
   @override
   Future<String?> getCurrentUserType() async {
-    return localUserTypeDataSource.getCurrentUserType();
+    var currentUserType = await localUserTypeDataSource.getCurrentUserType();
+    return currentUserType;
   }
 }

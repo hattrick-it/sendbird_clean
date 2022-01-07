@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../domain/entities/chat_doctor.dart';
 import '../../../locator/locator.dart';
 
 final doctorSelectionViewModel =
@@ -15,15 +14,12 @@ enum DoctorStates {
 
 class DoctorSelectionViewModel extends ChangeNotifier {
   // Properties
-  List<ChatDoctor> _doctorsList = [];
 
   // Getters
-  List<ChatDoctor> get doctorsList => _doctorsList;
 
   // Setters
 
   // Private methods
 
   // Public methods
-  void getDoctorList() {}
 }

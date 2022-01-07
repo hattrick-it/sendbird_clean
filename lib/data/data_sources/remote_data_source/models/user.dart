@@ -1,4 +1,5 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
+
 import '../../../../domain/entities/chat_user.dart';
 
 extension UserExtension on User {
@@ -9,5 +10,7 @@ extension UserExtension on User {
         isActive: this.isActive,
         lastSeenAt: this.lastSeenAt,
         metadata: this.metaData,
+        isOnline:
+            this.connectionStatus == UserConnectionStatus.online ? true : false,
       );
 }

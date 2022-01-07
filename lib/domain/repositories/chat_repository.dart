@@ -11,5 +11,5 @@ abstract class ChatRepository {
 
   Future<List<ChatMessage>?>? getMessagesList();
 
-  Future<List<ChatUser>?> getUsers();
+  Future<List<ChatUser>> getUsers();
 }

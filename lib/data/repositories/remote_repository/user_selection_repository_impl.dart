@@ -1,22 +1,31 @@
-import 'package:sendbirdtutorial/Core/string_constants.dart';
-
-import '../../data_sources/remote_data_source/user_batch_data_entry.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../../domain/repositories/user_selection_repository.dart';
-import '../../data_sources/remote_data_source/models/user.dart';
+import '../../data_sources/remote_data_source/users_data_source.dart';
 
 class UserSelectionRepositoryImpl implements UserSelectionRepository {
-  UserBatchDataEntry sendbirdUserSelectionDataSource;
-  UserSelectionRepositoryImpl({required this.sendbirdUserSelectionDataSource});
+  UsersDataSource usersDataSource;
+
+  UserSelectionRepositoryImpl({
+    required this.usersDataSource,
+  });
+
+  // add to repo interface
+  @override
+  Future<List<ChatUser>?> getUserByName(String name) async {
+    return usersDataSource.getUserByName(name);
+  }
 
   @override
-  Future<List<ChatUser>> getUsersByType(String userType) async {
-    var users = await sendbirdUserSelectionDataSource.getUsers();
-    return users
-        .where((element) =>
-            element.metaData.containsKey(StringConstants.userTypeKey) &&
-            element.metaData[StringConstants.userTypeKey] == userType)
-        .map((e) => e.toDomain())
-        .toList();
+  Future<List<ChatUser>?> getUsersByType() async {
+    return await usersDataSource.getUsersByType();
+  }
+
+  @override
+  Future<List<ChatUser>?> getDoctorBySpecialty(String specialty) async {
+    return usersDataSource.getDoctorBySpecialty(specialty);
+  }
+
+  Future<Map<String, bool>> getSpecialtyMap() async {
+    return usersDataSource.getSpecialtyMap();
   }
 }

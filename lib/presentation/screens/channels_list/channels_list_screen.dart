@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../Core/chat_colors.dart';
 import '../../../domain/entities/chat_channel.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../chat_screen/chat_screen.dart';
-import '../users_list_screen/users_list_screen.dart';
 import '../../viewmodel/channel_list_viewmodel/chat_channel_list_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -11,7 +11,7 @@ class ChannelListScreen extends ConsumerWidget {
   static const String routeName = '/channel-list';
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context, ref) {
     WidgetsBinding.instance?.addPostFrameCallback((_) {});
     ChatUser chatUser = ref.read(chatChannelViewModel).getCurrentUser();
     return Scaffold(
@@ -24,9 +24,7 @@ class ChannelListScreen extends ConsumerWidget {
       ),
       body: BuildChannelListBody(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed(UsersListScreen.routeName);
-        },
+        onPressed: () {},
         child: Text('Add'),
       ),
     );
@@ -37,7 +35,7 @@ class BuildChannelListBody extends ConsumerWidget {
   const BuildChannelListBody();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context, ref) {
     WidgetsBinding.instance?.addPostFrameCallback((_) {});
 
     return StreamBuilder(
@@ -48,8 +46,7 @@ class BuildChannelListBody extends ConsumerWidget {
           return ListView.builder(
             itemCount: channelList.length,
             itemBuilder: (context, index) {
-              var chatUser =
-                  ref.read(chatChannelViewModel).getCurrentUser as ChatUser;
+              var chatUser = ref.read(chatChannelViewModel).getCurrentUser();
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushNamed(ChatScreen.routeName,
@@ -79,7 +76,12 @@ class BuildChannelListBody extends ConsumerWidget {
             },
           );
         }
-        return Center(child: CircularProgressIndicator());
+        return Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(
+                ChatColors.purpleAppbarBackgroundColor),
+          ),
+        );
       },
     );
   }

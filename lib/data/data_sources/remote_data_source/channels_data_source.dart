@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'package:sendbirdtutorial/Core/string_constants.dart';
+
+import '../../../Core/string_constants.dart';
 
 class ChannelsDataSource extends ChannelEventHandler {
   final SendbirdSdk sendbird;
 
-  StreamController<BaseMessage>? _messageStreamController;
-  StreamController<BaseChannel>? _channelsStreamController;
+  late StreamController<BaseMessage> _messageStreamController;
+  late StreamController<BaseChannel> _channelsStreamController;
 
   ChannelsDataSource({required this.sendbird}) {
     _messageStreamController = StreamController<BaseMessage>();
@@ -20,26 +21,36 @@ class ChannelsDataSource extends ChannelEventHandler {
   }
 
   Stream<BaseMessage> get onChannelNewMessage =>
-      _messageStreamController!.stream;
+      _messageStreamController.stream;
 
   Stream<BaseChannel> get onChannelNewChanged =>
-      _channelsStreamController!.stream;
+      _channelsStreamController.stream;
 
   void closeStream() {
     _messageStreamController!.close();
     _channelsStreamController!.close();
   }
 
+  // ChannelEventHandler methods
+  @override
+  void onMessageReceived(BaseChannel channel, BaseMessage message) {
+    _messageStreamController.sink.add(message);
+  }
+
   @override
   void onChannelChanged(BaseChannel channel) {
-    _channelsStreamController!.sink.add(channel);
+    BaseChannel groupChannel = channel;
+    _channelsStreamController.sink.add(groupChannel);
   }
 
   // Methods
-  Future<GroupChannel> createChannel(List<String> userIds) {
+  Future<GroupChannel> createChannel(List<String> userIds) async {
     try {
-      final params = GroupChannelParams()..userIds = userIds;
-      return GroupChannel.createChannel(params);
+      final params = GroupChannelParams()
+        ..userIds = userIds
+        ..isDistinct = true;
+      var groupChannel = await GroupChannel.createChannel(params);
+      return groupChannel;
     } catch (e) {
       throw Exception(e);
     }
@@ -63,6 +74,24 @@ class ChannelsDataSource extends ChannelEventHandler {
   }
 
   User? getCurrentUser() {
-    return sendbird.currentUser;
+    User? currentUser = sendbird.currentUser;
+    return currentUser;
+  }
+
+  Future<GroupChannel> getChannelByIds(List<String> usersIds) async {
+    try {
+      final query = GroupChannelListQuery();
+      query.setUserIdsIncludeFilter(
+          [usersIds[0], usersIds[1]], GroupChannelListQueryType.and);
+      final result = await query.loadNext();
+      if (result.length > 0) {
+        return result.first;
+      } else {
+        var newChannel = await createChannel(usersIds);
+        return newChannel;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

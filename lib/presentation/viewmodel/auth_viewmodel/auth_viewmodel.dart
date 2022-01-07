@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
+import '../../../Core/constants.dart';
 import '../../../domain/controllers/login_controller/login_controller.dart';
 import '../../../locator/locator.dart';
 
-enum AuthState {
-  Error,
+enum LoginState {
+  Empty,
   Loading,
   Loaded,
-  Empty,
+  Error,
 }
 
 final authViewModel =
@@ -19,48 +21,71 @@ class AuthViewModel extends ChangeNotifier {
   AuthViewModel({required this.loginController});
 
   // Properties
-  var _userId = '';
-  var _nickname = '';
-  AuthState _authState = AuthState.Empty;
-
-  // Setters
-  set setUserId(String userid) {
-    _userId = userid;
-  }
-
-  set setNickname(String nickname) {
-    _nickname = nickname;
-  }
-
-  void _setState(AuthState state) {
-    _authState = state;
-    notifyListeners();
-  }
+  LoginState _loginState = LoginState.Empty;
 
   // Getters
-  AuthState get getAuthState => _authState;
+  LoginState get getState => _loginState;
+
+  // Setters
+  void _setLoginState(LoginState state) {
+    _loginState = state;
+    notifyListeners();
+  }
 
   // Private Methods
 
   // Public Methods
-  Future<void> connect(String userId, String nickname) async {
+  Future<ChatUser> connect(
+      String userId, String nickname, String userType) async {
     try {
-      _setState(AuthState.Loading);
+      _setLoginState(LoginState.Loading);
+      loginController.saveUserType(userType);
       var chatUser = await loginController.connect(userId, nickname);
-      if (chatUser != null) {
-        _setState(AuthState.Loaded);
-      } else {
-        return null;
-      }
+
+      _setLoginState(LoginState.Loaded);
+      return chatUser;
     } catch (e) {
-      _setState(AuthState.Error);
+      _setLoginState(LoginState.Error);
       throw Exception(e);
+    } finally {
+      _setLoginState(LoginState.Empty);
     }
   }
 
-  Future<void> adminConnect(String userId, String nickname) async {
-    //TODO remove the return (its only for testing)
-    var chatUser = await loginController.connect(userId, nickname);
-    print(chatUser.nickname);
+  Future<void> loginPatient() async {
+    try {
+      await connect(
+        Constants.patientId,
+        Constants.patientNickname,
+        Constants.patientType,
+      );
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> loginDoctor() async {
+    try {
+      await connect(
+        Constants.doctorId,
+        Constants.doctorNickname,
+        Constants.doctorType,
+      );
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<ChatUser> connectAdmin(
+      String userId, String nickname, String userType) async {
+    try {
+      loginController.saveUserType(userType);
+      return await loginController.connect(
+        userId,
+        nickname,
+      );
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

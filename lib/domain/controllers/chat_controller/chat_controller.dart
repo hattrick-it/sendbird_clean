@@ -1,10 +1,9 @@
 import 'dart:async';
-
-import 'package:sendbirdtutorial/domain/repositories/users_repository.dart';
-
 import '../../entities/chat_message.dart';
 import '../../entities/chat_user.dart';
 import '../../repositories/chat_repository.dart';
+import '../../repositories/users_repository.dart';
+import 'package:collection/collection.dart';
 
 class ChatController {
   final ChatRepository chatRepository;
@@ -35,11 +34,7 @@ class ChatController {
   }
 
   Future<void> sendMessage(String message) async {
-    var messageSent = await chatRepository.sendMessage(message);
-    if (messageSent != null) {
-      _chatMessagesList!.add(messageSent);
-      _chatStreamController.sink.add(_chatMessagesList!);
-    }
+    await chatRepository.sendMessage(message);
   }
 
   void setChannelUrl(String channelUrl) {
@@ -50,10 +45,17 @@ class ChatController {
     return await chatRepository.getMessagesList();
   }
 
-  void _getMessageStream() {
+  void _getMessageStream() async {
     chatRepository.getMessageStream()!.listen((event) {
-      _chatMessagesList!.add(event);
-      _chatStreamController.sink.add(_chatMessagesList!);
+      final message = _chatMessagesList!
+          .firstWhereOrNull((element) => element.requestId == event.requestId);
+      if (message == null) {
+        _chatMessagesList!.add(event);
+        _chatStreamController.sink.add(_chatMessagesList!);
+      } else {
+        message.sendingStatus = event.sendingStatus;
+        _chatStreamController.sink.add(_chatMessagesList!);
+      }
     });
   }
 }

@@ -4,4 +4,6 @@ abstract class AuthRepository {
   Future<ChatUser> connect(String userId, String nickname);
 
   void disconnect();
+
+  void saveUserType(String userType);
 }

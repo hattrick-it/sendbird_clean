@@ -1,5 +1,5 @@
 name: sendbirdtutorial
-description: A new Flutter project.
+description: Hattrick-it.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -19,24 +19,26 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
-  flutter: ">=2.5.3"
+  # sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: ^0.17.0
+  intl: 0.17.0
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
+  cupertino_icons: ^1.0.4
   sendbird_sdk: ^3.1.7
   flutter_riverpod: ^1.0.3
   get_it: ^7.2.0
   shared_preferences: ^2.0.11
   animate_do: ^2.0.0
+  flutter_advanced_avatar: ^1.0.0+1
+  font_awesome_flutter: ^9.2.0
 
 dev_dependencies:
   flutter_test:

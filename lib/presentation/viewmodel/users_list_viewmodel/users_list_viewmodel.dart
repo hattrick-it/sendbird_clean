@@ -2,11 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/controllers/channel_list_controller/channel_list_controller.dart';
 import '../../../domain/controllers/chat_controller/chat_controller.dart';
+import '../../../domain/entities/chat_channel.dart';
 import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
-
-final usersListViewModel =
-    ChangeNotifierProvider<UsersListViewModel>((ref) => locator.get());
 
 enum UserListStatus {
   Empty,
@@ -15,12 +13,15 @@ enum UserListStatus {
   Error,
 }
 
+final usersListViewModel =
+    ChangeNotifierProvider<UsersListViewModel>((ref) => locator.get());
+
 class UsersListViewModel extends ChangeNotifier {
-  final ChatController chatController;
   final ChannelListController channelListController;
+  final ChatController chatController;
 
   UsersListViewModel(
-      {required this.chatController, required this.channelListController});
+      {required this.chatController, required this.channelListController}) {}
 
   // Properties
   List<ChatUser> _usersList = [];
@@ -29,9 +30,7 @@ class UsersListViewModel extends ChangeNotifier {
 
   // Getters
   List<ChatUser> get usersList => _usersList;
-
   String get errorMsg => _errorMsg;
-
   UserListStatus get userListStatus => _userListStatus;
 
   // Setters
@@ -53,6 +52,7 @@ class UsersListViewModel extends ChangeNotifier {
   // Private methods
 
   // Public methodss
+
   Future<void> getUsers() async {
     try {
       _setStatus(UserListStatus.Loading);
@@ -65,7 +65,11 @@ class UsersListViewModel extends ChangeNotifier {
     }
   }
 
-  void createChannel(String userId) {
-    channelListController.createChannel(userId);
+  Future<ChatChannel> createChannel(String userId) {
+    return channelListController.createChannel(userId);
+  }
+
+  Future<ChatChannel> getChannelByIds(String userId) async {
+    return await channelListController.getChannelByIds(userId);
   }
 }

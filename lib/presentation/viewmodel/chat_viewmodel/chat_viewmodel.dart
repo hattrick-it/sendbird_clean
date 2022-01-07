@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/controllers/chat_controller/chat_controller.dart';
@@ -26,6 +25,7 @@ class ChatViewModel extends ChangeNotifier {
   String _userMsg = '';
   String _errorMsg = '';
   ChatState _chatState = ChatState.Empty;
+  ChatUser? _currentUser;
 
   // Getters
   Stream<List<ChatMessage>> get onNewMessage => chatController.getMessages;
@@ -35,6 +35,8 @@ class ChatViewModel extends ChangeNotifier {
   String get errorMsg => _errorMsg;
 
   String get getMsg => _userMsg;
+
+  ChatUser? get getCurrentUser => _currentUser;
 
   // Setters
   void setChannelUrl(String channelUrl) {
@@ -55,31 +57,25 @@ class ChatViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _setErrorMsg(String msg) {
-    _errorMsg = msg;
-    notifyListeners();
-  }
-
   // Private Methods
 
   // Public Methods
 
-  ChatUser getCurrentUser() {
-    return chatController.getCurrentUser();
+  void setCurrentUser() {
+    _currentUser = chatController.getCurrentUser();
   }
 
   void sendMessage() async {
     try {
-      _setState(ChatState.Empty);
       if (_userMsg.isNotEmpty) {
         _setState(ChatState.Sending);
         await chatController.sendMessage(_userMsg);
         setUserMsg('');
         clearMsg();
+        _setState(ChatState.Empty);
       }
       _setState(ChatState.Send);
     } catch (e) {
-      _setErrorMsg(e.toString());
       _setState(ChatState.Error);
     }
   }

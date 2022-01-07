@@ -1,15 +1,19 @@
 import 'dart:async';
 
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-import 'package:sendbirdtutorial/Core/string_constants.dart';
+
+import '../../../Core/string_constants.dart';
 import 'channels_data_source.dart';
 
-class ChatDataSource with ChannelEventHandler {
-  StreamController<BaseMessage>? _chatStreamController;
-  final ChannelsDataSource channelsDataSource;
-  final SendbirdSdk sendbird;
+class ChatRemoteDataSource with ChannelEventHandler {
+  // ignore: close_sinks
+  late StreamController<BaseMessage> _chatStreamController;
 
-  ChatDataSource({required this.sendbird, required this.channelsDataSource}) {
+  late final ChannelsDataSource channelsDataSource;
+  late final SendbirdSdk sendbird;
+
+  ChatRemoteDataSource(
+      {required this.sendbird, required this.channelsDataSource}) {
     _chatStreamController = StreamController<BaseMessage>(
         onListen: () async {
           sendbird.addChannelEventHandler(StringConstants.chatHandlerKey, this);
@@ -20,7 +24,7 @@ class ChatDataSource with ChannelEventHandler {
 
   Stream<BaseMessage> get getMessageStream => _chatStreamController!.stream;
 
-  String _channelUrl = '';
+  late String _channelUrl;
 
   void setChannelUrl(String channelUrl) {
     _channelUrl = channelUrl;
@@ -48,18 +52,19 @@ class ChatDataSource with ChannelEventHandler {
     }
   }
 
-  Future<BaseMessage> sendMessage(String message) async {
+  Future<BaseMessage?> sendMessage(String message) async {
+    BaseMessage userMessage;
     try {
-      final Completer<BaseMessage> completer = Completer();
       GroupChannel channel = await getGroupChannel(_channelUrl);
-      channel.sendUserMessageWithText(message, onCompleted: (baseMessage, err) {
+      userMessage = channel.sendUserMessageWithText(message,
+          onCompleted: (baseMessage, err) {
         if (err != null) {
-          completer.complete(null);
+          _chatStreamController.sink.add(baseMessage);
         } else {
-          completer.complete(baseMessage);
+          _chatStreamController.sink.add(baseMessage);
         }
       });
-      return completer.future;
+      _chatStreamController.sink.add(userMessage);
     } catch (e) {
       throw Exception(e);
     }
