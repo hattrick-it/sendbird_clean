@@ -5,11 +5,11 @@ import '../entities/chat_message.dart';
 abstract class ChatRepository {
   void setChannelUrl(String channelUrl);
 
-  Stream<ChatMessage> getMessageStream();
+  Stream<ChatMessage>? getMessageStream();
 
-  Future<ChatMessage> sendMessage(String message);
+  Future<ChatMessage>? sendMessage(String message);
 
-  Future<List<ChatMessage>> getMessagesList();
+  Future<List<ChatMessage>?>? getMessagesList();
 
   Future<List<ChatUser>> getUsers();
 }

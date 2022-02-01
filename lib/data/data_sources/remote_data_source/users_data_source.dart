@@ -9,6 +9,7 @@ import 'models/user.dart';
 
 class UsersDataSource {
   final SendbirdSdk sendbird;
+
   final UserTypeDataSource localUserTypeDataSource;
 
   UsersDataSource({

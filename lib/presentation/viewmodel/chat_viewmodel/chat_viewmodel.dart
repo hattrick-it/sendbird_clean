@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../domain/controllers/chat_controller/chat_controller.dart';
 import '../../../domain/entities/chat_message.dart';
 import '../../../domain/entities/chat_user.dart';

@@ -27,8 +27,8 @@ class ChannelsDataSource extends ChannelEventHandler {
       _channelsStreamController.stream;
 
   void closeStream() {
-    _messageStreamController.close();
-    _channelsStreamController.close();
+    _messageStreamController!.close();
+    _channelsStreamController!.close();
   }
 
   // ChannelEventHandler methods

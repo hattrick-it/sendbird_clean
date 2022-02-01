@@ -1,5 +1,5 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-
+import 'package:sendbirdtutorial/Core/constants.dart';
 import '../../../domain/entities/chat_doctor.dart';
 import '../../../domain/entities/chat_user.dart';
 
@@ -55,7 +55,7 @@ class UserBatchDataEntry {
   final SendbirdSdk sendbird;
   UserBatchDataEntry({required this.sendbird});
 
-  final send = SendbirdSdk(appId: '8431DE7B-30C4-4C16-BC27-B827BF4B5C6A');
+  final send = SendbirdSdk(appId: Constants.api_key);
 
   Future<List<User>> getUsers() {
     try {

@@ -35,6 +35,7 @@ class UserSelectionViewModel extends ChangeNotifier {
   }
 
   // Properties
+
   String? _userType;
   List<ChatUser> _userList = [];
   List<String> _specialtyList = [];

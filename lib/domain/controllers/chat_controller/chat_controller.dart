@@ -14,7 +14,7 @@ class ChatController {
     _chatStreamController =
         StreamController<List<ChatMessage>>(onListen: () async {
       _chatMessagesList = await getMessagesList();
-      _chatStreamController.sink.add(_chatMessagesList);
+      _chatStreamController.sink.add(_chatMessagesList!);
       _getMessageStream();
     });
   }
@@ -23,7 +23,7 @@ class ChatController {
 
   Stream<List<ChatMessage>> get getMessages => _chatStreamController.stream;
 
-  List<ChatMessage> _chatMessagesList = [];
+  List<ChatMessage>? _chatMessagesList = [];
 
   Future<List<ChatUser>> getUsers() {
     return usersRepository.getUsers();
@@ -41,20 +41,20 @@ class ChatController {
     chatRepository.setChannelUrl(channelUrl);
   }
 
-  Future<List<ChatMessage>> getMessagesList() async {
+  Future<List<ChatMessage>?> getMessagesList() async {
     return await chatRepository.getMessagesList();
   }
 
   void _getMessageStream() async {
-    chatRepository.getMessageStream().listen((event) {
-      final message = _chatMessagesList
+    chatRepository.getMessageStream()!.listen((event) {
+      final message = _chatMessagesList!
           .firstWhereOrNull((element) => element.requestId == event.requestId);
       if (message == null) {
-        _chatMessagesList.add(event);
-        _chatStreamController.sink.add(_chatMessagesList);
+        _chatMessagesList!.add(event);
+        _chatStreamController.sink.add(_chatMessagesList!);
       } else {
         message.sendingStatus = event.sendingStatus;
-        _chatStreamController.sink.add(_chatMessagesList);
+        _chatStreamController.sink.add(_chatMessagesList!);
       }
     });
   }

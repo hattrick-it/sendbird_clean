@@ -21,9 +21,7 @@ class UsersListViewModel extends ChangeNotifier {
   final ChatController chatController;
 
   UsersListViewModel(
-      {required this.chatController, required this.channelListController}) {
-    // getUsers();
-  }
+      {required this.chatController, required this.channelListController}) {}
 
   // Properties
   List<ChatUser> _usersList = [];

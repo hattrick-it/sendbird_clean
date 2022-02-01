@@ -22,7 +22,7 @@ class ChatRemoteDataSource with ChannelEventHandler {
             sendbird.removeChannelEventHandler(StringConstants.chatHandlerKey));
   }
 
-  Stream<BaseMessage> get getMessageStream => _chatStreamController.stream;
+  Stream<BaseMessage> get getMessageStream => _chatStreamController!.stream;
 
   late String _channelUrl;
 
@@ -31,7 +31,7 @@ class ChatRemoteDataSource with ChannelEventHandler {
   }
 
   void onMessageReceived(BaseChannel channel, BaseMessage message) {
-    _chatStreamController.sink.add(message);
+    _chatStreamController!.sink.add(message);
   }
 
   Future<GroupChannel> getGroupChannel(String channelUrl) async {

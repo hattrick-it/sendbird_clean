@@ -1,5 +1,4 @@
 import 'package:sendbird_sdk/sendbird_sdk.dart';
-
 import '../../../domain/entities/chat_channel.dart';
 import '../../../domain/entities/chat_message.dart';
 import '../../../domain/entities/chat_user.dart';

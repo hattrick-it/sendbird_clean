@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendbirdtutorial/domain/entities/chat_user.dart';
 import '../../../Core/constants.dart';
 import '../../../domain/controllers/login_controller/login_controller.dart';
-import '../../../domain/entities/chat_user.dart';
 import '../../../locator/locator.dart';
 
 enum LoginState {
@@ -41,6 +41,7 @@ class AuthViewModel extends ChangeNotifier {
       _setLoginState(LoginState.Loading);
       loginController.saveUserType(userType);
       var chatUser = await loginController.connect(userId, nickname);
+
       _setLoginState(LoginState.Loaded);
       return chatUser;
     } catch (e) {
